@@ -6,8 +6,9 @@ namespace MWebApi.Controllers
     /// <summary>
     /// 天气预测控制器
     /// </summary>
+    [ApiExplorerSettings(GroupName = "TEST1")]
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
@@ -36,6 +37,16 @@ namespace MWebApi.Controllers
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+        /// <summary>
+        /// 获取天气信息
+        /// </summary>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet]
+        public int GetData()
+        {
+            return new Random().Next(10,100);
         }
     }
 }

@@ -1,5 +1,6 @@
 
 using Microsoft.OpenApi.Models;
+using MWebApi.Extensions.SwaggerExtensions;
 
 namespace MWebApi
 {
@@ -8,52 +9,29 @@ namespace MWebApi
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
-            // Add services to the container.
+            List<SwaggerGroup> swaggerGroups = new List<SwaggerGroup>()
+            {
+                new SwaggerGroup("TEST1","TEST1 TITLE","TEST1 DESC"),
+                new SwaggerGroup("Hello","Hello1 TITLE","Hello1 DESC"),
+            };
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(c =>
+            builder.Services.AddSwagger(swaggerGroups);
+            // Add services to the container.
+            builder.Services.AddCors(options =>
             {
-                // 添加文档信息
-                var path = Path.Combine(AppContext.BaseDirectory, "MWebApi.xml");  // xml文档绝对路径
-                c.IncludeXmlComments(path, true); // true : 显示控制器层注释
-                c.OrderActionsBy(o => o.RelativePath); // 对action的名称进行排序，如果有多个，就可以看见效果了。
-
-                // 添加swagger Header验证
-                var scheme = new OpenApiSecurityScheme()
-                {
-                    Description = "Authorization header. \r\nExample: 'Bearer 12345abcdef'",
-                    Reference = new OpenApiReference
-                    {
-                        Type = ReferenceType.SecurityScheme,
-                        Id = "Authorization"
-                    },
-                    Scheme = "oauth2",
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey,
-                };
-                c.AddSecurityDefinition("Authorization", scheme);
-                var requirement = new OpenApiSecurityRequirement();
-                requirement[scheme] = new List<string>();
-                c.AddSecurityRequirement(requirement);
-
+                options.AddPolicy("MyPolicy", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()); //MyPolicy 为自定义的策略名称，与使用时相同即可。可以同时定义多个不同策略名称的跨域策略
             });
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.DocumentTitle = "MWebApi";
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "MWebApi v1");
-                });
+                app.UseSwaggerExtension(swaggerGroups);
             }
-
+            app.UseCors("MyPolicy");
             app.UseAuthorization();
 
 

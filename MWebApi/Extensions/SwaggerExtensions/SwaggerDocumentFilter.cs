@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace MWebApi
+namespace MWebApi.Extensions.SwaggerExtensions
 {
     public class SwaggerDocumentFilter : IDocumentFilter
     {
