@@ -1,8 +1,11 @@
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MWebApi.Extensions.SwaggerExtensions;
+using Serilog;
+using Serilog.Events;
 using System.Text;
 
 namespace MWebApi
@@ -12,12 +15,18 @@ namespace MWebApi
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            var builderC = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json");
+
+            IConfiguration configuration = builderC.Build();
+
             List<SwaggerGroup> swaggerGroups = new List<SwaggerGroup>()
             {
                 new SwaggerGroup("TEST1","TEST1 TITLE","TEST1 DESC"),
                 new SwaggerGroup("Hello","Hello1 TITLE","Hello1 DESC"),
             };
-
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -29,22 +38,25 @@ namespace MWebApi
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
-                //返回的是 字符的数组
-                var secretByte = Encoding.UTF8.GetBytes(builder.Configuration["Auth:SecretKey"]);
+                var section = configuration.GetSection("JWTConfig");
+                string secretKey = section.GetValue<string>("SecretKey");
+                var secretByte = Encoding.UTF8.GetBytes(secretKey);
                 //配置token验证
-                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                options.TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidateIssuer = true,
-                    ValidIssuer = builder.Configuration["Auth:Issuer"],
+                    ValidIssuer = section.GetValue<string>("Issuer"),
                     ValidateAudience = true,
-                    ValidAudience = builder.Configuration["Auth:Audience"],
+                    ValidAudience = section.GetValue<string>("Audience"),
                     //验证是否过期
                     ValidateLifetime = true,
                     //验证私钥
-                    IssuerSigningKey = new SymmetricSecurityKey(sercrtByte)
+                    IssuerSigningKey = new SymmetricSecurityKey(secretByte)
 
                 };
             });
+
+            builder.Services.AddSingleton(new Extensions.Token.MTokenHandler(configuration));
 
             var app = builder.Build();
 

@@ -1,20 +1,26 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 
 namespace MWebApi.Extensions.Token
 {
-    public class TokenHandler
+    public class MTokenHandler
     {
-
-        public TokenHandler(IConfiguration configuration)
+        private readonly IConfiguration _configuration;
+        public MTokenHandler(IConfiguration configuration)
         {
-            configuration.GetValue<string>("Auth:SecretKey");
+            _configuration = configuration;
         }
-        public string CreateToken(string username, string secretKey, int expires, string audience, string issuer, List<string> roleList)
+        public string CreateToken(string username, List<string> roleList)
         {
+            var section = _configuration.GetSection("JWTConfig");
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = System.Text.Encoding.ASCII.GetBytes(secretKey);
+            var key = System.Text.Encoding.ASCII.GetBytes(section.GetValue<string>("SecretKey"));
+            var expires = section.GetValue<int>("Expires");
+            var audience = section.GetValue<string>("Audience");
+            var issuer = section.GetValue<string>("Issuer");
+
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
