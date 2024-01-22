@@ -25,6 +25,7 @@
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageReference Include="Serilog.Sinks.Mqtt" Version="1.0.6" />
     <PackageReference Include="Serilog.Sinks.SQLite" Version="6.0.0" />
+    <PackageReference Include="SqlSugarCore" Version="5.1.4.134" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 

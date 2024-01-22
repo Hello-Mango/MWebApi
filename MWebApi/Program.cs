@@ -5,8 +5,10 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MWebApi.Extensions.JsonExtensions;
 using MWebApi.Extensions.SwaggerExtensions;
+using MWebApi.Extensions.Token;
 using Serilog;
 using Serilog.Events;
+using SqlSugar;
 using System.Text;
 using System.Text.Json;
 
@@ -17,12 +19,6 @@ namespace MWebApi
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
-            //var builderC = new ConfigurationBuilder()
-            //.SetBasePath(Directory.GetCurrentDirectory())
-            //.AddJsonFile("appsettings.json");
-
-            //IConfiguration configuration = builderC.Build();
             IConfiguration configuration = builder.Configuration;
             List<SwaggerGroup> swaggerGroups = new List<SwaggerGroup>()
             {
@@ -34,40 +30,34 @@ namespace MWebApi
                 options.JsonSerializerOptions.Converters.Add(new LongToStringConverter());
             });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwagger(swaggerGroups, true);
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("MyPolicy", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()); //MyPolicy 为自定义的策略名称，与使用时相同即可。可以同时定义多个不同策略名称的跨域策略
             });
-            var section = configuration.GetSection("JWTConfig");
-            string secretKey = section.GetValue<string>("SecretKey");
-            var secretByte = Encoding.UTF8.GetBytes(secretKey);
-            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            builder.Services.AddScoped(s =>
             {
-                //配置token验证
-                options.TokenValidationParameters = new TokenValidationParameters()
+                ISqlSugarClient sqlSugar = new SqlSugarClient(new ConnectionConfig()
                 {
-                    ValidateIssuer = true,
-                    ValidIssuer = section.GetValue<string>("Issuer"),
-                    ValidateAudience = true,
-                    ValidAudience = section.GetValue<string>("Audience"),
-                    //验证是否过期
-                    ValidateLifetime = true,
-                    //验证私钥
-                    IssuerSigningKey = new SymmetricSecurityKey(secretByte)
-
-                };
+                    DbType = SqlSugar.DbType.Sqlite,
+                    ConnectionString = "DataSource=mwebapi.db",
+                    IsAutoCloseConnection = true,
+                });
+                return sqlSugar;
             });
-
-            builder.Services.AddSingleton(new Extensions.Token.MTokenHandler(configuration));
-
+            builder.Services.AddMToken(configuration);
+            var section = configuration.GetSection("JWTConfig");
+            builder.Services.AddMAuth(section);
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwaggerExtension(swaggerGroups);
+                var item = app.Services.GetRequiredService<ISqlSugarClient>();
+                item.Aop.OnLogExecuting = (sql, pars) =>
+                {
+                    Log.Information(sql + "\r\n" + item.Utilities.SerializeObject(pars.ToDictionary(it => it.ParameterName, it => it.Value)));
+                };
             }
             app.UseCors("MyPolicy");
             app.UseAuthorization();
