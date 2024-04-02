@@ -2,8 +2,11 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MWebApi.Core;
+using MWebApi.Extensions;
 using MWebApi.Extensions.JsonExtensions;
 using MWebApi.Extensions.SwaggerExtensions;
 using MWebApi.Extensions.Token;
@@ -49,6 +52,11 @@ namespace MWebApi
                 return sqlSugar;
             });
             builder.Services.AddMToken(configuration);
+            builder.Services.AddSingleton<IdGenerateInterface<long>, Snowflake>();
+            builder.Services.AddSingleton(z =>
+            {
+                return new SnowflakeId(1, 1);
+            });
             var section = configuration.GetSection("JWTConfig");
             builder.Services.AddMAuth(section);
             var app = builder.Build();
