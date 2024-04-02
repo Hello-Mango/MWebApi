@@ -31,6 +31,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MWebApi.Core\MWebApi.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="i18n\Controllers\AccountController.en-US.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
