@@ -16,9 +16,8 @@ namespace MWebApi.Extensions.Token
             service.AddSingleton(new MTokenHandler(configuration));
             return service;
         }
-        public static IServiceCollection AddMAuth(this IServiceCollection service, IConfigurationSection configuration)
+        public static IServiceCollection AddMAuth(this IServiceCollection service, IConfigurationSection section)
         {
-            var section = configuration.GetSection("JWTConfig");
             string secretKey = section.GetValue<string>("SecretKey");
             var secretByte = Encoding.UTF8.GetBytes(secretKey);
             service.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>

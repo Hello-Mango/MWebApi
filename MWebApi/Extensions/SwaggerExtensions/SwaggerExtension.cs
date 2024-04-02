@@ -42,7 +42,7 @@ namespace MWebApi.Extensions.SwaggerExtensions
             return service;
         }
 
-        public static IApplicationBuilder UseSwaggerExtension(this IApplicationBuilder app, List<SwaggerGroup> groupList, Action<SwaggerOptions> setupAction = null, Action<SwaggerUIOptions> setupUIAction = null)
+        public static IApplicationBuilder UseSwaggerExtension(this IApplicationBuilder app, List<SwaggerGroup> groupList, Action<SwaggerOptions>? setupAction = null, Action<SwaggerUIOptions> setupUIAction = null)
         {
             if (setupAction != null)
             {

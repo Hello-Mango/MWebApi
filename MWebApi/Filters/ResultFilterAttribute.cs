@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MWebApi.Filters
 {
-    public class ApiResultFilterAttribute : Attribute, IResultFilter
+    public class ResultFilterAttribute : Attribute, IResultFilter
     {
         public void OnResultExecuted(ResultExecutedContext context)
         {

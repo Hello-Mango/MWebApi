@@ -3,12 +3,10 @@ using SqlSugar;
 
 namespace MWebApi.Filters
 {
-    public class TransactionFilter : IActionFilter
+    public class TransactionFilterAttribute : IActionFilter
     {
-        //你也可以换EF CORE对象 或者ADO对象都行
         ISqlSugarClient _db;
-        //（ISqlSugarClient）需要IOC注入处理事务的对象
-        public TransactionFilter(ISqlSugarClient db)
+        public TransactionFilterAttribute(ISqlSugarClient db)
         {
             _db = db;
         }

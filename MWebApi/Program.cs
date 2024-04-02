@@ -1,5 +1,6 @@
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -9,6 +10,7 @@ using MWebApi.Extensions.Token;
 using Serilog;
 using Serilog.Events;
 using SqlSugar;
+using System.Globalization;
 using System.Text;
 using System.Text.Json;
 
@@ -30,6 +32,7 @@ namespace MWebApi
                 options.JsonSerializerOptions.Converters.Add(new LongToStringConverter());
             });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddJsonLocalization(z => z.ResourcesPath = "i18n");
             builder.Services.AddSwagger(swaggerGroups, true);
             builder.Services.AddCors(options =>
             {
@@ -53,12 +56,25 @@ namespace MWebApi
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwaggerExtension(swaggerGroups);
-                var item = app.Services.GetRequiredService<ISqlSugarClient>();
-                item.Aop.OnLogExecuting = (sql, pars) =>
-                {
-                    Log.Information(sql + "\r\n" + item.Utilities.SerializeObject(pars.ToDictionary(it => it.ParameterName, it => it.Value)));
-                };
+                //var item = app.Services.GetRequiredService<ISqlSugarClient>();
+                //item.Aop.OnLogExecuting = (sql, pars) =>
+                //{
+                //    Log.Information(sql + "\r\n" + item.Utilities.SerializeObject(pars.ToDictionary(it => it.ParameterName, it => it.Value)));
+                //};
             }
+            var supportedCultures = new[]
+            {
+                new CultureInfo("en-US"),
+                new CultureInfo("zh-CN"),
+            };
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("en-US"),
+                // Formatting numbers, dates, etc.
+                SupportedCultures = supportedCultures,
+                // UI strings that we have localized.
+                SupportedUICultures = supportedCultures
+            });
             app.UseCors("MyPolicy");
             app.UseAuthorization();
             app.MapControllers().RequireAuthorization();
