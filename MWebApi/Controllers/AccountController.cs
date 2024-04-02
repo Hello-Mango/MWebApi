@@ -16,17 +16,20 @@ namespace MWebApi.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IStringLocalizer _stringLocalizer;
+        private readonly IStringLocalizer _stringLocalizer2;
         private readonly MTokenHandler _mTokenHandler;
-        public AccountController(MTokenHandler mTokenHandler, IStringLocalizer<AccountController> stringLocalizer)
+        public AccountController(MTokenHandler mTokenHandler, IStringLocalizer<AccountController> stringLocalizer, IStringLocalizer stringLocalizer2)
         {
             _mTokenHandler = mTokenHandler;
             _stringLocalizer= stringLocalizer;
+            _stringLocalizer2 = stringLocalizer2;
         }
         [AllowAnonymous]
         [HttpPost]
         public string Login([FromBody] LoginReq _loginReq)
         {
             string value = _stringLocalizer["Account"];
+            string value2 = _stringLocalizer2["Account"];
             if (_loginReq.username == "admin" && _loginReq.password == "111111")
             {
                 var token = _mTokenHandler.CreateToken("admin", new List<string>()
