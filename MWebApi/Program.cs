@@ -8,11 +8,11 @@ using Microsoft.OpenApi.Models;
 using MWebApi.Core;
 using MWebApi.Extensions;
 using MWebApi.Extensions.JsonExtensions;
+using MWebApi.Extensions.Snowflake;
 using MWebApi.Extensions.SwaggerExtensions;
 using MWebApi.Extensions.Token;
 using Serilog;
 using Serilog.Events;
-using SqlSugar;
 using System.Globalization;
 using System.Text;
 using System.Text.Json;
@@ -41,22 +41,9 @@ namespace MWebApi
             {
                 options.AddPolicy("MyPolicy", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()); //MyPolicy 为自定义的策略名称，与使用时相同即可。可以同时定义多个不同策略名称的跨域策略
             });
-            builder.Services.AddScoped(s =>
-            {
-                ISqlSugarClient sqlSugar = new SqlSugarClient(new ConnectionConfig()
-                {
-                    DbType = SqlSugar.DbType.Sqlite,
-                    ConnectionString = "DataSource=mwebapi.db",
-                    IsAutoCloseConnection = true,
-                });
-                return sqlSugar;
-            });
+            
             builder.Services.AddMToken(configuration);
-            builder.Services.AddSingleton<IdGenerateInterface<long>, Snowflake>();
-            builder.Services.AddSingleton(z =>
-            {
-                return new SnowflakeId(1, 1);
-            });
+            builder.Services.AddSnowflake(configuration);
             var section = configuration.GetSection("JWTConfig");
             builder.Services.AddMAuth(section);
             var app = builder.Build();
@@ -64,11 +51,6 @@ namespace MWebApi
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwaggerExtension(swaggerGroups);
-                //var item = app.Services.GetRequiredService<ISqlSugarClient>();
-                //item.Aop.OnLogExecuting = (sql, pars) =>
-                //{
-                //    Log.Information(sql + "\r\n" + item.Utilities.SerializeObject(pars.ToDictionary(it => it.ParameterName, it => it.Value)));
-                //};
             }
             var supportedCultures = new[]
             {

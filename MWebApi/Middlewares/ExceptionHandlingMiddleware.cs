@@ -75,7 +75,6 @@ namespace IOTEdgeServer.Middlewares
 
     public static class ExceptionHandlingBuilderExtensions
     {
-
         public static IApplicationBuilder UseExceptionMiddleware(this IApplicationBuilder app)
         {
             return app.UseMiddleware<ExceptionHandlingMiddleware>();
