@@ -12,7 +12,8 @@ using System.Security.Claims;
 
 namespace MWebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
+    [ApiExplorerSettings(GroupName = "Hello")]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -23,15 +24,20 @@ namespace MWebApi.Controllers
         public AccountController(MTokenHandler mTokenHandler, IStringLocalizer<AccountController> stringLocalizer, IStringLocalizer stringLocalizer2, IdGenerateInterface<long> idGenerateInterface)
         {
             _mTokenHandler = mTokenHandler;
-            _stringLocalizer= stringLocalizer;
+            _stringLocalizer = stringLocalizer;
             _stringLocalizer2 = stringLocalizer2;
             idGenerateInterface1 = idGenerateInterface;
         }
+        /// <summary>
+        /// 登录
+        /// </summary>
+        /// <param name="_loginReq"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
         public string Login([FromBody] LoginReq _loginReq)
         {
-            long text= idGenerateInterface1.NextId();
+            long text = idGenerateInterface1.NextId();
             string value = _stringLocalizer["Account"];
             string value2 = _stringLocalizer2["Account"];
             if (_loginReq.username == "admin" && _loginReq.password == "111111")

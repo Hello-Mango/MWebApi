@@ -1,6 +1,7 @@
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
@@ -25,18 +26,13 @@ namespace MWebApi
         {
             var builder = WebApplication.CreateBuilder(args);
             IConfiguration configuration = builder.Configuration;
-            List<SwaggerGroup> swaggerGroups = new List<SwaggerGroup>()
-            {
-                new SwaggerGroup("TEST1","TEST1 TITLE","TEST1 DESC"),
-                new SwaggerGroup("Hello","Hello1 TITLE","Hello1 DESC"),
-            };
             builder.Services.AddControllers().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.Converters.Add(new LongToStringConverter());
             });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddJsonLocalization(z => z.ResourcesPath = "i18n");
-            builder.Services.AddSwagger(swaggerGroups, true);
+            builder.Services.AddSwagger( true);
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("MyPolicy", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()); //MyPolicy 为自定义的策略名称，与使用时相同即可。可以同时定义多个不同策略名称的跨域策略
@@ -46,11 +42,15 @@ namespace MWebApi
             builder.Services.AddSnowflake(configuration);
             var section = configuration.GetSection("JWTConfig");
             builder.Services.AddMAuth(section);
+
+            builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IApplicationModelProvider, ProduceResponseTypeModelProvider>());
+
+
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwaggerExtension(swaggerGroups);
+                app.UseSwaggerExtension();
             }
             var supportedCultures = new[]
             {
