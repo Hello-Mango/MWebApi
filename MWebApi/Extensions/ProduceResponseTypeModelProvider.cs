@@ -22,7 +22,7 @@ namespace MWebApi.Extensions
             {
                 foreach (ActionModel action in controller.Actions)
                 {
-                    Type type = typeof(ApiResult<object>);
+                    Type type = typeof(ErrorResponse);
                     action.Filters.Add(new ProducesResponseTypeAttribute(type, StatusCodes.Status422UnprocessableEntity));
                     action.Filters.Add(new ProducesResponseTypeAttribute(type, StatusCodes.Status500InternalServerError));
                     if (action.ActionMethod.ReturnType != null)

@@ -39,37 +39,29 @@ namespace IOTEdgeServer.Middlewares
         /// 异步处理异常
         /// </summary>
         /// <param name="context"></param>
-        /// <param name="exception"></param>
+        /// <param name="ex"></param>
         /// <returns></returns>
-        private async Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private async Task HandleExceptionAsync(HttpContext context, Exception ex)
         {
-            context.Response.ContentType = "application/json";  // 返回json 类型
             var response = context.Response;
-            var errorResponse = new ApiResult<object>  // 自定义的异常错误信息类型
+            var errorResponse = new ErrorResponse  // 自定义的异常错误信息类型
             {
-                statusCode = 500,
-                errors = exception.Message + exception.StackTrace
+                Message = ex.Message,
+                DebugMessage = ex.StackTrace ?? ex.Message,
+                Successed = false
             };
-            switch (exception)
+            switch (ex)
             {
-                case Exception422 ex:
-                    string msg = ex.Message;
-                    if (ex.InnerException != null)
-                    {
-                        msg += ex.InnerException.Message;
-                    }
-                    errorResponse.statusCode = (int)HttpStatusCode.UnprocessableContent;
-                    response.StatusCode = errorResponse.statusCode;
-                    errorResponse.errors = msg;
+                case Exception422 ex422:
+                    response.StatusCode = (int)HttpStatusCode.UnprocessableContent;
                     break;
                 default:
                     response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    errorResponse.errors = exception.Message + exception.StackTrace;
+                    _logger.LogError(ex.Message + ex.StackTrace);
                     break;
             }
-            _logger.LogError(exception.Message + exception.StackTrace);
             var result = JsonConvert.SerializeObject(errorResponse);
-            await context.Response.WriteAsync(result);
+            await context.Response.WriteAsJsonAsync(result);
         }
     }
 
