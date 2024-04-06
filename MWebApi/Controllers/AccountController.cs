@@ -13,7 +13,8 @@ using System.Security.Claims;
 
 namespace MWebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
+    [ApiExplorerSettings(GroupName = "Hello")]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -28,6 +29,11 @@ namespace MWebApi.Controllers
             _stringLocalizer2 = stringLocalizer2;
             idGenerateInterface1 = idGenerateInterface;
         }
+        /// <summary>
+        /// 登录
+        /// </summary>
+        /// <param name="_loginReq"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
         public TokenResponse Login([FromBody] LoginReq _loginReq)
