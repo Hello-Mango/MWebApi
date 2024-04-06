@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using MWebApi.Core;
 using MWebApi.Extensions.Token;
 using MWebApi.Models.Request;
+using NetTaste;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -23,15 +24,15 @@ namespace MWebApi.Controllers
         public AccountController(MTokenHandler mTokenHandler, IStringLocalizer<AccountController> stringLocalizer, IStringLocalizer stringLocalizer2, IdGenerateInterface<long> idGenerateInterface)
         {
             _mTokenHandler = mTokenHandler;
-            _stringLocalizer= stringLocalizer;
+            _stringLocalizer = stringLocalizer;
             _stringLocalizer2 = stringLocalizer2;
             idGenerateInterface1 = idGenerateInterface;
         }
         [AllowAnonymous]
         [HttpPost]
-        public string Login([FromBody] LoginReq _loginReq)
+        public TokenResponse Login([FromBody] LoginReq _loginReq)
         {
-            long text= idGenerateInterface1.NextId();
+            long text = idGenerateInterface1.NextId();
             string value = _stringLocalizer["Account"];
             string value2 = _stringLocalizer2["Account"];
             if (_loginReq.username == "admin" && _loginReq.password == "111111")
@@ -41,12 +42,31 @@ namespace MWebApi.Controllers
                     "admin",
                     "user"
                 });
-                return token;
+                return new TokenResponse()
+                {
+                    AccessToken = token,
+                    RefreshToken = token,
+                    Timestamp = DateTime.Now.Microsecond
+                };
             }
             else
             {
-                return "";
+                return new TokenResponse();
             }
+        }
+        /// <summary>
+        /// 根据refreshtoken刷新token
+        /// </summary>
+        /// <param name="freshToken"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpPost]
+        public TokenResponse RefreshToken(string freshToken)
+        {
+            return new TokenResponse()
+            {
+                Timestamp = DateTime.Now.Microsecond
+            };
         }
     }
 }
