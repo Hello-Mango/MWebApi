@@ -8,7 +8,6 @@ namespace MWebApi.Core
     {
         public string RefreshToken { get; set; }
         public string AccessToken { get; set; }
-
         public long Timestamp { get; set; }
     }
 }

@@ -12,7 +12,7 @@ namespace MWebApi.Extensions.Token
         {
             _configuration = configuration;
         }
-        public string CreateToken(string username, List<string> roleList)
+        public string CreateAccessToken(string username, List<string> roleList)
         {
             var section = _configuration.GetSection("JWTConfig");
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -26,6 +26,35 @@ namespace MWebApi.Extensions.Token
             {
                 Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, username) }),
                 Expires = DateTime.UtcNow.AddMinutes(expires),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                Audience = audience,
+                Claims = new Dictionary<string, object>()
+                {
+                    { "role", string.Join(',',roleList) }
+                },
+                Issuer = issuer,
+                IssuedAt = DateTime.UtcNow,
+                NotBefore = DateTime.UtcNow
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
+            return tokenString;
+        }
+        public string CreateRefreshToken(string username, List<string> roleList)
+        {
+            var section = _configuration.GetSection("JWTConfig");
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = System.Text.Encoding.ASCII.GetBytes(section.GetValue<string>("SecretKey"));
+            var expires = section.GetValue<int>("Expires");
+            var audience = section.GetValue<string>("Audience");
+            var issuer = section.GetValue<string>("Issuer");
+
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, username) }),
+                Expires = DateTime.UtcNow.AddMinutes(expires).AddHours(2),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
                 Audience = audience,
                 Claims = new Dictionary<string, object>()

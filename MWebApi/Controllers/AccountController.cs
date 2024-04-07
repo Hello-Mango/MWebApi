@@ -1,15 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using Microsoft.IdentityModel.JsonWebTokens;
-using Microsoft.IdentityModel.Tokens;
 using MWebApi.Core;
 using MWebApi.Extensions.Token;
 using MWebApi.Models.Request;
-using NetTaste;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 
 namespace MWebApi.Controllers
 {
@@ -43,7 +37,7 @@ namespace MWebApi.Controllers
             string value2 = _stringLocalizer2["Account"];
             if (_loginReq.username == "admin" && _loginReq.password == "111111")
             {
-                var token = _mTokenHandler.CreateToken("admin", new List<string>()
+                var token = _mTokenHandler.CreateAccessToken("admin", new List<string>()
                 {
                     "admin",
                     "user"
