@@ -21,7 +21,6 @@ namespace MWebApi.Extensions.Token
             var audience = section.GetValue<string>("Audience");
             var issuer = section.GetValue<string>("Issuer");
 
-
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, username) }),
@@ -31,14 +30,14 @@ namespace MWebApi.Extensions.Token
                 TokenType = "Bearer",
                 Claims = new Dictionary<string, object>()
                 {
-                    { "role", string.Join(',',roleList) }
+                    { ClaimTypes.Role, string.Join(',',roleList) }
                 },
                 Issuer = issuer,
                 IssuedAt = DateTime.UtcNow,
                 NotBefore = DateTime.UtcNow
             };
 
-            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var token = tokenHandler.CreateJwtSecurityToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
             return tokenString;
         }
@@ -63,7 +62,7 @@ namespace MWebApi.Extensions.Token
                 NotBefore = DateTime.UtcNow
             };
 
-            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var token = tokenHandler.CreateJwtSecurityToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
             return tokenString;
         }

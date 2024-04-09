@@ -15,7 +15,7 @@ namespace MMemoryCache
             _memoryCache = memoryCache;
             _mMemoryCacheOptions = mMemoryCacheOptions.Value;
         }
-        public string Get(string key)
+        public string? Get(string key)
         {
             key = _mMemoryCacheOptions.CacheKeyPrefix + key;
             return _memoryCache.Get<string>(key);
@@ -27,7 +27,7 @@ namespace MMemoryCache
             return _memoryCache.Get<T>(key);
         }
 
-        public async Task<string> GetAsync(string key)
+        public async Task<string?> GetAsync(string key)
         {
             key = _mMemoryCacheOptions.CacheKeyPrefix + key;
             return await Task.FromResult(_memoryCache.Get<string>(key));
@@ -53,31 +53,35 @@ namespace MMemoryCache
             return true;
         }
 
-        public bool Set<T>(string key, T t)
+        public bool Set<T>(string key, T t, int absoluteExpirationRelativeToNow)
         {
             key = _mMemoryCacheOptions.CacheKeyPrefix + key;
-            _memoryCache.Set(key, t);
+            var timespan = TimeSpan.FromSeconds(absoluteExpirationRelativeToNow);
+            _memoryCache.Set(key, t, timespan);
             return true;
         }
 
-        public bool Set(string key, string body)
+        public bool Set(string key, string body, int absoluteExpirationRelativeToNow)
         {
             key = _mMemoryCacheOptions.CacheKeyPrefix + key;
-            _memoryCache.Set(key, body);
+            var timespan = TimeSpan.FromSeconds(absoluteExpirationRelativeToNow);
+            _memoryCache.Set(key, body, timespan);
             return true;
         }
 
-        public async Task<bool> SetAsync<T>(string key, T t)
+        public async Task<bool> SetAsync<T>(string key, T t, int absoluteExpirationRelativeToNow)
         {
             key = _mMemoryCacheOptions.CacheKeyPrefix + key;
-            await Task.Run(() => _memoryCache.Set(key, t));
+            var timespan = TimeSpan.FromSeconds(absoluteExpirationRelativeToNow);
+            await Task.Run(() => _memoryCache.Set(key, t, timespan));
             return true;
         }
 
-        public async Task<bool> SetAsync(string key, string body)
+        public async Task<bool> SetAsync(string key, string body, int absoluteExpirationRelativeToNow)
         {
             key = _mMemoryCacheOptions.CacheKeyPrefix + key;
-            await Task.Run(() => _memoryCache.Set(key, body));
+            var timespan = TimeSpan.FromSeconds(absoluteExpirationRelativeToNow);
+            await Task.Run(() => _memoryCache.Set(key, body, timespan));
             return true;
         }
     }
