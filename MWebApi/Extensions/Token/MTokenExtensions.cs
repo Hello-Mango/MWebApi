@@ -18,6 +18,7 @@ namespace MWebApi.Extensions.Token
         }
         public static IServiceCollection AddMAuth(this IServiceCollection service, IConfigurationSection section)
         {
+            //AddMToken(service, section);
             string secretKey = section.GetValue<string>("SecretKey");
             var secretByte = Encoding.UTF8.GetBytes(secretKey);
             service.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>

@@ -6,8 +6,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MMemoryCache;
+using MRedisCache;
 using MWebApi.Core;
 using MWebApi.Extensions;
+using MWebApi.Extensions.Cache;
 using MWebApi.Extensions.JsonExtensions;
 using MWebApi.Extensions.Snowflake;
 using MWebApi.Extensions.SwaggerExtensions;
@@ -32,20 +35,24 @@ namespace MWebApi
             });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddJsonLocalization(z => z.ResourcesPath = "i18n");
-            builder.Services.AddSwagger( true);
+            builder.Services.AddSwagger(true);
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("MyPolicy", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()); //MyPolicy 为自定义的策略名称，与使用时相同即可。可以同时定义多个不同策略名称的跨域策略
             });
-            
+
             builder.Services.AddMToken(configuration);
             builder.Services.AddSnowflake(configuration);
             var section = configuration.GetSection("JWTConfig");
             builder.Services.AddMAuth(section);
 
             builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IApplicationModelProvider, ProduceResponseTypeModelProvider>());
-
-
+            //builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IApplicationModelProvider, AuthorizePolicyProvider>());
+            builder.Services.AddMemoryCache();
+            builder.Services.AddCacheService<MMemoryCacheService, MMemoryCacheOptions>(c =>
+            {
+                c.CacheKeyPrefix = "MWebApi";
+            });
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())

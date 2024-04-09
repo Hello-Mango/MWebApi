@@ -29,6 +29,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MCoreInterface\MCoreInterface.csproj" />
+    <ProjectReference Include="..\MMemoryCache\MMemoryCache.csproj" />
+    <ProjectReference Include="..\MRedisCache\MRedisCache.csproj" />
     <ProjectReference Include="..\MWebApi.Core\MWebApi.Core.csproj" />
   </ItemGroup>
 

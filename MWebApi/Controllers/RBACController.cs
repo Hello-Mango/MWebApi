@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MCoreInterface;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MWebApi.Controllers
@@ -7,13 +9,23 @@ namespace MWebApi.Controllers
     [ApiController]
     public class RBACController : ControllerBase
     {
-        public RBACController()
+        private readonly ICacheService _cacheService;
+        public RBACController(ICacheService cacheService)
         {
+            _cacheService = cacheService;
         }
+        [AllowAnonymous]
         [HttpGet]
         public string Test()
         {
+            _cacheService.Set("test", "test");
             return "Test";
+        }
+        [AllowAnonymous]
+        [HttpGet]
+        public string Get()
+        {
+            return _cacheService.Get("test");
         }
     }
 }

@@ -16,7 +16,7 @@ namespace MWebApi.Extensions.Token
         {
             var section = _configuration.GetSection("JWTConfig");
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = System.Text.Encoding.ASCII.GetBytes(section.GetValue<string>("SecretKey"));
+            var key = Encoding.ASCII.GetBytes(section.GetValue<string>("SecretKey"));
             var expires = section.GetValue<int>("Expires");
             var audience = section.GetValue<string>("Audience");
             var issuer = section.GetValue<string>("Issuer");
@@ -28,6 +28,7 @@ namespace MWebApi.Extensions.Token
                 Expires = DateTime.UtcNow.AddMinutes(expires),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
                 Audience = audience,
+                TokenType = "Bearer",
                 Claims = new Dictionary<string, object>()
                 {
                     { "role", string.Join(',',roleList) }
@@ -41,7 +42,7 @@ namespace MWebApi.Extensions.Token
             var tokenString = tokenHandler.WriteToken(token);
             return tokenString;
         }
-        public string CreateRefreshToken(string username, List<string> roleList)
+        public string CreateRefreshToken(string username)
         {
             var section = _configuration.GetSection("JWTConfig");
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -54,13 +55,9 @@ namespace MWebApi.Extensions.Token
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, username) }),
-                Expires = DateTime.UtcNow.AddMinutes(expires).AddHours(2),
+                Expires = DateTime.UtcNow.AddMinutes(expires).AddHours(5),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
                 Audience = audience,
-                Claims = new Dictionary<string, object>()
-                {
-                    { "role", string.Join(',',roleList) }
-                },
                 Issuer = issuer,
                 IssuedAt = DateTime.UtcNow,
                 NotBefore = DateTime.UtcNow

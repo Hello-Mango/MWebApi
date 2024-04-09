@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MCoreInterface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using MWebApi.Core;
@@ -16,12 +17,18 @@ namespace MWebApi.Controllers
         private readonly IStringLocalizer _stringLocalizer2;
         private readonly MTokenHandler _mTokenHandler;
         private readonly IdGenerateInterface<long> idGenerateInterface1;
-        public AccountController(MTokenHandler mTokenHandler, IStringLocalizer<AccountController> stringLocalizer, IStringLocalizer stringLocalizer2, IdGenerateInterface<long> idGenerateInterface)
+        private readonly ICacheService _cacheService;
+        public AccountController(MTokenHandler mTokenHandler,
+            IStringLocalizer<AccountController> stringLocalizer,
+            IStringLocalizer stringLocalizer2,
+            IdGenerateInterface<long> idGenerateInterface,
+            ICacheService cacheService)
         {
             _mTokenHandler = mTokenHandler;
             _stringLocalizer = stringLocalizer;
             _stringLocalizer2 = stringLocalizer2;
             idGenerateInterface1 = idGenerateInterface;
+            _cacheService = cacheService;
         }
         /// <summary>
         /// 登录
@@ -42,10 +49,11 @@ namespace MWebApi.Controllers
                     "admin",
                     "user"
                 });
+                var refreshToken = _mTokenHandler.CreateRefreshToken("admin");
                 return new TokenResponse()
                 {
                     AccessToken = token,
-                    RefreshToken = token,
+                    RefreshToken = refreshToken,
                     Timestamp = DateTime.Now.Microsecond
                 };
             }
@@ -57,11 +65,10 @@ namespace MWebApi.Controllers
         /// <summary>
         /// 根据refreshtoken刷新token
         /// </summary>
-        /// <param name="freshToken"></param>
+        /// <param name="refreshToken"></param>
         /// <returns></returns>
-        [AllowAnonymous]
         [HttpPost]
-        public TokenResponse RefreshToken(string freshToken)
+        public TokenResponse RefreshToken(string refreshToken)
         {
             return new TokenResponse()
             {

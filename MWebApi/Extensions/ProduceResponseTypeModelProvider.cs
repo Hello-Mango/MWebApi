@@ -1,16 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
+﻿using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using System;
-using static Microsoft.AspNetCore.Mvc.Controller;
-using MWebApi.Filters;
 using MWebApi.Core;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace MWebApi.Extensions
 {
     public class ProduceResponseTypeModelProvider : IApplicationModelProvider
     {
+        public ProduceResponseTypeModelProvider()
+        {
+        }
         public int Order => 0;
         public void OnProvidersExecuted(ApplicationModelProviderContext context)
         {
