@@ -32,6 +32,12 @@ namespace MWebApi
         {
             var builder = WebApplication.CreateBuilder(args);
             IConfiguration configuration = builder.Configuration;
+            builder.Services.AddSerilog();
+            builder.Services.AddSerilog(logger =>
+            {
+                logger.ReadFrom.Configuration(builder.Configuration)
+                .Enrich.FromLogContext();
+            });
             builder.Services.AddControllers().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.Converters.Add(new LongToStringConverter());
@@ -58,7 +64,7 @@ namespace MWebApi
                 c.CacheKeyPrefix = "MWebApi";
             });
             var app = builder.Build();
-
+            app.UseSerilogRequestLogging();
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwaggerExtension();
@@ -68,6 +74,7 @@ namespace MWebApi
                 new CultureInfo("en-US"),
                 new CultureInfo("zh-CN"),
             };
+            app.UseSerilogRequestLogging();
             app.UseExceptionMiddleware();
             app.UseUserContextMiddleware();
             app.UseRequestLocalization(new RequestLocalizationOptions
