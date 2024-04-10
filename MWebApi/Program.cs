@@ -1,5 +1,7 @@
 
+using IOTEdgeServer.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.Configuration;
@@ -15,6 +17,7 @@ using MWebApi.Extensions.JsonExtensions;
 using MWebApi.Extensions.Snowflake;
 using MWebApi.Extensions.SwaggerExtensions;
 using MWebApi.Extensions.Token;
+using MWebApi.Middlewares;
 using Serilog;
 using Serilog.Events;
 using System.Globalization;
@@ -45,10 +48,11 @@ namespace MWebApi
             builder.Services.AddSnowflake(configuration);
             var section = configuration.GetSection("JWTConfig");
             builder.Services.AddMAuth(section);
-
+            builder.Services.AddUserContext();
             builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IApplicationModelProvider, ProduceResponseTypeModelProvider>());
             //builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IApplicationModelProvider, AuthorizePolicyProvider>());
             builder.Services.AddMemoryCache();
+            builder.Services.AddSingleton<IAuthorizationHandler, MAuthorizationHandler>();
             builder.Services.AddCacheService<MMemoryCacheService, MMemoryCacheOptions>(c =>
             {
                 c.CacheKeyPrefix = "MWebApi";
@@ -64,6 +68,8 @@ namespace MWebApi
                 new CultureInfo("en-US"),
                 new CultureInfo("zh-CN"),
             };
+            app.UseExceptionMiddleware();
+            app.UseUserContextMiddleware();
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
                 DefaultRequestCulture = new RequestCulture("en-US"),

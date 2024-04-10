@@ -84,5 +84,33 @@ namespace MMemoryCache
             await Task.Run(() => _memoryCache.Set(key, body, timespan));
             return true;
         }
+
+        public bool Set<T>(string key, T t)
+        {
+            key = _mMemoryCacheOptions.CacheKeyPrefix + key;
+            _memoryCache.Set(key, t);
+            return true;
+        }
+
+        public bool Set(string key, string body)
+        {
+            key = _mMemoryCacheOptions.CacheKeyPrefix + key;
+            _memoryCache.Set(key, body);
+            return true;
+        }
+
+        public async Task<bool> SetAsync<T>(string key, T t)
+        {
+            key = _mMemoryCacheOptions.CacheKeyPrefix + key;
+            await Task.Run(() => _memoryCache.Set(key, t));
+            return true;
+        }
+
+        public async Task<bool> SetAsync(string key, string body)
+        {
+            key = _mMemoryCacheOptions.CacheKeyPrefix + key;
+            await Task.Run(() => _memoryCache.Set(key, body));
+            return true;
+        }
     }
 }

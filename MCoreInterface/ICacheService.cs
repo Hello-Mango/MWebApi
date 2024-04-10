@@ -24,5 +24,11 @@ namespace MCoreInterface
 
         public bool Set(string key, string body, int absoluteExpirationRelativeToNow);
         public Task<bool> SetAsync(string key, string body, int absoluteExpirationRelativeToNow);
+
+        public bool Set<T>(string key, T t);
+        public Task<bool> SetAsync<T>(string key, T t);
+
+        public bool Set(string key, string body);
+        public Task<bool> SetAsync(string key, string body);
     }
 }

@@ -113,6 +113,7 @@ namespace MWebApi.Extensions.SwaggerExtensions
             {
                 app.UseSwaggerUI(c =>
                    {
+                       c.EnablePersistAuthorization();
                        var apiDescriptionGroups = app.ApplicationServices.GetRequiredService<IApiDescriptionGroupCollectionProvider>().ApiDescriptionGroups.Items;
                        foreach (var description in apiDescriptionGroups)
                        {

@@ -31,9 +31,8 @@ namespace MRedisCache
             };
             redisConnection.ConnectionRestored += (sender, e) =>
             {
-                _logger.LogInformation("Redis Connection Restored");
+                _logger.LogWarning("Redis Connection Restored");
             };
-            ///TODO: Add Redis Connection
         }
         public string Get(string key)
         {
@@ -83,22 +82,46 @@ namespace MRedisCache
 
         public bool Set<T>(string key, T t, int absoluteExpirationRelativeToNow)
         {
-            return redisConnection.GetDatabase().SetAdd(key, Newtonsoft.Json.JsonConvert.SerializeObject(t));
+            var timespan = TimeSpan.FromSeconds(absoluteExpirationRelativeToNow);
+            return redisConnection.GetDatabase().StringSet(key, Newtonsoft.Json.JsonConvert.SerializeObject(t), timespan);
         }
 
         public bool Set(string key, string body, int absoluteExpirationRelativeToNow)
         {
-            return redisConnection.GetDatabase().SetAdd(key, body);
+            var timespan = TimeSpan.FromSeconds(absoluteExpirationRelativeToNow);
+            return redisConnection.GetDatabase().StringSet(key, body, timespan);
         }
 
         public Task<bool> SetAsync<T>(string key, T t, int absoluteExpirationRelativeToNow)
         {
-            return redisConnection.GetDatabase().SetAddAsync(key, Newtonsoft.Json.JsonConvert.SerializeObject(t));
+            var timespan = TimeSpan.FromSeconds(absoluteExpirationRelativeToNow);
+            return redisConnection.GetDatabase().StringSetAsync(key, Newtonsoft.Json.JsonConvert.SerializeObject(t), timespan);
         }
 
         public Task<bool> SetAsync(string key, string body, int absoluteExpirationRelativeToNow)
         {
-            return redisConnection.GetDatabase().SetAddAsync(key, body);
+            var timespan = TimeSpan.FromSeconds(absoluteExpirationRelativeToNow);
+            return redisConnection.GetDatabase().StringSetAsync(key, body, timespan);
+        }
+
+        public bool Set<T>(string key, T t)
+        {
+            return redisConnection.GetDatabase().StringSet(key, Newtonsoft.Json.JsonConvert.SerializeObject(t));
+        }
+
+        public bool Set(string key, string body)
+        {
+            return redisConnection.GetDatabase().StringSet(key, body);
+        }
+
+        public Task<bool> SetAsync<T>(string key, T t)
+        {
+            return redisConnection.GetDatabase().StringSetAsync(key, Newtonsoft.Json.JsonConvert.SerializeObject(t));
+        }
+
+        public Task<bool> SetAsync(string key, string body)
+        {
+            return redisConnection.GetDatabase().StringSetAsync(key, body);
         }
     }
 }

@@ -18,12 +18,15 @@ namespace MWebApi.Controllers
         private readonly MTokenHandler _mTokenHandler;
         private readonly IdGenerateInterface<long> idGenerateInterface1;
         private readonly ICacheService _cacheService;
+        private readonly UserContext _userContext;
         public AccountController(MTokenHandler mTokenHandler,
             IStringLocalizer<AccountController> stringLocalizer,
             IStringLocalizer stringLocalizer2,
             IdGenerateInterface<long> idGenerateInterface,
+            UserContext userContext,
             ICacheService cacheService)
         {
+            _userContext = userContext;
             _mTokenHandler = mTokenHandler;
             _stringLocalizer = stringLocalizer;
             _stringLocalizer2 = stringLocalizer2;
@@ -52,7 +55,7 @@ namespace MWebApi.Controllers
                 var refreshToken = _mTokenHandler.CreateRefreshToken("admin");
                 return new TokenResponse()
                 {
-                    AccessToken = token,
+                    AccessToken = $"bearer " + token,
                     RefreshToken = refreshToken,
                     Timestamp = DateTime.Now.Microsecond
                 };
@@ -68,11 +71,13 @@ namespace MWebApi.Controllers
         /// <param name="refreshToken"></param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize]
         public TokenResponse RefreshToken(string refreshToken)
         {
             return new TokenResponse()
             {
-                Timestamp = DateTime.Now.Microsecond
+                RefreshToken = _userContext.UserName,
+                Timestamp = DateTime.Now.Ticks
             };
         }
     }
