@@ -74,7 +74,6 @@ namespace MWebApi
                 new CultureInfo("en-US"),
                 new CultureInfo("zh-CN"),
             };
-            app.UseSerilogRequestLogging();
             app.UseExceptionMiddleware();
             app.UseUserContextMiddleware();
             app.UseRequestLocalization(new RequestLocalizationOptions

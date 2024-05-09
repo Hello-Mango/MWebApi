@@ -20,6 +20,7 @@
     <PackageReference Include="JWT" Version="10.1.1" />
     <PackageReference Include="Masuit.Tools.Abstractions" Version="2.6.9.9" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="8.0.4" />
     <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="8.0.3" />
     <PackageReference Include="Serilog" Version="3.1.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
