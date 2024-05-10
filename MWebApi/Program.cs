@@ -1,5 +1,4 @@
 
-using IOTEdgeServer.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
@@ -64,6 +63,9 @@ namespace MWebApi
             {
                 c.CacheKeyPrefix = "MWebApi";
             });
+            builder.Services.AddSignalR(z =>
+            {
+            });
             var app = builder.Build();
             if (configuration.GetSection("Swagger").GetValue<bool>("IsShow"))
             {
@@ -89,7 +91,7 @@ namespace MWebApi
             app.UseCors("MyPolicy");
             app.UseAuthorization();
             app.MapControllers().RequireAuthorization();
-
+            app.MapHub<ChatHub>("/Chat");
             app.Run();
         }
     }

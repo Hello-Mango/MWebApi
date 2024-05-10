@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System.Net;
 
-namespace IOTEdgeServer.Middlewares
+namespace MWebApi.Middlewares
 {
     /// <summary>
     /// 全局异常捕获中间件
