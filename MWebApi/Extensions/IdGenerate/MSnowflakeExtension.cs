@@ -6,7 +6,7 @@ namespace MWebApi.Extensions.Snowflake
     {
         public static IServiceCollection AddSnowflake(this IServiceCollection services,long dcId,long workId)
         {
-            services.AddSingleton<IdGenerateInterface<long>, Snowflake>();
+            services.AddSingleton<IGenerateId<long>, Snowflake>();
             services.AddSingleton(z =>
             {
                 return new SnowflakeId(dcId, workId);
@@ -17,7 +17,7 @@ namespace MWebApi.Extensions.Snowflake
         {
             long dcId = configuration.GetValue<long>("Snowflake:DatacenterId");
             long workId = configuration.GetValue<long>("Snowflake:WorkerId");
-            services.AddSingleton<IdGenerateInterface<long>, Snowflake>();
+            services.AddSingleton<IGenerateId<long>, Snowflake>();
             services.AddSingleton(z =>
             {
                 return new SnowflakeId(dcId, workId);

@@ -4,8 +4,8 @@ using System.Text;
 
 namespace MWebApi.Core
 {
-    public interface IGenerateId<T>
+    public interface IUserPermission
     {
-        public T NextId();
+        bool CheckPermission(string userId, string permissionName);
     }
 }

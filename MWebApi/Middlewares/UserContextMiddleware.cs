@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using MWebApi.Core;
 using MWebApi.Extensions.Snowflake;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MWebApi.Middlewares
 {
@@ -15,11 +16,14 @@ namespace MWebApi.Middlewares
 
         public async Task InvokeAsync(HttpContext context, IServiceProvider serviceProvider)
         {
-            if (context.User.Identity.IsAuthenticated)
+            if (context is not null)
             {
-                var userContext = serviceProvider.GetRequiredService<UserContext>();
-                // Do something with userContext
-                userContext.UserName = context.User.Identity.Name;
+                if (context.User.Identity.IsAuthenticated)
+                {
+                    var userContext = serviceProvider.GetRequiredService<UserContext>();
+                    // Do something with userContext
+                    userContext.UserName = context.User.Identity.Name;
+                }
             }
 
             await _next(context);

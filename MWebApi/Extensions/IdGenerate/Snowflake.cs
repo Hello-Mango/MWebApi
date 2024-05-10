@@ -3,7 +3,7 @@ using System.Text;
 
 namespace MWebApi.Extensions.Snowflake
 {
-    public class Snowflake : IdGenerateInterface<long>
+    public class Snowflake : IGenerateId<long>
     {
         private readonly SnowflakeId _snowflakeId;
         public Snowflake(SnowflakeId snowflakeId)
@@ -11,7 +11,7 @@ namespace MWebApi.Extensions.Snowflake
             _snowflakeId = snowflakeId;
         }
 
-        long IdGenerateInterface<long>.NextId()
+        long IGenerateId<long>.NextId()
         {
             return _snowflakeId.NextId();
         }

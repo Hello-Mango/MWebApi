@@ -45,11 +45,12 @@ namespace MWebApi
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddJsonLocalization(z => z.ResourcesPath = "i18n");
             builder.Services.AddSwagger(true);
+            builder.Services.AddSingleton<IUserPermission, UserPermission>();
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("MyPolicy", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()); //MyPolicy 为自定义的策略名称，与使用时相同即可。可以同时定义多个不同策略名称的跨域策略
             });
-
+            builder.Services.AddHealthChecks();
             builder.Services.AddMToken(configuration);
             builder.Services.AddSnowflake(configuration);
             var section = configuration.GetSection("JWTConfig");
@@ -64,8 +65,7 @@ namespace MWebApi
                 c.CacheKeyPrefix = "MWebApi";
             });
             var app = builder.Build();
-            app.UseSerilogRequestLogging();
-            if (app.Environment.IsDevelopment())
+            if (configuration.GetSection("Swagger").GetValue<bool>("IsShow"))
             {
                 app.UseSwaggerExtension();
             }
@@ -74,6 +74,8 @@ namespace MWebApi
                 new CultureInfo("en-US"),
                 new CultureInfo("zh-CN"),
             };
+            app.UseHealthChecks("/health");
+            app.UseSerilogRequestLogging();
             app.UseExceptionMiddleware();
             app.UseUserContextMiddleware();
             app.UseRequestLocalization(new RequestLocalizationOptions

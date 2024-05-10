@@ -95,7 +95,7 @@ namespace MWebApi.Extensions.SwaggerExtensions
             return service;
         }
 
-        public static IApplicationBuilder UseSwaggerExtension(this IApplicationBuilder app, Action<SwaggerOptions>? setupAction = null, Action<SwaggerUIOptions> setupUIAction = null)
+        public static IApplicationBuilder UseSwaggerExtension(this IApplicationBuilder app, Action<SwaggerOptions>? setupAction = null, Action<SwaggerUIOptions>? setupUIAction = null)
         {
             if (setupAction != null)
             {

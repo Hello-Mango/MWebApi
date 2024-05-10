@@ -16,13 +16,13 @@ namespace MWebApi.Controllers
         private readonly IStringLocalizer _stringLocalizer;
         private readonly IStringLocalizer _stringLocalizer2;
         private readonly MTokenHandler _mTokenHandler;
-        private readonly IdGenerateInterface<long> idGenerateInterface1;
+        private readonly IGenerateId<long> idGenerateInterface1;
         private readonly ICacheService _cacheService;
         private readonly UserContext _userContext;
         public AccountController(MTokenHandler mTokenHandler,
             IStringLocalizer<AccountController> stringLocalizer,
             IStringLocalizer stringLocalizer2,
-            IdGenerateInterface<long> idGenerateInterface,
+            IGenerateId<long> idGenerateInterface,
             UserContext userContext,
             ICacheService cacheService)
         {
