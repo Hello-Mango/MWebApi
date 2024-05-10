@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace MRedisCache
@@ -47,7 +48,7 @@ namespace MRedisCache
             {
                 return default;
             }
-            var res = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringRes);
+            var res = JsonSerializer.Deserialize<T>(stringRes);
             return res;
         }
 
@@ -64,7 +65,7 @@ namespace MRedisCache
         {
             var res = redisConnection.GetDatabase().StringGetAsync(key).ContinueWith(t =>
             {
-                return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(t.Result);
+                return JsonSerializer.Deserialize<T>(t.Result);
             });
             return res;
         }
@@ -83,7 +84,7 @@ namespace MRedisCache
         public bool Set<T>(string key, T t, int absoluteExpirationRelativeToNow)
         {
             var timespan = TimeSpan.FromSeconds(absoluteExpirationRelativeToNow);
-            return redisConnection.GetDatabase().StringSet(key, Newtonsoft.Json.JsonConvert.SerializeObject(t), timespan);
+            return redisConnection.GetDatabase().StringSet(key, JsonSerializer.Serialize(t), timespan);
         }
 
         public bool Set(string key, string body, int absoluteExpirationRelativeToNow)
@@ -95,7 +96,7 @@ namespace MRedisCache
         public Task<bool> SetAsync<T>(string key, T t, int absoluteExpirationRelativeToNow)
         {
             var timespan = TimeSpan.FromSeconds(absoluteExpirationRelativeToNow);
-            return redisConnection.GetDatabase().StringSetAsync(key, Newtonsoft.Json.JsonConvert.SerializeObject(t), timespan);
+            return redisConnection.GetDatabase().StringSetAsync(key, JsonSerializer.Serialize(t), timespan);
         }
 
         public Task<bool> SetAsync(string key, string body, int absoluteExpirationRelativeToNow)
@@ -106,7 +107,7 @@ namespace MRedisCache
 
         public bool Set<T>(string key, T t)
         {
-            return redisConnection.GetDatabase().StringSet(key, Newtonsoft.Json.JsonConvert.SerializeObject(t));
+            return redisConnection.GetDatabase().StringSet(key, JsonSerializer.Serialize(t));
         }
 
         public bool Set(string key, string body)
@@ -116,7 +117,7 @@ namespace MRedisCache
 
         public Task<bool> SetAsync<T>(string key, T t)
         {
-            return redisConnection.GetDatabase().StringSetAsync(key, Newtonsoft.Json.JsonConvert.SerializeObject(t));
+            return redisConnection.GetDatabase().StringSetAsync(key, JsonSerializer.Serialize(t));
         }
 
         public Task<bool> SetAsync(string key, string body)
