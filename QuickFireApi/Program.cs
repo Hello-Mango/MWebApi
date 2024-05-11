@@ -14,6 +14,7 @@ using QucikFire.Extensions;
 using QuickFire.MemoryCache;
 using QuickFireApi.Core;
 using QuickFireApi.Extensions;
+using QuickFireApi.Extensions.Addons;
 using QuickFireApi.Extensions.Cache;
 using QuickFireApi.Extensions.GZYQuartz;
 using QuickFireApi.Extensions.JsonExtensions;
@@ -47,6 +48,7 @@ namespace QuickFireApi
             {
                 options.JsonSerializerOptions.Converters.Add(new LongToStringConverter());
             });
+            builder.Services.AddAddons();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddJsonLocalization(z => z.ResourcesPath = "i18n");
             builder.Services.AddSwagger(true);
@@ -85,6 +87,7 @@ namespace QuickFireApi
                 new CultureInfo("en-US"),
                 new CultureInfo("zh-CN"),
             };
+            app.UseAddonsUI();
             app.UseGYZQuartz();
             app.UseHealthChecks("/health");
             app.UseSerilogRequestLogging();
