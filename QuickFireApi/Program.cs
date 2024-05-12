@@ -1,22 +1,13 @@
-
-using GZY.Quartz.MUI.EFContext;
-using GZY.Quartz.MUI.Extensions;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using QucikFire.Extensions;
 using QuickFire.MemoryCache;
 using QuickFireApi.Core;
 using QuickFireApi.Extensions;
 using QuickFireApi.Extensions.Addons;
 using QuickFireApi.Extensions.Cache;
-using QuickFireApi.Extensions.GZYQuartz;
 using QuickFireApi.Extensions.JsonExtensions;
 using QuickFireApi.Extensions.Snowflake;
 using QuickFireApi.Extensions.SwaggerExtensions;
@@ -24,10 +15,9 @@ using QuickFireApi.Extensions.Token;
 using QuickFireApi.Middlewares;
 using QuickFireApi.SignalR;
 using Serilog;
-using Serilog.Events;
 using System.Globalization;
-using System.Text;
-using System.Text.Json;
+using QuickFire.Extensions.Quartz;
+using Microsoft.Extensions.FileProviders;
 
 namespace QuickFireApi
 {
@@ -36,7 +26,6 @@ namespace QuickFireApi
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.AddGYZQuartz();
             IConfiguration configuration = builder.Configuration;
             builder.Services.AddSerilog();
             builder.Services.AddSerilog(logger =>
@@ -64,7 +53,6 @@ namespace QuickFireApi
             builder.Services.AddMAuth(section);
             builder.Services.AddUserContext();
             builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IApplicationModelProvider, ProduceResponseTypeModelProvider>());
-            //builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IApplicationModelProvider, AuthorizePolicyProvider>());
             builder.Services.AddMemoryCache();
             builder.Services.AddSingleton<IAuthorizationHandler, MAuthorizationHandler>();
             builder.Services.AddCacheService<MemoryCacheService, QMemoryCacheOptions>(c =>
@@ -74,9 +62,7 @@ namespace QuickFireApi
             builder.Services.AddSignalR(z =>
             {
             });
-            var optionsBuilder = new DbContextOptionsBuilder<QuarzEFContext>();
-            optionsBuilder.UseSqlite($"DataSource={Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "quartz.db")}", b => b.MaxBatchSize(1));//�������ݿ�����
-            builder.Services.AddGYZQuartz(optionsBuilder.Options);
+            builder.Services.AddQuickFireQuartz(configuration);
             var app = builder.Build();
             if (configuration.GetSection("Swagger").GetValue<bool>("IsShow"))
             {
@@ -87,8 +73,9 @@ namespace QuickFireApi
                 new CultureInfo("en-US"),
                 new CultureInfo("zh-CN"),
             };
+            app.UseStaticFiles();
+            app.UseQuickFireQuartzUI();
             app.UseAddonsUI();
-            app.UseGYZQuartz();
             app.UseHealthChecks("/health");
             app.UseSerilogRequestLogging();
             app.UseExceptionMiddleware();

@@ -17,9 +17,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GZY.Quartz.MUI" Version="2.6.0" />
+    <PackageReference Include="CronExpressionDescriptor" Version="2.33.0" />
     <PackageReference Include="JWT" Version="10.1.1" />
-    <PackageReference Include="Masuit.Tools.Abstractions" Version="2024.3.3" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.4" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="8.0.4" />
@@ -35,10 +34,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\QuickFire.Extensions.Quartz\QuickFire.Extensions.Quartz.csproj" />
     <ProjectReference Include="..\QuickFire.MemoryCache\QuickFire.Extensions.MemoryCache.csproj" />
     <ProjectReference Include="..\QuickFireApi.Core\QuickFireApi.Core.csproj" />
-    <ProjectReference Include="..\QuickFireCoreInterface\QuickFire.CoreInterface.csproj" />
-    <ProjectReference Include="..\QuickFireMemoryCache\QuickFire.MemoryCache.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -48,6 +46,19 @@
     <Content Update="i18n\Controllers\AccountController.zh-CN.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Addons\readme.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dockerfile">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 </Project>

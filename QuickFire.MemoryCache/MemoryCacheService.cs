@@ -21,19 +21,19 @@ namespace QucikFire.Extensions
             return _memoryCache.Get<string>(key);
         }
 
-        public T Get<T>(string key)
+        public T? Get<T>(string key) where T : class
         {
             key = _mMemoryCacheOptions.CacheKeyPrefix + key;
             return _memoryCache.Get<T>(key);
         }
 
-        public async Task<string> GetAsync(string key)
+        public async Task<string?> GetAsync(string key)
         {
             key = _mMemoryCacheOptions.CacheKeyPrefix + key;
             return await Task.FromResult(_memoryCache.Get<string>(key));
         }
 
-        public async Task<T> GetAsync<T>(string key)
+        public async Task<T?> GetAsync<T>(string key) where T : class
         {
             key = _mMemoryCacheOptions.CacheKeyPrefix + key;
             return await Task.FromResult(_memoryCache.Get<T>(key));

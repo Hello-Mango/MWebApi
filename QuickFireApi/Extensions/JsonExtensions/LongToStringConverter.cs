@@ -9,7 +9,7 @@ namespace QuickFireApi.Extensions.JsonExtensions
         {
             if (reader.TokenType == JsonTokenType.String)
             {
-                string stringValue = reader.GetString();
+                string? stringValue = reader.GetString();
                 if (long.TryParse(stringValue, out long value))
                 {
                     return value;

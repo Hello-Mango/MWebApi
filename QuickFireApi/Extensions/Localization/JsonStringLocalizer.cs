@@ -85,7 +85,7 @@ public class JsonStringLocalizer : IStringLocalizer
         }
     }
 
-    protected string? GetStringSafely(string name, CultureInfo culture)
+    protected string? GetStringSafely(string name, CultureInfo? culture)
     {
         ArgumentNullException.ThrowIfNull(name);
 
@@ -113,7 +113,7 @@ public class JsonStringLocalizer : IStringLocalizer
         }
         catch (MissingManifestResourceException)
         {
-            _missingManifestCache.TryAdd(cacheKey, null);
+            _missingManifestCache.TryAdd(cacheKey, string.Empty);
 
             return null;
         }

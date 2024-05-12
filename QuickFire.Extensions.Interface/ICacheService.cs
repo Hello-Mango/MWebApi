@@ -10,11 +10,11 @@ namespace QucikFire.Extensions
     /// </summary>
     public interface ICacheService
     {
-        public Task<string> GetAsync(string key);
-        public string Get(string key);
+        public Task<string?> GetAsync(string key);
+        public string? Get(string key);
 
-        public T Get<T>(string key);
-        public Task<T> GetAsync<T>(string key);
+        public T? Get<T>(string key) where T : class;
+        public Task<T?> GetAsync<T>(string key) where T : class;
 
         public Task<bool> RemoveAsync(string key);
         public bool Remove(string key);

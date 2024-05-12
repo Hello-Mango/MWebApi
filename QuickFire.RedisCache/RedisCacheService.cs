@@ -34,37 +34,42 @@ namespace QucikFire.Extensions
                 _logger.LogWarning("Redis Connection Restored");
             };
         }
-        public string Get(string key)
+        public string? Get(string key)
         {
             var res = redisConnection.GetDatabase().StringGet(key);
             return res;
         }
 
-        public T Get<T>(string key)
+        public T? Get<T>(string key) where T : class
         {
             var stringRes = redisConnection.GetDatabase().StringGet(key);
             if (string.IsNullOrEmpty(stringRes))
             {
                 return default;
             }
-            var res = JsonSerializer.Deserialize<T>(stringRes);
+            var res = JsonSerializer.Deserialize<T>(stringRes!);
             return res;
         }
 
-        public Task<string> GetAsync(string key)
+        public async Task<string?> GetAsync(string key)
         {
             var res = redisConnection.GetDatabase().StringGetAsync(key).ContinueWith(t =>
             {
-                return t.Result.ToString();
+                return t.Result;
             });
-            return res;
+            return await res;
         }
 
-        public Task<T> GetAsync<T>(string key)
+        public Task<T?> GetAsync<T>(string key) where T : class
         {
             var res = redisConnection.GetDatabase().StringGetAsync(key).ContinueWith(t =>
             {
-                return JsonSerializer.Deserialize<T>(t.Result);
+                string result = t.Result.ToString();
+                if (string.IsNullOrEmpty(result))
+                {
+                    return default;
+                }
+                return JsonSerializer.Deserialize<T>(result);
             });
             return res;
         }

@@ -58,7 +58,7 @@ namespace QuickFireApi.Extensions.SwaggerExtensions
                 c.IncludeXmlComments(xmlPathMain, true); // true : 显示控制器层注释
 
                 Assembly assembly = Assembly.GetExecutingAssembly();
-                List<string> referencedAssemblies = assembly.GetReferencedAssemblies().Select(z => z.Name).ToList();
+                List<string> referencedAssemblies = assembly.GetReferencedAssemblies().Select(z => z.Name!).ToList();
                 DirectoryInfo d = new DirectoryInfo(AppContext.BaseDirectory);
                 FileInfo[] files = d.GetFiles("*.xml");
                 foreach (var xml in files)
