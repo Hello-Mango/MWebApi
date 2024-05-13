@@ -6,7 +6,7 @@ namespace QuickFireApi.Extensions.Localization.Json.Internal;
 
 internal static class JsonStringLocalizerLoggerExtensions
 {
-    private static readonly Action<ILogger, string, string, CultureInfo, Exception> _searchedLocation;
+    private static readonly Action<ILogger, string, string, CultureInfo, Exception?> _searchedLocation;
 
     static JsonStringLocalizerLoggerExtensions()
     {

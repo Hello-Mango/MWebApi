@@ -23,7 +23,7 @@ namespace QuickFireApi.Controllers
         }
         [AllowAnonymous]
         [HttpGet]
-        public string Get()
+        public string? Get()
         {
             return _cacheService.Get("test");
         }

@@ -16,7 +16,12 @@ namespace QuickFireApi.Extensions.Token
         {
             var section = _configuration.GetSection("JWTConfig");
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(section.GetValue<string>("SecretKey"));
+            string? secretKey = section.GetValue<string>("SecretKey");
+            if (string.IsNullOrEmpty(secretKey))
+            {
+                throw new ArgumentNullException("SecretKey is null");
+            }
+            var key = Encoding.ASCII.GetBytes(secretKey!);
             var expires = section.GetValue<int>("Expires");
             var audience = section.GetValue<string>("Audience");
             var issuer = section.GetValue<string>("Issuer");
@@ -45,7 +50,12 @@ namespace QuickFireApi.Extensions.Token
         {
             var section = _configuration.GetSection("JWTConfig");
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = System.Text.Encoding.ASCII.GetBytes(section.GetValue<string>("SecretKey"));
+            string? secretKey = section.GetValue<string>("SecretKey");
+            if (string.IsNullOrEmpty(secretKey))
+            {
+                throw new ArgumentNullException("SecretKey is null");
+            }
+            var key = System.Text.Encoding.ASCII.GetBytes(secretKey);
             var expires = section.GetValue<int>("Expires");
             var audience = section.GetValue<string>("Audience");
             var issuer = section.GetValue<string>("Issuer");

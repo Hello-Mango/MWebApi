@@ -16,17 +16,17 @@ namespace QuickFireApi.Middlewares
 
         public async Task InvokeAsync(HttpContext context, IServiceProvider serviceProvider)
         {
-            if (context is not null)
+            if (context.User.Identity is not null)
             {
-                if (context.User.Identity.IsAuthenticated)
+                if (context.User.Identity!.IsAuthenticated)
                 {
                     var userContext = serviceProvider.GetRequiredService<UserContext>();
                     // Do something with userContext
-                    userContext.UserName = context.User.Identity.Name;
+                    userContext.UserName = context.User.Identity.Name!;
                 }
             }
 
-            await _next(context);
+            await _next(context!);
         }
     }
     public static class UserContextBuilderExtensions

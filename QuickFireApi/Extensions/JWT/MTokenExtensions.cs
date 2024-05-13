@@ -19,7 +19,11 @@ namespace QuickFireApi.Extensions.Token
         public static IServiceCollection AddMAuth(this IServiceCollection service, IConfigurationSection section, Func<TokenValidatedContext, Task>? func = null)
         {
             //AddMToken(service, section);
-            string secretKey = section.GetValue<string>("SecretKey");
+            string? secretKey = section.GetValue<string?>("SecretKey");
+            if (string.IsNullOrEmpty(secretKey))
+            {
+                throw new ArgumentNullException("SecretKey is null");
+            }
             var secretByte = Encoding.UTF8.GetBytes(secretKey);
             service.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {

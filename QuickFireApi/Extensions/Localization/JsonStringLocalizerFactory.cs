@@ -37,7 +37,7 @@ public class JsonStringLocalizerFactory : IStringLocalizerFactory
         var assemblyName = resourceSource.Assembly.GetName().Name;
         var resourceName = $"{assemblyName}.{typeInfo.Name}" == typeInfo.FullName
             ? typeInfo.Name
-            : TrimPrefix(typeInfo.FullName, assemblyName + ".");
+            : TrimPrefix(typeInfo.FullName!, assemblyName + ".");
 
         resourcesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, _resourcesRelativePath);
 
@@ -54,7 +54,7 @@ public class JsonStringLocalizerFactory : IStringLocalizerFactory
             var assemblyName = new AssemblyName(location);
             var assembly = Assembly.Load(assemblyName);
             var resourcesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, _resourcesRelativePath);
-            string resourceName = null;
+            string? resourceName = null;
             if (baseName == string.Empty)
             {
                 resourceName = baseName;
@@ -67,7 +67,7 @@ public class JsonStringLocalizerFactory : IStringLocalizerFactory
                 resourceName = TrimPrefix(baseName, location + ".");
             }
 
-            return CreateJsonStringLocalizer(resourcesPath, resourceName);
+            return CreateJsonStringLocalizer(resourcesPath, resourceName!);
         });
     }
 

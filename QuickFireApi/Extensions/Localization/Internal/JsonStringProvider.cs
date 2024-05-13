@@ -29,7 +29,7 @@ public class JsonStringProvider(IResourceNamesCache resourceNamesCache, JsonReso
                 }
                 else
                 {
-                    return null;
+                    return new List<string>();
                 }
             }
 

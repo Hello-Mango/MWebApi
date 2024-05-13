@@ -40,7 +40,7 @@ namespace QuickFireApi.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
-        public async Task<TokenResponse> Login([FromBody] LoginReq _loginReq)
+        public TokenResponse Login([FromBody] LoginReq _loginReq)
         {
             long text = idGenerateInterface1.NextId();
             string value = _stringLocalizer["Account"];

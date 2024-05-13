@@ -22,7 +22,7 @@ public class JsonResourceManager
         _jsonFileWatcher.Changed += RefreshResourcesCache;
     }
 
-    public string ResourceName { get; }
+    public string? ResourceName { get; }
 
     public string ResourcesPath { get; }
 
@@ -117,10 +117,10 @@ public class JsonResourceManager
         {
             return null;
         }
-        bool flag = resources.TryGetValue(name, out string value);
+        bool flag = resources.TryGetValue(name, out string? value);
         if (flag)
         {
-            _hitKeyCache.TryAdd(key, value.ToString());
+            _hitKeyCache.TryAdd(key, value!.ToString());
             return value.ToString();
         }
         else
