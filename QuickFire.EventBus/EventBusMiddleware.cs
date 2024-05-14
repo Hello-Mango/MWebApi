@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -13,11 +12,6 @@ namespace QuickFire.EventBus
         {
             services.AddSingleton<IEventBus, EventBus>();
             return services;
-        }
-
-        public static IApplicationBuilder UseQuickFireEventBus(this IApplicationBuilder app)
-        {
-            return app;
         }
     }
 }
