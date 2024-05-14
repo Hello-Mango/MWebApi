@@ -33,6 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\QuickFire.EventBus\QuickFire.EventBus.csproj" />
     <ProjectReference Include="..\QuickFire.Extensions.Localization\QuickFire.Extensions.Localization.csproj" />
     <ProjectReference Include="..\QuickFire.Extensions.Quartz\QuickFire.Extensions.Quartz.csproj" />
     <ProjectReference Include="..\QuickFire.MemoryCache\QuickFire.Extensions.MemoryCache.csproj" />

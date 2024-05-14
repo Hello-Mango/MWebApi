@@ -16,15 +16,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="quartzui\static\**" />
-	  <EmbeddedResource Remove="quartzui\static\**" />
-	  <None Remove="quartzui\static\**" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <None Remove="sql\tables_mysql_innodb.sql" />
-	  <None Remove="quartzui\favicon.ico" />
-	  <None Remove="quartzui\index.html" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -44,8 +36,5 @@
 	</ItemGroup>
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="quartzui\" />
 	</ItemGroup>
 </Project>

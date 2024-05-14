@@ -18,6 +18,7 @@ using Serilog;
 using System.Globalization;
 using QuickFire.Extensions.Quartz;
 using Microsoft.Extensions.FileProviders;
+using QuickFire.EventBus;
 
 namespace QuickFireApi
 {
@@ -47,6 +48,7 @@ namespace QuickFireApi
                 options.AddPolicy("MyPolicy", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()); //MyPolicy Ϊ�Զ���Ĳ������ƣ���ʹ��ʱ��ͬ���ɡ�����ͬʱ��������ͬ�������ƵĿ������
             });
             builder.Services.AddHealthChecks();
+            builder.Services.AddQuickFireEventBus(configuration);
             builder.Services.AddSnowflake(configuration);
             builder.Services.AddMToken(configuration);
             var section = configuration.GetSection("JWTConfig");
