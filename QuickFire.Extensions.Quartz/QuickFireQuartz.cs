@@ -96,12 +96,15 @@ namespace QuickFire.Extensions.Quartz
 
         public static IApplicationBuilder UseQuickFireQuartzUI(this IApplicationBuilder app)
         {
-            app.UseStaticFiles(new StaticFileOptions
+            if (Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "quartzui")))
             {
-                FileProvider = new PhysicalFileProvider(
+                app.UseStaticFiles(new StaticFileOptions
+                {
+                    FileProvider = new PhysicalFileProvider(
                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "quartzui")),
-                RequestPath = "/quartzui" // 访问文件的URL路径
-            });
+                    RequestPath = "/quartzui" // 访问文件的URL路径
+                });
+            }
             return app;
         }
     }

@@ -22,6 +22,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.4" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="8.0.4" />
     <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="8.0.4" />
+    <PackageReference Include="MySql.Data" Version="8.4.0" />
     <PackageReference Include="Serilog" Version="3.1.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
@@ -32,6 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\QuickFire.Extensions.Localization\QuickFire.Extensions.Localization.csproj" />
     <ProjectReference Include="..\QuickFire.Extensions.Quartz\QuickFire.Extensions.Quartz.csproj" />
     <ProjectReference Include="..\QuickFire.MemoryCache\QuickFire.Extensions.MemoryCache.csproj" />
     <ProjectReference Include="..\QuickFireApi.Core\QuickFireApi.Core.csproj" />
