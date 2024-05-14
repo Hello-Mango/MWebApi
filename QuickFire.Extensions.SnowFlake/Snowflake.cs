@@ -1,7 +1,9 @@
-﻿using QuickFireApi.Core;
+﻿using Microsoft.Extensions.Options;
+using QuickFire.Extensions.Interface;
+using System;
 using System.Text;
 
-namespace QuickFireApi.Extensions.Snowflake
+namespace QuickFire.Extensions.Snowflake
 {
     public class Snowflake : IGenerateId<long>
     {
@@ -68,18 +70,18 @@ namespace QuickFireApi.Extensions.Snowflake
         /// </summary>
         /// <param name="datacenterId">数据中心ID</param>
         /// <param name="workerId">工作机器ID</param>
-        public SnowflakeId(long datacenterId, long workerId)
+        public SnowflakeId(IOptions<SnowflakeOption> options)
         {
-            if (datacenterId > maxDatacenterId || datacenterId < 0)
+            if (options.Value.DatacenterId > maxDatacenterId || datacenterId < 0)
             {
                 throw new Exception(string.Format("datacenter Id can't be greater than {0} or less than 0", maxDatacenterId));
             }
-            if (workerId > maxWorkerId || workerId < 0)
+            if (options.Value.WorkerId > maxWorkerId || options.Value.WorkerId < 0)
             {
                 throw new Exception(string.Format("worker Id can't be greater than {0} or less than 0", maxWorkerId));
             }
-            this.workerId = workerId;
-            this.datacenterId = datacenterId;
+            this.workerId = options.Value.WorkerId;
+            this.datacenterId = options.Value.DatacenterId;
             sequence = 0L;
             lastTimestamp = -1L;
         }
@@ -179,5 +181,15 @@ namespace QuickFireApi.Extensions.Snowflake
         }
 
         private static readonly DateTime Jan1st1970 = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+    }
+    public class SnowflakeOption
+    {
+        public long DatacenterId { get; set; }
+        public long WorkerId { get; set; }
+        public SnowflakeOption(long dcId, long workId)
+        {
+            DatacenterId = dcId;
+            WorkerId = workId;
+        }
     }
 }

@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Runtime.Loader;
 using System.Threading.Tasks;
 
 namespace QuickFire.EventBus
@@ -87,43 +88,48 @@ namespace QuickFire.EventBus
         {
             var dataType = eventData.GetType().FullName;
             //获取当前的EventData绑定的所有Handler
-            Notify(dataType, eventData);
+            Notify(dataType, eventData).Wait();
         }
 
         public void Trigger(string pubKey, IEventData eventData)
         {
             //获取当前的EventData绑定的所有Handler
-            Notify(pubKey, eventData);
+            Notify(pubKey, eventData).Wait();
         }
         public async Task TriggerAsync<TEventData>(TEventData eventData) where TEventData : IEventData
         {
-            await Task.Factory.StartNew(new Action(() =>
-            {
-                var dataType = eventData.GetType().FullName;
-                Notify(dataType, eventData);
-            }));
+            var dataType = eventData.GetType().FullName;
+            await Notify(dataType, eventData);
         }
         public async Task TriggerAsync(string pubKey, IEventData eventData)
         {
-            await Task.Factory.StartNew(new Action(() =>
-            {
-                var dataType = eventData.GetType().FullName;
-                Notify(pubKey, eventData);
-            }));
+            await Notify(pubKey, eventData);
         }
         //通知每成功执行一个就需要记录到数据库
-        private void Notify<TEventData>(string eventType, TEventData eventData) where TEventData : IEventData
+        private async Task Notify<TEventData>(string eventType, TEventData eventData) where TEventData : IEventData
         {
             //获取当前的EventData绑定的所有Handler
             var handlerTypes = dicEvent[eventType];
             foreach (var handlerType in handlerTypes)
             {
                 var resolveObj = _serviceProvider.GetService(handlerType);
-                IEventHandler<TEventData> handler = resolveObj as IEventHandler<TEventData>;
-                handler.Handle(eventData);
-                //var resolveObj = _iresolve.Resolve(handlerType);
-                //IEventHandler<TEventData> handler = resolveObj as IEventHandler<TEventData>;
-                //handler.Handle(eventData);
+                if (resolveObj != null)
+                {
+                    IEventHandler<TEventData>? handler = resolveObj as IEventHandler<TEventData>;
+                    if (handler != null)
+                    {
+                        //异步执行handler!.Handle(eventData);
+                        await Task.Factory.StartNew(() => handler.Handle(eventData));
+                    }
+                    else
+                    {
+                        _logger.LogError($"未找到{handlerType.FullName}的实例2");
+                    }
+                }
+                else
+                {
+                    _logger.LogError($"未找到{handlerType.FullName}的实例1");
+                }
             }
         }
         #endregion
@@ -139,7 +145,8 @@ namespace QuickFire.EventBus
             //自动扫描类型并且注册
             foreach (var file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll"))
             {
-                var ass = Assembly.LoadFrom(file);
+                var ass = AssemblyLoadContext.GetLoadContext(typeof(EventBus).Assembly).LoadFromAssemblyPath(file);
+                //var ass = Assembly.LoadFrom(file);
                 foreach (var item in ass.GetTypes().Where(p => p.GetInterfaces().Contains(typeof(IEventHandler))))
                 {
                     if (item.IsClass)

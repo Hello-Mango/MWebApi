@@ -1,7 +1,6 @@
 ﻿using QuickFireApi.Middlewares;
 using Microsoft.Extensions.DependencyInjection;
 using QuickFireApi.Core;
-using QuickFireApi.Extensions.Snowflake;
 using System.Diagnostics.CodeAnalysis;
 
 namespace QuickFireApi.Middlewares

@@ -9,7 +9,6 @@ using QuickFireApi.Extensions;
 using QuickFireApi.Extensions.Addons;
 using QuickFireApi.Extensions.Cache;
 using QuickFireApi.Extensions.JsonExtensions;
-using QuickFireApi.Extensions.Snowflake;
 using QuickFireApi.Extensions.SwaggerExtensions;
 using QuickFireApi.Extensions.Token;
 using QuickFireApi.Middlewares;
@@ -17,8 +16,8 @@ using QuickFireApi.SignalR;
 using Serilog;
 using System.Globalization;
 using QuickFire.Extensions.Quartz;
-using Microsoft.Extensions.FileProviders;
 using QuickFire.EventBus;
+using QuickFire.Extensions.Snowflake;
 
 namespace QuickFireApi
 {
@@ -45,11 +44,17 @@ namespace QuickFireApi
             builder.Services.AddSingleton<IUserPermission, UserPermission>();
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("MyPolicy", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()); //MyPolicy Ϊ�Զ���Ĳ������ƣ���ʹ��ʱ��ͬ���ɡ�����ͬʱ��������ͬ�������ƵĿ������
+                options.AddPolicy("MyPolicy", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             });
             builder.Services.AddHealthChecks();
             builder.Services.AddQuickFireEventBus(configuration);
-            builder.Services.AddSnowflake(configuration);
+            long dataCenterId = configuration.GetValue<long>("Snowflake:DataCenterId");
+            long workerId = configuration.GetValue<long>("Snowflake:WorkerId");
+            builder.Services.AddSnowflake(c =>
+                {
+                    c.DatacenterId = dataCenterId;
+                    c.WorkerId = workerId;
+                });
             builder.Services.AddMToken(configuration);
             var section = configuration.GetSection("JWTConfig");
             builder.Services.AddMAuth(section);
@@ -59,7 +64,7 @@ namespace QuickFireApi
             builder.Services.AddSingleton<IAuthorizationHandler, MAuthorizationHandler>();
             builder.Services.AddCacheService<MemoryCacheService, QMemoryCacheOptions>(c =>
             {
-                c.CacheKeyPrefix = "QuickFireApi";
+                c.CacheKeyPrefix = "QuickFire";
             });
             builder.Services.AddSignalR(z =>
             {

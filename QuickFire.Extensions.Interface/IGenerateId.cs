@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace QuickFireApi.Core
+namespace QuickFire.Extensions.Interface
 {
     public interface IGenerateId<T>
     {
