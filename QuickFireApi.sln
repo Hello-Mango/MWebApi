@@ -30,9 +30,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickFire.Extensions.Locali
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickFire.EventBus", "QuickFire.EventBus\QuickFire.EventBus.csproj", "{A1758146-091E-481F-8D37-62E0AB18E24F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickFire.Extensions.SnowFlake", "QuickFire.Extensions.SnowFlake\QuickFire.Extensions.SnowFlake.csproj", "{E621D95B-F648-4BDE-A465-D278428E3BA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickFire.Extensions.SnowFlake", "QuickFire.Extensions.SnowFlake\QuickFire.Extensions.SnowFlake.csproj", "{E621D95B-F648-4BDE-A465-D278428E3BA8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickFire.Extensions.AuditLog", "QuickFire.Extensions.AuditLog\QuickFire.Extensions.AuditLog.csproj", "{28846677-1958-4E37-B9CB-79F3F400D261}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickFire.Extensions.AuditLog", "QuickFire.Extensions.AuditLog\QuickFire.Extensions.AuditLog.csproj", "{28846677-1958-4E37-B9CB-79F3F400D261}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickFire.Utils", "QuickFire.Utils\QuickFire.Utils.csproj", "{B55F64FB-38D0-48E8-85FA-732747CED9ED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -88,6 +90,10 @@ Global
 		{28846677-1958-4E37-B9CB-79F3F400D261}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28846677-1958-4E37-B9CB-79F3F400D261}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28846677-1958-4E37-B9CB-79F3F400D261}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B55F64FB-38D0-48E8-85FA-732747CED9ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B55F64FB-38D0-48E8-85FA-732747CED9ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B55F64FB-38D0-48E8-85FA-732747CED9ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B55F64FB-38D0-48E8-85FA-732747CED9ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
