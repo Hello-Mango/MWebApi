@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using QuickFireApi.Core;
 
 namespace QuickFireApi.Extension
 {
@@ -19,7 +20,7 @@ namespace QuickFireApi.Extension
                         .ToList();
 
 
-                    throw new Exception(string.Join(Environment.NewLine, errors));
+                    throw new Exception422(string.Join(Environment.NewLine, errors));
                 };
             });
             return service;

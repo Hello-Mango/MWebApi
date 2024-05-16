@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Loader;
 using System.Threading.Tasks;
 
-namespace QuickFire.EventBus
+namespace QuickFire.Extensions.EventBus
 {
     public class EventBus : IEventBus
     {
@@ -24,6 +24,7 @@ namespace QuickFire.EventBus
         //注册以及取消注册的时候需要加锁处理
         private readonly object obj = new object();
         private ConcurrentDictionary<string, List<Type>> dicEvent = new ConcurrentDictionary<string, List<Type>>();
+
         #region 注册事件
         public void Register<TEventData>(Type handlerType) where TEventData : IEventData
         {
@@ -84,24 +85,24 @@ namespace QuickFire.EventBus
 
         #region Trigger触发
         //trigger时候需要记录到数据库
-        public void Trigger<TEventData>(TEventData eventData) where TEventData : IEventData
+        public void Publish<TEventData>(TEventData eventData) where TEventData : IEventData
         {
             var dataType = eventData.GetType().FullName;
             //获取当前的EventData绑定的所有Handler
             Notify(dataType, eventData).Wait();
         }
 
-        public void Trigger(string pubKey, IEventData eventData)
+        public void Publish(string pubKey, IEventData eventData)
         {
             //获取当前的EventData绑定的所有Handler
             Notify(pubKey, eventData).Wait();
         }
-        public async Task TriggerAsync<TEventData>(TEventData eventData) where TEventData : IEventData
+        public async Task PublishAsync<TEventData>(TEventData eventData) where TEventData : IEventData
         {
             var dataType = eventData.GetType().FullName;
             await Notify(dataType, eventData);
         }
-        public async Task TriggerAsync(string pubKey, IEventData eventData)
+        public async Task PublishAsync(string pubKey, IEventData eventData)
         {
             await Notify(pubKey, eventData);
         }
@@ -165,7 +166,5 @@ namespace QuickFire.EventBus
                 }
             }
         }
-
-
     }
 }

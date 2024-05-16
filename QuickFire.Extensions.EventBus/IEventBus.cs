@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuickFire.EventBus
+namespace QuickFire.Extensions.EventBus
 {
     public interface IEventBus
     {
@@ -20,9 +20,9 @@ namespace QuickFire.EventBus
         #endregion
 
 
-        void Trigger(string pubKey, IEventData eventData);
-        Task TriggerAsync(string pubKey, IEventData eventData);
-        void Trigger<TEventData>(TEventData eventData) where TEventData : IEventData;
-        Task TriggerAsync<TEventData>(TEventData eventData) where TEventData : IEventData;
+        void Publish(string pubKey, IEventData eventData);
+        Task PublishAsync(string pubKey, IEventData eventData);
+        void Publish<TEventData>(TEventData eventData) where TEventData : IEventData;
+        Task PublishAsync<TEventData>(TEventData eventData) where TEventData : IEventData;
     }
 }

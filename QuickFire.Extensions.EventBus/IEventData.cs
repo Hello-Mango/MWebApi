@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace QuickFire.EventBus
+namespace QuickFire.Extensions.EventBus
 {
     public interface IEventData
     {

@@ -16,7 +16,7 @@ using QuickFireApi.SignalR;
 using Serilog;
 using System.Globalization;
 using QuickFire.Extensions.Quartz;
-using QuickFire.EventBus;
+using QuickFire.Extensions.EventBus;
 using QuickFire.Extensions.Snowflake;
 
 namespace QuickFireApi
@@ -47,7 +47,11 @@ namespace QuickFireApi
                 options.AddPolicy("MyPolicy", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             });
             builder.Services.AddHealthChecks();
-            builder.Services.AddQuickFireEventBus(configuration);
+            //builder.Services.AddQuickFireEventBus(configuration);
+            builder.Services.AddHostedService<EventBusHostedService>();
+            builder.Services.AddSingleton<IEventSourceStorer, ChannelEventSourceStorer>();
+            builder.Services.AddSingleton<IEventPublisher, ChannelEventPublisher>();
+
             long dataCenterId = configuration.GetValue<long>("Snowflake:DataCenterId");
             long workerId = configuration.GetValue<long>("Snowflake:WorkerId");
             builder.Services.AddSnowflake(c =>
