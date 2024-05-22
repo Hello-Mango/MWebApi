@@ -21,6 +21,7 @@ namespace QuickFire.Extensions.Quartz
             // TODO 任务调度通过反射实现调度指定dll的方法
             // 根据context中的配置job信息获取动态加载的dll信息，例如dll名称、反射的type
             // 判断当前实例池中是否存在该任务信息，若存在，则直接通过实例池获取，若不存在，则进行新增，并且手动执行一次任务
+
             await Task.FromResult(0);
         }
     }
