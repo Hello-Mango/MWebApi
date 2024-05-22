@@ -15,6 +15,6 @@ namespace QuickFire.Extensions.EventBus
         /// 事件处理器处理具体事件的接口
         /// </summary>
         /// <param name="eventData"></param>
-        Task Handle(TEventData eventData);
+        void Handle(TEventData eventData);
     }
 }

@@ -1,8 +1,10 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -15,9 +17,7 @@ using System.Threading.Tasks;
 
 namespace QuickFire.Extensions.EventBus
 {
-    public class Test : EventData
-    {
-    }
+   
     public class EventBusHostedService : BackgroundService
     {
         private readonly IEventSourceStorer _eventSourceStorer;
@@ -45,9 +45,15 @@ namespace QuickFire.Extensions.EventBus
                             {
                                 if (item2.GetInterfaces().Contains(typeof(IEventData)))
                                 {
+                                    //Type constructedType = item.MakeGenericType(item2);
+                                    var obj = Activator.CreateInstance(item);
                                     MethodInfo methodInfo = item.GetMethod("Handle");
-                                    var handler = methodInfo.CreateDelegate(typeof(Func<Test, Task>), item2);
+                                    methodInfo.GetParameters()[0].GetType();
 
+                                    var delegateType = typeof(Action<>).MakeGenericType(item2);
+                                    //var res = Delegate.CreateDelegate(delegateType, target, methodInfo);
+
+                                    var handler = methodInfo.CreateDelegate(delegateType, obj);
                                     //通过反射生成item的实例，该实例的基类为handler
                                     //Register(item2, handler);
                                 }

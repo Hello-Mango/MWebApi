@@ -4,13 +4,15 @@ using System.Threading.Tasks;
 
 namespace EventBusHandlers.Test
 {
-    public class Class1 : IEventHandler<QuickFire.Extensions.EventBus.Test>
+    public class Class1 : IEventHandler<Test>
     {
-        public Task Handle(QuickFire.Extensions.EventBus.Test eventData)
+        public void Handle(Test eventData)
         {
             Console.WriteLine(eventData.EventSource);
-            return Task.CompletedTask;
         }
+    }
+    public class Test : EventData
+    {
     }
 
 
