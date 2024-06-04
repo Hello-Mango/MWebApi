@@ -17,6 +17,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\**" />
+    <Content Remove="wwwroot\**" />
+    <EmbeddedResource Remove="wwwroot\**" />
+    <None Remove="wwwroot\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CronExpressionDescriptor" Version="2.33.0" />
     <PackageReference Include="JWT" Version="10.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.4" />
@@ -34,7 +41,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EventBusHandlers.Test\EventBusHandlers.Test.csproj" />
-    <ProjectReference Include="..\QuickFire.EventBus\QuickFire.Extensions.EventBus.csproj" />
     <ProjectReference Include="..\QuickFire.Extensions.EventBus\QuickFire.Extensions.EventBus.csproj" />
     <ProjectReference Include="..\QuickFire.Extensions.Localization\QuickFire.Extensions.Localization.csproj" />
     <ProjectReference Include="..\QuickFire.Extensions.Quartz\QuickFire.Extensions.Quartz.csproj" />
@@ -59,10 +65,6 @@
     <None Update="Dockerfile">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 </Project>
