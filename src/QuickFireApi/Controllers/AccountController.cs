@@ -5,6 +5,7 @@ using QucikFire.Extensions;
 using QuickFire.Extensions.Interface;
 using QuickFireApi.Core;
 using QuickFireApi.Extensions.Token;
+using QuickFireApi.Models.Reponse;
 using QuickFireApi.Models.Request;
 
 namespace QuickFireApi.Controllers
@@ -28,7 +29,7 @@ namespace QuickFireApi.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
-        public TokenResponse Login([FromBody] LoginReq _loginReq)
+        public LoginReponse Login([FromBody] LoginReq _loginReq)
         {
             if (_loginReq.username == "admin" && _loginReq.password == "111111")
             {
@@ -38,16 +39,19 @@ namespace QuickFireApi.Controllers
                     "user"
                 });
                 var refreshToken = _mTokenHandler.CreateRefreshToken("admin");
-                return new TokenResponse()
+                return new LoginReponse()
                 {
                     AccessToken = $"bearer " + token,
                     RefreshToken = refreshToken,
-                    Timestamp = DateTime.Now.Microsecond
+                    Timestamp = DateTime.Now.Microsecond,
+                    CompanyId = 1,
+                    UserId = 1,
+                    Username = "admin",
                 };
             }
             else
             {
-                return new TokenResponse();
+                return new LoginReponse();
             }
         }
         /// <summary>

@@ -7,6 +7,7 @@ using QuickFire.Extensions.EventBus;
 using QuickFire.Extensions.Interface;
 using QuickFireApi.Core;
 using QuickFireApi.Extensions.Token;
+using QuickFireApi.Models.Request;
 
 namespace QuickFireApi.Controllers
 {
@@ -33,9 +34,9 @@ namespace QuickFireApi.Controllers
             _eventBus = eventBus;
         }
         [HttpPost]
-        public string AddCache()
+        public string AddCache(SingleReq<long> singleReq)
         {
-            _cacheService.Set("test", "test");
+            _cacheService.Set("test", singleReq._);
             return "Test";
         }
         [HttpGet]
@@ -61,7 +62,7 @@ namespace QuickFireApi.Controllers
         [HttpPost]
         public async Task PublishEvent()
         {
-          await  _eventBus.PublishAsync(new Test());
+            await _eventBus.PublishAsync(new Test());
         }
     }
 }

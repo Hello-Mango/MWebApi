@@ -42,7 +42,6 @@ namespace QuickFireApi.Extensions.SwaggerExtensions
             service.AddTransient<IConfigureOptions<SwaggerGenOptions>, SwaggerConfigureOptions>();
             service.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("All", new OpenApiInfo { Title = "All APIs", Version = "v1" });
                 //c.DocumentFilter<AllGroupDocumentFilter>();
                 c.DocInclusionPredicate((docName, apiDesc) =>
                 {
@@ -90,6 +89,8 @@ namespace QuickFireApi.Extensions.SwaggerExtensions
                     var requirement = new OpenApiSecurityRequirement();
                     requirement[scheme] = new List<string>();
                     c.AddSecurityRequirement(requirement);
+                    c.SchemaFilter<LongToStringSchemaFilter>();
+                    c.SwaggerDoc("All", new OpenApiInfo { Title = "All APIs", Version = "v1" });
                 }
             });
             return service;
