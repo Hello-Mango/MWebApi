@@ -6,6 +6,7 @@ using QucikFire.Extensions;
 namespace QuickFireApi.Controllers
 {
     [Route("api/[controller]/[action]")]
+    [ApiExplorerSettings(GroupName = "System")]
     [ApiController]
     public class RBACController : ControllerBase
     {

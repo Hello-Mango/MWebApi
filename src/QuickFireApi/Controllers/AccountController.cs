@@ -10,29 +10,16 @@ using QuickFireApi.Models.Request;
 namespace QuickFireApi.Controllers
 {
     [Route("api/[controller]/[action]")]
-    [ApiExplorerSettings(GroupName = "Hello")]
+    [ApiExplorerSettings(GroupName = "System")]
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly IStringLocalizer _stringLocalizer;
-        private readonly IStringLocalizer _stringLocalizer2;
         private readonly MTokenHandler _mTokenHandler;
-        private readonly IGenerateId<long> idGenerateInterface1;
-        private readonly ICacheService _cacheService;
         private readonly UserContext _userContext;
-        public AccountController(MTokenHandler mTokenHandler,
-            IStringLocalizer<AccountController> stringLocalizer,
-            IStringLocalizer stringLocalizer2,
-            IGenerateId<long> idGenerateInterface,
-            UserContext userContext,
-            ICacheService cacheService)
+        public AccountController(MTokenHandler mTokenHandler, UserContext userContext)
         {
             _userContext = userContext;
             _mTokenHandler = mTokenHandler;
-            _stringLocalizer = stringLocalizer;
-            _stringLocalizer2 = stringLocalizer2;
-            idGenerateInterface1 = idGenerateInterface;
-            _cacheService = cacheService;
         }
         /// <summary>
         /// 登录
@@ -43,9 +30,6 @@ namespace QuickFireApi.Controllers
         [HttpPost]
         public TokenResponse Login([FromBody] LoginReq _loginReq)
         {
-            long text = idGenerateInterface1.NextId();
-            string value = _stringLocalizer["Account"];
-            string value2 = _stringLocalizer2["Account"];
             if (_loginReq.username == "admin" && _loginReq.password == "111111")
             {
                 var token = _mTokenHandler.CreateAccessToken("admin", new List<string>()

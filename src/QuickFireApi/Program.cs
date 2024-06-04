@@ -73,7 +73,7 @@ namespace QuickFireApi
             builder.Services.AddSignalR(z =>
             {
             });
-            builder.Services.AddQuickFireQuartz(configuration);
+            //builder.Services.AddQuickFireQuartz(configuration);
             var app = builder.Build();
             if (configuration.GetSection("Swagger").GetValue<bool>("IsShow"))
             {
@@ -85,7 +85,7 @@ namespace QuickFireApi
                 new CultureInfo("zh-CN"),
             };
             app.UseStaticFiles();
-            app.UseQuickFireQuartzUI();
+            //app.UseQuickFireQuartzUI();
             app.UseAddonsUI();
             app.UseHealthChecks("/health");
             app.UseSerilogRequestLogging();

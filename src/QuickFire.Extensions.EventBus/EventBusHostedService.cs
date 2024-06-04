@@ -17,11 +17,11 @@ using System.Threading.Tasks;
 
 namespace QuickFire.Extensions.EventBus
 {
-   
+
     public class EventBusHostedService : BackgroundService
     {
         private readonly IEventSourceStorer _eventSourceStorer;
-        private ConcurrentDictionary<Type, List<Func<IEventData, Task>>> dicEvent = new ConcurrentDictionary<Type, List<Func<IEventData, Task>>>();
+        private ConcurrentDictionary<Type, List<Delegate>> dicEvent = new ConcurrentDictionary<Type, List<Delegate>>();
         private readonly ILogger _logger;
         public EventBusHostedService(
             ILogger<EventBusHostedService> logger,
@@ -54,8 +54,9 @@ namespace QuickFire.Extensions.EventBus
                                     //var res = Delegate.CreateDelegate(delegateType, target, methodInfo);
 
                                     var handler = methodInfo.CreateDelegate(delegateType, obj);
-                                    //通过反射生成item的实例，该实例的基类为handler
-                                    //Register(item2, handler);
+                                    //var item3 = (Action<IEventData>)handler;
+
+                                    Register(item2, handler);
                                 }
                             }
                         }
@@ -90,24 +91,33 @@ namespace QuickFire.Extensions.EventBus
             Type eventType = eventSource.GetType();
             if (dicEvent.ContainsKey(eventType))
             {
-                foreach (Func<IEventData, Task> item in dicEvent[eventType])
+                //并行方式执行事件
+                Parallel.ForEach(dicEvent[eventType], item =>
                 {
-                    await item.Invoke(eventSource);
-                }
+                    item.DynamicInvoke(eventSource);
+                });
             }
         }
 
         #region 注册事件
-        public void Register<TEventData>(Func<IEventData, Task> handlerType) where TEventData : IEventData
+        public void Register<TEventData>(Delegate handlerType) where TEventData : IEventData
         {
             //将数据存储到mapDic
             var dataType = typeof(TEventData);
             Register(dataType, handlerType);
         }
-        public void Register(Type pubKey, Func<IEventData, Task> handlerType)
+        public void Register(Type pubKey, Delegate handlerType)
         {
             //将数据存储到dicEvent
-            dicEvent[pubKey] = new List<Func<IEventData, Task>>();
+            if (dicEvent.Keys.Contains(pubKey))
+            {
+                dicEvent[pubKey].Add(handlerType);
+            }
+            else
+            {
+                dicEvent[pubKey] = new List<Delegate>();
+                dicEvent[pubKey].Add(handlerType);
+            }
         }
 
         #endregion

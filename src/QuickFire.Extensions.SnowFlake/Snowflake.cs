@@ -186,10 +186,10 @@ namespace QuickFire.Extensions.Snowflake
     {
         public long DatacenterId { get; set; }
         public long WorkerId { get; set; }
-        public SnowflakeOption(long dcId, long workId)
-        {
-            DatacenterId = dcId;
-            WorkerId = workId;
-        }
+        //public SnowflakeOption(long dcId, long workId)
+        //{
+        //    DatacenterId = dcId;
+        //    WorkerId = workId;
+        //}
     }
 }

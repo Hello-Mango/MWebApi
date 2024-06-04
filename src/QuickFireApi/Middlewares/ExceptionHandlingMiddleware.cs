@@ -60,8 +60,7 @@ namespace QuickFireApi.Middlewares
                     _logger.LogError(ex.Message + ex.StackTrace);
                     break;
             }
-            var result = JsonConvert.SerializeObject(errorResponse);
-            await context.Response.WriteAsJsonAsync(result);
+            await context.Response.WriteAsJsonAsync(errorResponse);
         }
     }
 
