@@ -21,6 +21,6 @@ namespace QuickFireApi.Core
         /// <summary>
         /// 时间戳
         /// </summary>
-        public string Timestamp { get; set; } = DateTime.UtcNow.Ticks.ToString();
+        public string Timestamp { get; } = DateTime.UtcNow.Ticks.ToString();
     }
 }

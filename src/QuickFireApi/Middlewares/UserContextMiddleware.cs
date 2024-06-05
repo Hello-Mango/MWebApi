@@ -20,7 +20,6 @@ namespace QuickFireApi.Middlewares
                 if (context.User.Identity!.IsAuthenticated)
                 {
                     var userContext = serviceProvider.GetRequiredService<UserContext>();
-                    // Do something with userContext
                     userContext.UserName = context.User.Identity.Name!;
                 }
             }

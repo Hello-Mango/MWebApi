@@ -116,6 +116,7 @@ namespace QuickFireApi.Extensions.SwaggerExtensions
                    {
                        c.EnablePersistAuthorization();
                        var apiDescriptionGroups = app.ApplicationServices.GetRequiredService<IApiDescriptionGroupCollectionProvider>().ApiDescriptionGroups.Items;
+                       c.SwaggerEndpoint($"/swagger/All/swagger.json", "All APIs");
                        foreach (var description in apiDescriptionGroups)
                        {
                            if (string.IsNullOrEmpty(description.GroupName) == false)
@@ -123,7 +124,6 @@ namespace QuickFireApi.Extensions.SwaggerExtensions
                                c.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName);
                            }
                        }
-                       c.SwaggerEndpoint($"/swagger/All/swagger.json", "All APIs");
 
                    });
             }
