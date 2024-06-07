@@ -5,8 +5,6 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickFireApi", "QuickFireApi\QuickFireApi.csproj", "{141DAAD9-B301-404F-9B3E-DAA4ED1DB525}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickFire.Models", "QuickFireApi.Models\QuickFire.Models.csproj", "{DD7BB5EA-A56D-4216-A6B5-27824458844F}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{33D8E23B-60F7-493E-ABB9-53A952AEF9F8}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -16,7 +14,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickFireApi.Core", "QuickF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickFire.Infrastructure", "QuickFireApi.Infrastructure\QuickFire.Infrastructure.csproj", "{0248C09F-E159-431A-B0B8-F84C815274A0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "QuickFire.Extensions", "QuickFire.Extensions", "{0BC51CC7-EB46-4FE5-82D6-E4EC30ECB8A4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", "{0BC51CC7-EB46-4FE5-82D6-E4EC30ECB8A4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickFire.Extensions.RedisCache", "QuickFire.RedisCache\QuickFire.Extensions.RedisCache.csproj", "{A580E69D-299C-49FA-B073-91F9F1FC8BC8}"
 EndProject
@@ -42,6 +40,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventBusHandlers.Test", "Ev
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickFire.Extensions.EFCoreCache", "QuickFire.Extensions.EFCoreCache\QuickFire.Extensions.EFCoreCache.csproj", "{CDA3450C-F3D8-4102-AC49-A8901703E22F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickFire.Application", "QuickFire.Application\QuickFire.Application.csproj", "{B0A1464E-36D2-47D3-90B0-EE787B7A1E2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickFire.Domain", "QuickFire.Domain\QuickFire.Domain.csproj", "{235CB9C9-082F-4EEB-99A4-D63CCCEE56E1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{4256C97E-D22E-4C3B-925E-7B349490C26A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{C61D8553-A7BB-48F0-86FA-82F33AE52722}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{D4E20658-E3B7-447E-97BA-D0509C0E1932}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickFire.Domain.Entity", "QuickFire.Domain.Entity\QuickFire.Domain.Entity.csproj", "{9261A047-169A-4C63-846B-108E23088E77}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,10 +62,6 @@ Global
 		{141DAAD9-B301-404F-9B3E-DAA4ED1DB525}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{141DAAD9-B301-404F-9B3E-DAA4ED1DB525}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{141DAAD9-B301-404F-9B3E-DAA4ED1DB525}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DD7BB5EA-A56D-4216-A6B5-27824458844F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DD7BB5EA-A56D-4216-A6B5-27824458844F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DD7BB5EA-A56D-4216-A6B5-27824458844F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DD7BB5EA-A56D-4216-A6B5-27824458844F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{88BFAF8F-23A5-4308-ADFE-DC477C0A8416}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{88BFAF8F-23A5-4308-ADFE-DC477C0A8416}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88BFAF8F-23A5-4308-ADFE-DC477C0A8416}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -108,11 +114,24 @@ Global
 		{CDA3450C-F3D8-4102-AC49-A8901703E22F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDA3450C-F3D8-4102-AC49-A8901703E22F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDA3450C-F3D8-4102-AC49-A8901703E22F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0A1464E-36D2-47D3-90B0-EE787B7A1E2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0A1464E-36D2-47D3-90B0-EE787B7A1E2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0A1464E-36D2-47D3-90B0-EE787B7A1E2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0A1464E-36D2-47D3-90B0-EE787B7A1E2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{235CB9C9-082F-4EEB-99A4-D63CCCEE56E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{235CB9C9-082F-4EEB-99A4-D63CCCEE56E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{235CB9C9-082F-4EEB-99A4-D63CCCEE56E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{235CB9C9-082F-4EEB-99A4-D63CCCEE56E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9261A047-169A-4C63-846B-108E23088E77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9261A047-169A-4C63-846B-108E23088E77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9261A047-169A-4C63-846B-108E23088E77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9261A047-169A-4C63-846B-108E23088E77}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{0248C09F-E159-431A-B0B8-F84C815274A0} = {C61D8553-A7BB-48F0-86FA-82F33AE52722}
 		{A580E69D-299C-49FA-B073-91F9F1FC8BC8} = {0BC51CC7-EB46-4FE5-82D6-E4EC30ECB8A4}
 		{05D9A575-CA73-4D61-B8D1-1AC2D02C14EE} = {0BC51CC7-EB46-4FE5-82D6-E4EC30ECB8A4}
 		{E44C20F3-7AB0-4B7F-A9B5-73DC3A87C4C4} = {0BC51CC7-EB46-4FE5-82D6-E4EC30ECB8A4}
@@ -123,6 +142,9 @@ Global
 		{9137565A-DF1B-48DC-B1CC-A940DD1A2594} = {0BC51CC7-EB46-4FE5-82D6-E4EC30ECB8A4}
 		{6395773C-4077-4F35-9132-001B33623EB1} = {D79DDAD0-7111-4FD5-BDA0-3CE5312CD04A}
 		{CDA3450C-F3D8-4102-AC49-A8901703E22F} = {0BC51CC7-EB46-4FE5-82D6-E4EC30ECB8A4}
+		{B0A1464E-36D2-47D3-90B0-EE787B7A1E2E} = {D4E20658-E3B7-447E-97BA-D0509C0E1932}
+		{235CB9C9-082F-4EEB-99A4-D63CCCEE56E1} = {4256C97E-D22E-4C3B-925E-7B349490C26A}
+		{9261A047-169A-4C63-846B-108E23088E77} = {4256C97E-D22E-4C3B-925E-7B349490C26A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {79BF8878-5EA8-446C-A79D-1324F1393C33}
