@@ -1,6 +1,6 @@
-﻿using QuickFire.Extensions.EventBus;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using QuickFire.Extensions.EventBus;
 
 namespace EventBusHandlers.Test
 {
