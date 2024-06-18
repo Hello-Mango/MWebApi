@@ -23,12 +23,15 @@ namespace QuickFire.Extensions.EventBus
         private readonly IEventSourceStorer _eventSourceStorer;
         private ConcurrentDictionary<Type, List<Delegate>> dicEvent = new ConcurrentDictionary<Type, List<Delegate>>();
         private readonly ILogger _logger;
+        private readonly IServiceProvider _serviceProvider;
         public EventBusHostedService(
             ILogger<EventBusHostedService> logger,
+            IServiceProvider serviceProvider,
             IEventSourceStorer eventSourceStorer)
         {
             _logger = logger;
             _eventSourceStorer = eventSourceStorer;
+            _serviceProvider = serviceProvider;
 
             //自动扫描类型并且注册
             foreach (var file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll"))
@@ -45,8 +48,32 @@ namespace QuickFire.Extensions.EventBus
                             {
                                 if (item2.GetInterfaces().Contains(typeof(IEventData)))
                                 {
+                                    bool isServiceProvider = false;
+                                    var constructors = item.GetConstructors();
+
+                                    // 遍历每个构造函数
+                                    foreach (var constructor in constructors)
+                                    {
+                                        // 获取构造函数的所有参数
+                                        var parameters = constructor.GetParameters();
+
+                                        // 检查是否有任何参数是IServiceProvider类型
+                                        if (parameters.Any(param => param.ParameterType == typeof(IServiceProvider)))
+                                        {
+                                            isServiceProvider = true;
+                                        }
+                                    }
+
                                     //Type constructedType = item.MakeGenericType(item2);
-                                    var obj = Activator.CreateInstance(item);
+                                    object obj;
+                                    if (isServiceProvider == true)
+                                    {
+                                        obj = Activator.CreateInstance(item, _serviceProvider);
+                                    }
+                                    else
+                                    {
+                                        obj = Activator.CreateInstance(item);
+                                    }
                                     MethodInfo methodInfo = item.GetMethod("Handle");
                                     methodInfo.GetParameters()[0].GetType();
 
@@ -123,13 +150,13 @@ namespace QuickFire.Extensions.EventBus
         #endregion
 
         #region 取消事件注册
-        public void Unregister<TEventData>(Type handler) where TEventData : IEventData
+        public void UnRegister<TEventData>(Type handler) where TEventData : IEventData
         {
             var dataType = typeof(TEventData);
-            Unregister(dataType, handler);
+            UnRegister(dataType, handler);
         }
 
-        public void Unregister(Type eventType, Type handlerType)
+        public void UnRegister(Type eventType, Type handlerType)
         {
             if (dicEvent.Keys.Contains(eventType))
             {
