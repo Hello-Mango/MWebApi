@@ -11,6 +11,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\QuickFire.Domain\QuickFire.Domain.csproj" />
+    <ProjectReference Include="..\QuickFire.Utils\QuickFire.Utils.csproj" />
+    <ProjectReference Include="..\QuickFireApi.Core\QuickFireApi.Core.csproj" />
   </ItemGroup>
 
 </Project>

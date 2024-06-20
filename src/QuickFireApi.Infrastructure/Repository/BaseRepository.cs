@@ -9,9 +9,6 @@ using System.Threading.Tasks;
 
 namespace QuickFire.Infrastructure.Repository
 {
-
-
-
     public class GenerialRepository<T, Tkey> : IRepository<T, Tkey> where T : class
     {
         protected readonly DbContext _context;
@@ -92,7 +89,7 @@ namespace QuickFire.Infrastructure.Repository
             return await _context.SaveChangesAsync();
         }
 
-        public virtual T Update(T t, object key)
+        public virtual T? Update(T t, object key)
         {
             if (t == null)
                 return null;
