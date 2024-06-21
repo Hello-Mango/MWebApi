@@ -30,12 +30,11 @@
 		<PackageReference Include="Quartz.Plugins.TimeZoneConverter" Version="3.9.0" />
 		<PackageReference Include="Quartz.Serialization.Json" Version="3.9.0" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\QuickFireApi.Core\QuickFireApi.Core.csproj" />
-	</ItemGroup>
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\QuickFire.Core\QuickFire.Core.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 	  <None Update="quartzui\readme.txt">

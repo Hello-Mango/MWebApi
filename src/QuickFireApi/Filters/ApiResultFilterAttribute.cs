@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
-using QuickFireApi.Core;
+using QuickFire.Core;
 
 namespace QuickFireApi.Filters
 {

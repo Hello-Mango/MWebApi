@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using QucikFire.Extensions;
 using QuickFire.Extensions.Interface;
-using QuickFireApi.Core;
+using QuickFire.Core;
 using QuickFireApi.Extensions.Token;
 using QuickFireApi.Models.Reponse;
 using QuickFireApi.Models.Request;

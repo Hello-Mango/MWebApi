@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuickFire.Domain.Entity
+namespace QuickFire.Core
 {
     public interface IEntity<TId>
     {

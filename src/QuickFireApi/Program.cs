@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using QucikFire.Extensions;
 using QuickFire.MemoryCache;
-using QuickFireApi.Core;
+using QuickFire.Core;
 using QuickFireApi.Extensions;
 using QuickFireApi.Extensions.Addons;
 using QuickFireApi.Extensions.Cache;

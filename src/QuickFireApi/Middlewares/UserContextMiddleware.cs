@@ -1,6 +1,6 @@
 ﻿using QuickFireApi.Middlewares;
 using Microsoft.Extensions.DependencyInjection;
-using QuickFireApi.Core;
+using QuickFire.Core;
 using System.Diagnostics.CodeAnalysis;
 
 namespace QuickFireApi.Middlewares

@@ -1,10 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using QuickFire.Domain.Shared;
+using QuickFire.Core;
 using QuickFire.Utils;
-using QuickFireApi.Core;
 using System;
 
-namespace QuickFire.Infrastructure.Extensions
+namespace QuickFire.Extensions.EFCore
 {
     // SoftDelete/DbContextExtensions.cs
     public static class DbContextExtensions

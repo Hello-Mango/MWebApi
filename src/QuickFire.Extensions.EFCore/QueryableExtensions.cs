@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuickFire.Infrastructure.Extensions
+namespace QuickFire.Extensions.EFCore
 {
     public static class QueryableExtensions
     {

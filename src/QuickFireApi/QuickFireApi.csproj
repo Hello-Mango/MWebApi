@@ -41,6 +41,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EventBusHandlers.Test\EventBusHandlers.Test.csproj" />
+    <ProjectReference Include="..\QuickFire.Core\QuickFire.Core.csproj" />
     <ProjectReference Include="..\QuickFire.Extensions.EventBus\QuickFire.Extensions.EventBus.csproj" />
     <ProjectReference Include="..\QuickFire.Extensions.Interface\QuickFire.Extensions.Interface.csproj" />
     <ProjectReference Include="..\QuickFire.Extensions.Localization\QuickFire.Extensions.Localization.csproj" />
@@ -48,7 +49,6 @@
     <ProjectReference Include="..\QuickFire.Extensions.SnowFlake\QuickFire.Extensions.SnowFlake.csproj" />
     <ProjectReference Include="..\QuickFire.MemoryCache\QuickFire.Extensions.MemoryCache.csproj" />
     <ProjectReference Include="..\QuickFire.RedisCache\QuickFire.Extensions.RedisCache.csproj" />
-    <ProjectReference Include="..\QuickFireApi.Core\QuickFireApi.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

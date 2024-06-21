@@ -1,4 +1,4 @@
-﻿using QuickFireApi.Core;
+﻿using QuickFire.Core;
 
 namespace QuickFireApi.Extensions
 {

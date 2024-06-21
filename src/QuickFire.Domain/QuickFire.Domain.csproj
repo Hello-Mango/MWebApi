@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\QuickFire.Core\QuickFire.Core.csproj" />
+  </ItemGroup>
+
 </Project>

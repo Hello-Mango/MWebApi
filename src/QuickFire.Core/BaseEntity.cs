@@ -1,22 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using QuickFire.Core;
+using System;
 
-namespace QuickFire.Domain.Entity
+namespace QuickFire.Core
 {
     public abstract class BaseEntity<TId> : IEntity<TId>
     {
         public TId Id { get; set; }
-    }
-
-    public interface ISoftDeleted
-    {
-        //string DeletedStaffName { get; set; }
-        //DateTime DeletedTime { get; set; }
-
-        bool Deleted { get; set; }
     }
 
     public abstract class BaseEntity : BaseEntity<long>, ISoftDeleted

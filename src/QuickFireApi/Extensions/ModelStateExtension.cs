@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using QuickFireApi.Core;
+using QuickFire.Core;
 
 namespace QuickFireApi.Extension
 {

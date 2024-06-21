@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using QuickFire.Domain.Shared;
+using QuickFire.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuickFire.Infrastructure.Extensions
+namespace QuickFire.Extensions.EFCore
 {
     public static class ModelBuilderExtensions
     {
@@ -21,6 +21,22 @@ namespace QuickFire.Infrastructure.Extensions
                     var filter = Expression.Lambda(Expression.Equal(
                         Expression.Property(parameter, nameof(ISoftDeleted.Deleted)),
                         Expression.Constant(false)
+                    ), parameter);
+
+                    modelBuilder.Entity(entityType.ClrType).HasQueryFilter(filter);
+                }
+            }
+        }
+        public static void AddTenantQueryFilter(this ModelBuilder modelBuilder,UserContext userContext)
+        {
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                if (typeof(ITenant).IsAssignableFrom(entityType.ClrType))
+                {
+                    var parameter = Expression.Parameter(entityType.ClrType, "e");
+                    var filter = Expression.Lambda(Expression.Equal(
+                        Expression.Property(parameter, nameof(ITenant.TenantId)),
+                        Expression.Constant(userContext.TenantId)
                     ), parameter);
 
                     modelBuilder.Entity(entityType.ClrType).HasQueryFilter(filter);

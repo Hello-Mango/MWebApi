@@ -5,9 +5,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Quartz;
 using Quartz.Impl.Matchers;
+using QuickFire.Core;
 using QuickFire.Extensions.Quartz.Resp;
 using QuickFire.Extensions.QuartzResq;
-using QuickFireApi.Core;
 
 namespace QuickFire.Extensions.Quartz
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace QuickFireApi.Core
+namespace QuickFire.Core
 {
     public class Exception422 : Exception
     {

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Localization;
 using QucikFire.Extensions;
 using QuickFire.Extensions.EventBus;
 using QuickFire.Extensions.Interface;
-using QuickFireApi.Core;
+using QuickFire.Core;
 using QuickFireApi.Extensions.Token;
 using QuickFireApi.Models.Request;
 

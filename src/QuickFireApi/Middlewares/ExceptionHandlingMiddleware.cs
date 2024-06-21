@@ -1,4 +1,4 @@
-﻿using QuickFireApi.Core;
+﻿using QuickFire.Core;
 using Newtonsoft.Json;
 using System.Net;
 

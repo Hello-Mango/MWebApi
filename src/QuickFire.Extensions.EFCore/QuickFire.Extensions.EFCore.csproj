@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
@@ -10,9 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\QuickFire.Domain\QuickFire.Domain.csproj" />
+    <ProjectReference Include="..\QuickFire.Core\QuickFire.Core.csproj" />
     <ProjectReference Include="..\QuickFire.Utils\QuickFire.Utils.csproj" />
-    <ProjectReference Include="..\QuickFireApi.Core\QuickFireApi.Core.csproj" />
   </ItemGroup>
 
 </Project>
