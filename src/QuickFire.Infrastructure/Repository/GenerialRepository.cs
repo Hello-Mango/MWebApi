@@ -9,38 +9,38 @@ using System.Threading.Tasks;
 
 namespace QuickFire.Infrastructure.Repository
 {
-    public class GenerialRepository<T, Tkey> : IRepository<T, Tkey> where T : class
+    public class GenerialRepository<TEntity, Tkey> : IRepository<TEntity, Tkey> where TEntity : class
     {
         protected readonly DbContext _context;
-        protected readonly DbSet<T> _dbSet;
+        protected readonly DbSet<TEntity> _dbSet;
 
         public GenerialRepository(DbContext dbContext)
         {
             _context = dbContext;
-            _dbSet = _context.Set<T>();
+            _dbSet = _context.Set<TEntity>();
         }
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<TEntity> GetAll()
         {
             return _dbSet;
         }
 
-        public virtual async Task<IEnumerable<T?>> GetAllAsyn()
+        public virtual async Task<IEnumerable<TEntity?>> GetAllAsyn()
         {
             return await _dbSet.ToListAsync();
         }
 
-        public virtual T? Get(Tkey id)
+        public virtual TEntity? FindById(Tkey id)
         {
             return _dbSet.Find(id);
         }
 
-        public virtual async Task<T?> GetAsync(int id)
+        public virtual async Task<TEntity?> FindByIdAsync(Tkey id)
         {
             return await _dbSet.FindAsync(id);
         }
 
-        public virtual T Add(T t)
+        public virtual TEntity Add(TEntity t)
         {
 
             _dbSet.Add(t);
@@ -48,7 +48,7 @@ namespace QuickFire.Infrastructure.Repository
             return t;
         }
 
-        public virtual async Task<T> AddAsyn(T t)
+        public virtual async Task<TEntity> AddAsyn(TEntity t)
         {
             _dbSet.Add(t);
             await _context.SaveChangesAsync();
@@ -56,44 +56,44 @@ namespace QuickFire.Infrastructure.Repository
 
         }
 
-        public virtual T? Find(Expression<Func<T, bool>> match)
+        public virtual TEntity? Find(Expression<Func<TEntity, bool>> match)
         {
             return _dbSet.SingleOrDefault(match);
         }
 
-        public virtual async Task<T?> FindAsync(Expression<Func<T, bool>> match)
+        public virtual async Task<TEntity?> FindAsync(Expression<Func<TEntity, bool>> match)
         {
             return await _dbSet.SingleOrDefaultAsync(match);
         }
 
-        public IEnumerable<T> FindAll(Expression<Func<T, bool>> match)
+        public IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> match)
         {
             return _dbSet.Where(match).ToList();
         }
 
-        public async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> match)
+        public async Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> match)
         {
             return await _dbSet.Where(match).ToListAsync();
         }
 
-        public virtual void Delete(T entity)
+        public virtual void Delete(TEntity entity)
         {
             _dbSet.Remove(entity);
             _context.SaveChanges();
 
         }
 
-        public virtual async Task<int> DeleteAsyn(T entity)
+        public virtual async Task<int> DeleteAsyn(TEntity entity)
         {
             _dbSet.Remove(entity);
             return await _context.SaveChangesAsync();
         }
 
-        public virtual T? Update(T t, object key)
+        public virtual TEntity? Update(TEntity t, object key)
         {
             if (t == null)
                 return null;
-            T? exist = _dbSet.Find(key);
+            TEntity? exist = _dbSet.Find(key);
             if (exist != null)
             {
                 _context.Entry(exist).CurrentValues.SetValues(t);
@@ -102,11 +102,11 @@ namespace QuickFire.Infrastructure.Repository
             return exist;
         }
 
-        public virtual async Task<T?> UpdateAsyn(T t, Tkey key)
+        public virtual async Task<TEntity?> UpdateAsyn(TEntity t, Tkey key)
         {
             if (t == null)
                 return null;
-            T? exist = await _dbSet.FindAsync(key);
+            TEntity? exist = await _dbSet.FindAsync(key);
             if (exist != null)
             {
                 _context.Entry(exist).CurrentValues.SetValues(t);
@@ -135,13 +135,13 @@ namespace QuickFire.Infrastructure.Repository
             return await _context.SaveChangesAsync();
         }
 
-        public virtual IEnumerable<T> FindBy(Expression<Func<T, bool>> predicate)
+        public virtual IEnumerable<TEntity> FindBy(Expression<Func<TEntity, bool>> predicate)
         {
-            IEnumerable<T> query = _dbSet.Where(predicate);
+            IEnumerable<TEntity> query = _dbSet.Where(predicate);
             return query;
         }
 
-        public virtual async Task<IEnumerable<T>> FindByAsyn(Expression<Func<T, bool>> predicate)
+        public virtual async Task<IEnumerable<TEntity>> FindByAsyn(Expression<Func<TEntity, bool>> predicate)
         {
             return await _dbSet.Where(predicate).ToListAsync();
         }

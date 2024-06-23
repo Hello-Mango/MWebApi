@@ -21,10 +21,10 @@ namespace EntityFrameworkCore.Repository.Interfaces
         Task<TEntity?> FindAsync(Expression<Func<TEntity, bool>> match);
         IEnumerable<TEntity> FindBy(Expression<Func<TEntity, bool>> predicate);
         Task<IEnumerable<TEntity>> FindByAsyn(Expression<Func<TEntity, bool>> predicate);
-        TEntity? Get(TKey id);
+        TEntity? FindById(TKey id);
         IEnumerable<TEntity> GetAll();
         Task<IEnumerable<TEntity?>> GetAllAsyn();
-        Task<TEntity?> GetAsync(int id);
+        Task<TEntity?> FindByIdAsync(TKey id);
         void Save();
         Task<int> SaveAsync();
         TEntity? Update(TEntity t, object key);
