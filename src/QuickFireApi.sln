@@ -48,11 +48,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickFire.Domain.Entity", "QuickFire.Domain.Entity\QuickFire.Domain.Entity.csproj", "{9261A047-169A-4C63-846B-108E23088E77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickFire.Extensions.EFCore", "QuickFire.Extensions.EFCore\QuickFire.Extensions.EFCore.csproj", "{B0D268C8-3AE3-4E8F-99DF-F7FDD2ED0A03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickFire.Extensions.EFCore", "QuickFire.Extensions.EFCore\QuickFire.Extensions.EFCore.csproj", "{B0D268C8-3AE3-4E8F-99DF-F7FDD2ED0A03}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickFire.Infrastructure", "QuickFire.Infrastructure\QuickFire.Infrastructure.csproj", "{88B6A50A-1504-4615-BC43-275427F4197E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickFire.Core", "QuickFire.Core\QuickFire.Core.csproj", "{4A5A4C31-100D-4766-BE45-0BC7BFB2E402}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickFire.Data", "QuickFire.Data\QuickFire.Data.csproj", "{923F73AA-D6DD-4873-B775-76ABF112953A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -132,6 +134,10 @@ Global
 		{4A5A4C31-100D-4766-BE45-0BC7BFB2E402}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A5A4C31-100D-4766-BE45-0BC7BFB2E402}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A5A4C31-100D-4766-BE45-0BC7BFB2E402}.Release|Any CPU.Build.0 = Release|Any CPU
+		{923F73AA-D6DD-4873-B775-76ABF112953A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{923F73AA-D6DD-4873-B775-76ABF112953A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{923F73AA-D6DD-4873-B775-76ABF112953A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{923F73AA-D6DD-4873-B775-76ABF112953A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

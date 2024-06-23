@@ -14,7 +14,7 @@ namespace QuickFire.Utils
         public static long GetTimeStamp(bool isMillisecond = false)
         {
             var ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
-            var timeStamp = isMillisecond ? Convert.ToInt64(ts.TotalMilliseconds) : Convert.ToInt64(ts.TotalSeconds); return timeStamp;
+            var timeStamp = isMillisecond ? Convert.ToLong(ts.TotalMilliseconds) : Convert.ToLong(ts.TotalSeconds); return timeStamp;
         }
     }
 }

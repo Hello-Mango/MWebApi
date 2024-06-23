@@ -127,7 +127,6 @@ namespace QuickFire.Infrastructure.Repository
 
         public virtual void Save()
         {
-
             _context.SaveChanges();
         }
 
