@@ -10,7 +10,7 @@ namespace QuickFire.Utils
     /// <summary>
     /// 类型转换扩展
     /// </summary>
-    public static class ConvertExtensions
+    public static class ConvertUtils
     {
         /// <summary>
         /// 安全转换为字符串，去除两端空格，当值为null时返回""
