@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace QuickFire.Core
+﻿namespace QuickFireApi.Extensions
 {
     public class ErrorResponse
     {
