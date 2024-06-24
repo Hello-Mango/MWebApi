@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
-using QuickFire.Extensions.Interface;
+using QuickFire.Extensions.Core;
 using System;
 using System.Text;
 

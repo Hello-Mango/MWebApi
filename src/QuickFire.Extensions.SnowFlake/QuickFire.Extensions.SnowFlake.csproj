@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\QuickFire.Extensions.Core\QuickFire.Extensions.Core.csproj" />
-    <ProjectReference Include="..\QuickFire.Extensions.Interface\QuickFire.Extensions.Core.csproj" />
   </ItemGroup>
 
 </Project>

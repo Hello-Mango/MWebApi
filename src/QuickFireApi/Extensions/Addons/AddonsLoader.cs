@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
-using QuickFire.Extensions.Interface;
+using QuickFire.Extensions.Core;
 using System.Runtime.Loader;
 
 namespace QuickFireApi.Extensions.Addons

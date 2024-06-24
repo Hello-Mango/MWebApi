@@ -1,6 +1,6 @@
 ﻿
 using Microsoft.Extensions.DependencyInjection;
-using QuickFire.Extensions.Interface;
+using QuickFire.Extensions.Core;
 using System;
 
 namespace QuickFire.Extensions.Snowflake

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace QuickFire.Extensions.Interface
+namespace QuickFire.Extensions.Core
 {
     public interface IAddon
     {

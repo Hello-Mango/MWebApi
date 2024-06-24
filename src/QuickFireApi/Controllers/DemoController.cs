@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using QucikFire.Extensions;
 using QuickFire.Extensions.EventBus;
-using QuickFire.Extensions.Interface;
 using QuickFire.Core;
 using QuickFireApi.Extensions.Token;
 using QuickFireApi.Models.Request;
+using QuickFire.Extensions.Core;
 
 namespace QuickFireApi.Controllers
 {
