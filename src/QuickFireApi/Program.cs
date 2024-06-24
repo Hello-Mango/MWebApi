@@ -18,6 +18,8 @@ using System.Globalization;
 using QuickFire.Extensions.Quartz;
 using QuickFire.Extensions.EventBus;
 using QuickFire.Extensions.Snowflake;
+using QuickFire.Domain.Shared;
+using QuickFire.Infrastructure;
 
 namespace QuickFireApi
 {
@@ -51,7 +53,7 @@ namespace QuickFireApi
             builder.Services.AddHostedService<EventBusHostedService>();
             builder.Services.AddSingleton<IEventSourceStorer, ChannelEventSourceStorer>();
             builder.Services.AddSingleton<IEventPublisher, ChannelEventPublisher>();
-
+            builder.Services.AddScoped<IUnitOfWork, EFUnitOfWork>();
             long dataCenterId = configuration.GetValue<long>("Snowflake:DataCenterId");
             long workerId = configuration.GetValue<long>("Snowflake:WorkerId");
             builder.Services.AddSnowflake(c =>

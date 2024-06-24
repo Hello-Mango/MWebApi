@@ -1,4 +1,4 @@
-﻿namespace QuickFireApi.Extensions
+﻿namespace QuickFireApi
 {
     public class ErrorResponse
     {

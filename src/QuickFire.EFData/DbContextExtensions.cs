@@ -3,7 +3,7 @@ using QuickFire.Core;
 using QuickFire.Utils;
 using System;
 
-namespace QuickFire.Extensions.EFCore
+namespace QuickFire.EFData
 {
     // SoftDelete/DbContextExtensions.cs
     public static class DbContextExtensions

@@ -1,5 +1,5 @@
-﻿using EntityFrameworkCore.Repository.Interfaces;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using QuickFire.Domain.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;

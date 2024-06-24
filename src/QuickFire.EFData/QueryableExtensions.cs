@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuickFire.Extensions.EFCore
+namespace QuickFire.Extensions.EFData
 {
     public class PagedList<T> : List<T>
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace EntityFrameworkCore.Repository.Interfaces
+namespace QuickFire.Domain.Shared
 {
     public interface IRepository : IDisposable
     { }

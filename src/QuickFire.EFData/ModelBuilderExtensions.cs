@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuickFire.Extensions.EFCore
+namespace QuickFire.Extensions.EFData
 {
     public static class ModelBuilderExtensions
     {
