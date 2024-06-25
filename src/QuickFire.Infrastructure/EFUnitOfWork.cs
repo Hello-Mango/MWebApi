@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace QuickFire.Infrastructure
 {
-    public class EFUnitOfWork : IUnitOfWork
+    public class EFUnitOfWork<T> : IUnitOfWork<T> where T : DbContext
     {
-        private readonly DbContext _dbContext;
+        private readonly T _dbContext;
         private readonly IServiceProvider _serviceProvider;
-        public EFUnitOfWork(DbContext dbContext, IServiceProvider serviceProvider)
+        public EFUnitOfWork(T dbContext, IServiceProvider serviceProvider)
         {
             _dbContext = dbContext;
             _serviceProvider = serviceProvider;

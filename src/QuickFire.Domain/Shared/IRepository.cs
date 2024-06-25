@@ -3,10 +3,10 @@ using System.Linq.Expressions;
 
 namespace QuickFire.Domain.Shared
 {
-    public interface IRepository : IDisposable
+    public interface IRepository<TEntity> : IRepository<TEntity, long> where TEntity : class
     { }
 
-    public interface IRepository<TEntity,TKey> where TEntity : class
+    public interface IRepository<TEntity, TKey> where TEntity : class
     {
         TEntity Add(TEntity t);
         Task<TEntity> AddAsyn(TEntity t);

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace QuickFire.Domain.Shared
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork<T>
     {
         public IRepository<TEntity, long>? GetRepository<TEntity>() where TEntity : BaseEntity;
         public IRepository<TEntity, TKey>? GetRepository<TEntity, TKey>() where TEntity : BaseEntity<TKey>;

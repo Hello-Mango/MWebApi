@@ -20,6 +20,7 @@ using QuickFire.Extensions.EventBus;
 using QuickFire.Extensions.Snowflake;
 using QuickFire.Domain.Shared;
 using QuickFire.Infrastructure;
+using QuickFire.Infrastructure.Repository;
 
 namespace QuickFireApi
 {
@@ -53,7 +54,8 @@ namespace QuickFireApi
             builder.Services.AddHostedService<EventBusHostedService>();
             builder.Services.AddSingleton<IEventSourceStorer, ChannelEventSourceStorer>();
             builder.Services.AddSingleton<IEventPublisher, ChannelEventPublisher>();
-            builder.Services.AddScoped<IUnitOfWork, EFUnitOfWork>();
+            builder.Services.AddScoped(typeof(IUnitOfWork<>), typeof(EFUnitOfWork<>));
+            builder.Services.AddScoped(typeof(IRepository<>), typeof(LongIdRepository<>));
             long dataCenterId = configuration.GetValue<long>("Snowflake:DataCenterId");
             long workerId = configuration.GetValue<long>("Snowflake:WorkerId");
             builder.Services.AddSnowflake(c =>
@@ -70,7 +72,7 @@ namespace QuickFireApi
             builder.Services.AddSingleton<IAuthorizationHandler, MAuthorizationHandler>();
             builder.Services.AddCacheService<MemoryCacheService, QMemoryCacheOptions>(c =>
             {
-                c.CacheKeyPrefix = "QuickFire";
+                c.CacheKeyPrefix = "QF";
             });
             builder.Services.AddSignalR(z =>
             {

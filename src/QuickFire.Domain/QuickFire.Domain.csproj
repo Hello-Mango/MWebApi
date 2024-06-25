@@ -10,4 +10,8 @@
     <ProjectReference Include="..\QuickFire.Core\QuickFire.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Events\" />
+  </ItemGroup>
+
 </Project>

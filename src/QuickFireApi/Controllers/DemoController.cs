@@ -8,6 +8,9 @@ using QuickFire.Core;
 using QuickFireApi.Extensions.Token;
 using QuickFireApi.Models.Request;
 using QuickFire.Extensions.Core;
+using QuickFire.Domain.Shared;
+using QuickFire.Infrastructure;
+using QuickFire.Domain.Entity;
 
 namespace QuickFireApi.Controllers
 {
@@ -20,11 +23,14 @@ namespace QuickFireApi.Controllers
         private readonly IGenerateId<long> idGenerateInterface1;
         private readonly ICacheService _cacheService;
         private readonly IEventPublisher _eventBus;
+        private readonly ILogger _logger;
+        private readonly IUnitOfWork<ApplicationDbContext> _unitOfWork;
         public DemoController(
             IStringLocalizer<AccountController> stringLocalizer,
             IStringLocalizer stringLocalizer2,
             IGenerateId<long> idGenerateInterface,
             IEventPublisher eventBus,
+            IUnitOfWork<ApplicationDbContext> unitOfWork,
             ICacheService cacheService)
         {
             _stringLocalizer = stringLocalizer;
@@ -32,10 +38,13 @@ namespace QuickFireApi.Controllers
             idGenerateInterface1 = idGenerateInterface;
             _cacheService = cacheService;
             _eventBus = eventBus;
+            _unitOfWork = unitOfWork;
         }
         [HttpPost]
         public string AddCache(SingleReq<long> singleReq)
         {
+            var respository = _unitOfWork.GetRepository<User>();
+            respository.FindById(1);
             _cacheService.Set("test", singleReq._);
             return "Test";
         }
