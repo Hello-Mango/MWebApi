@@ -56,6 +56,7 @@ namespace QuickFireApi
             builder.Services.AddSingleton<IEventPublisher, ChannelEventPublisher>();
             builder.Services.AddScoped(typeof(IUnitOfWork<>), typeof(EFUnitOfWork<>));
             builder.Services.AddScoped(typeof(IRepository<>), typeof(LongIdRepository<>));
+            builder.Services.AddDbContext<ApplicationDbContext>();
             long dataCenterId = configuration.GetValue<long>("Snowflake:DataCenterId");
             long workerId = configuration.GetValue<long>("Snowflake:WorkerId");
             builder.Services.AddSnowflake(c =>

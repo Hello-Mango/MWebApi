@@ -49,9 +49,9 @@ namespace QuickFire.Infrastructure
             _dbContext.Dispose();
         }
 
-        public IRepository<TEntity, long>? GetRepository<TEntity>() where TEntity : BaseEntity
+        public IRepository<TEntity>? GetRepository<TEntity>() where TEntity : BaseEntity
         {
-            return _serviceProvider.GetService<IRepository<TEntity, long>>();
+            return _serviceProvider.GetService<IRepository<TEntity>>();
         }
 
         public IRepository<TEntity, TKey>? GetRepository<TEntity, TKey>() where TEntity : BaseEntity<TKey>

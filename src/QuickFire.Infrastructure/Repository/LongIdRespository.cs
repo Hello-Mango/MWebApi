@@ -9,10 +9,11 @@ using System.Threading.Tasks;
 
 namespace QuickFire.Infrastructure.Repository
 {
-    public class LongIdRepository<T> : GenerialRepository<T, long> where T : BaseEntity
+    public class LongIdRepository<T> : GenerialRepository<T, long>, IRepository<T> where T : BaseEntity
     {
-        public LongIdRepository(DbContext dbContext) : base(dbContext)
+        public LongIdRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
+
         }
     }
 }

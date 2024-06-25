@@ -34,7 +34,7 @@ namespace QuickFire.Extensions.EventBus
             _serviceProvider = serviceProvider;
 
             //自动扫描类型并且注册
-            foreach (var file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll"))
+            foreach (var file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*Event.dll"))
             {
                 var ass = AssemblyLoadContext.Default.LoadFromAssemblyPath(file);
                 //var ass = Assembly.LoadFrom(file);

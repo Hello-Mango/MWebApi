@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace QuickFire.Utils
 {
@@ -161,7 +162,16 @@ namespace QuickFire.Utils
 
     public static class Convert
     {
+        public static string ToSnakeCase(this string input)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                return input;
+            }
 
+            var startUnderscores = Regex.Match(input, @"^_+");
+            return startUnderscores + Regex.Replace(input, @"([a-z0-9])([A-Z])", "$1_$2").ToLower();
+        }
         #region ToInt(转换为32位整型)
 
         /// <summary>
@@ -369,7 +379,7 @@ namespace QuickFire.Utils
                     return false;
             }
             bool.TryParse(value, out var result);
-            return  result;
+            return result;
         }
 
         #endregion

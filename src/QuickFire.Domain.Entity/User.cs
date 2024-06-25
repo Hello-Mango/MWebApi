@@ -5,7 +5,7 @@ using QuickFire.Core;
 
 namespace QuickFire.Domain.Entity
 {
-    public class User : BaseEntity
+    public class TUser : BaseEntity
     {
         public string Name { get; set; }
     }

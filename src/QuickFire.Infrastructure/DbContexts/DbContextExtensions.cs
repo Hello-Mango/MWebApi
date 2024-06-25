@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuickFire.Core;
+using QuickFire.Infrastructure;
 using QuickFire.Utils;
 using System;
 using System.Reflection;
