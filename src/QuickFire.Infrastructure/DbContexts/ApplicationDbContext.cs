@@ -13,6 +13,7 @@ using QuickFire.Utils;
 using System.Threading;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Linq.Expressions;
+using QuickFire.EFData;
 
 
 namespace QuickFire.Infrastructure

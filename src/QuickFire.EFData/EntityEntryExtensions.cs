@@ -6,14 +6,11 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuickFire.Infrastructure.DbContexts
+namespace QuickFire.EFData
 {
     public static class EntityEntryExtensions
     {
-        public static EntityEntry SetColumnIf<TEntity, TProperty>(
-            this EntityEntry<TEntity> entry, bool condition,
-            Expression<Func<TEntity, TProperty>> propertyExpression,
-            TProperty value) where TEntity : class
+        public static EntityEntry SetColumnIf<TEntity, TProperty>(this EntityEntry<TEntity> entry, bool condition, Expression<Func<TEntity, TProperty>> propertyExpression, TProperty value) where TEntity : class
         {
             if (condition)
             {
@@ -32,10 +29,7 @@ namespace QuickFire.Infrastructure.DbContexts
         /// <param name="condition"></param>
         /// <param name="propertyValueTuple"></param>
         /// <returns></returns>
-        public static EntityEntry SetColumnIf<TEntity, TProperty>(
-       this EntityEntry<TEntity> entry, bool condition,
-       (Expression<Func<TEntity, TProperty>> PropertyExpression, TProperty Value) propertyValueTuple
-      ) where TEntity : class
+        public static EntityEntry SetColumnIf<TEntity, TProperty>(this EntityEntry<TEntity> entry, bool condition, (Expression<Func<TEntity, TProperty>> PropertyExpression, TProperty Value) propertyValueTuple) where TEntity : class
         {
             if (condition)
             {
@@ -46,22 +40,19 @@ namespace QuickFire.Infrastructure.DbContexts
             return entry;
         }
         /// <summary>
-     //   entry.SetColumnsIf(
-     //condition: order.TotalAmount > 100,
-     //propertyValuePairs: new (Expression<Func<Order, object>>, object)[]
-     //{
-     //    (x => x.TotalAmount, 200.00M),
-     //    (x => x.Status, "Processed")
-     //});
+        //   entry.SetColumnsIf(
+        //condition: order.TotalAmount > 100,
+        //propertyValuePairs: new (Expression<Func<Order, object>>, object)[]
+        //{
+        //    (x => x.TotalAmount, 200.00M),
+        //    (x => x.Status, "Processed")
+        //});
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="entry"></param>
         /// <param name="condition"></param>
         /// <param name="propertyValuePairs"></param>
-        public static void SetColumnsIf<TEntity>(
-       this EntityEntry<TEntity> entry,
-       bool condition,
-       params (Expression<Func<TEntity, object>> PropertyExpression, object Value)[] propertyValuePairs) where TEntity : class
+        public static void SetColumnsIf<TEntity>(this EntityEntry<TEntity> entry, bool condition, params (Expression<Func<TEntity, object>> PropertyExpression, object Value)[] propertyValuePairs) where TEntity : class
         {
             if (condition)
             {

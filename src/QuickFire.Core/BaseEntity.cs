@@ -1,5 +1,5 @@
-﻿using QuickFire.Core;
-using System;
+﻿using System;
+using System.Security.Cryptography;
 
 namespace QuickFire.Core
 {

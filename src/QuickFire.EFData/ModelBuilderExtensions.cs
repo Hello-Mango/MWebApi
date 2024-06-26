@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuickFire.Extensions.EFData
+namespace QuickFire.EFData
 {
     public static class ModelBuilderExtensions
     {

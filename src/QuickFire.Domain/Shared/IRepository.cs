@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Query;
+using System;
 using System.Linq.Expressions;
 
 namespace QuickFire.Domain.Shared
@@ -29,6 +30,13 @@ namespace QuickFire.Domain.Shared
         Task<int> SaveAsync();
         TEntity? Update(TEntity t);
         Task<TEntity?> UpdateAsyn(TEntity t);
+
+        Task<int> ExecuteUpdateAsync(Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> setPropertyCalls, Expression<Func<TEntity, bool>> predicate);
+        int ExecuteUpdate(Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> setPropertyCalls, Expression<Func<TEntity, bool>> predicate);
+
+        Task<int> ExecuteDeleteAsync(Expression<Func<TEntity, bool>> predicate);
+        int ExecuteDelete(Expression<Func<TEntity, bool>> predicate);
+
     }
 
 }

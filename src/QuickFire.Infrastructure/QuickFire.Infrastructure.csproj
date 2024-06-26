@@ -18,6 +18,7 @@
     <ProjectReference Include="..\QuickFire.Core\QuickFire.Core.csproj" />
     <ProjectReference Include="..\QuickFire.Domain.Entity\QuickFire.Domain.Entity.csproj" />
     <ProjectReference Include="..\QuickFire.Domain\QuickFire.Domain.csproj" />
+    <ProjectReference Include="..\QuickFire.EFData\QuickFire.EFData.csproj" />
     <ProjectReference Include="..\QuickFire.Utils\QuickFire.Utils.csproj" />
   </ItemGroup>
 

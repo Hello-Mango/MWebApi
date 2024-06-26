@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using QuickFire.Core;
 using QuickFire.Domain.Shared;
 using System;
@@ -164,5 +165,24 @@ namespace QuickFire.Infrastructure.Repository
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
+        public Task<int> ExecuteUpdateAsync(Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> setPropertyCalls, Expression<Func<TEntity, bool>> predicate)
+        {
+            return _dbSet.Where(predicate).ExecuteUpdateAsync(setPropertyCalls);
+        }
+        public int ExecuteUpdate(Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> setPropertyCalls, Expression<Func<TEntity, bool>> predicate)
+        {
+            return _dbSet.Where(predicate).ExecuteUpdate(setPropertyCalls);
+        }
+
+        public Task<int> ExecuteDeleteAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return _dbSet.Where(predicate).ExecuteDeleteAsync();
+        }
+        public int ExecuteDelete(Expression<Func<TEntity, bool>> predicate)
+        {
+            return _dbSet.Where(predicate).ExecuteDelete();
+        }
+
     }
 }
