@@ -8,10 +8,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\QuickFire.Core\QuickFire.Core.csproj" />
+    <ProjectReference Include="..\QuickFire.Domain.Entity\QuickFire.Domain.Entity.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Events\" />
+    <Folder Include="Factory\" />
   </ItemGroup>
 
 </Project>

@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using QuickFire.Core;
 using QuickFire.Domain.Shared;
 using QuickFire.Infrastructure.Repository;
+using QuickFire.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,14 +50,18 @@ namespace QuickFire.Infrastructure
             _dbContext.Dispose();
         }
 
-        public IRepository<TEntity>? GetRepository<TEntity>() where TEntity : BaseEntity
+        public IRepository<TEntity> GetRepository<TEntity>() where TEntity : BaseEntity
         {
-            return _serviceProvider.GetService<IRepository<TEntity>>();
+            var repository = _serviceProvider.GetService<IRepository<TEntity>>();
+            repository!.CheckNull(nameof(IRepository<TEntity>));
+            return repository!;
         }
 
-        public IRepository<TEntity, TKey>? GetRepository<TEntity, TKey>() where TEntity : BaseEntity<TKey>
+        public IRepository<TEntity, TKey> GetRepository<TEntity, TKey>() where TEntity : BaseEntity<TKey>
         {
-            return _serviceProvider.GetService<IRepository<TEntity, TKey>>();
+            var repository = _serviceProvider.GetService<IRepository<TEntity, TKey>>();
+            repository!.CheckNull(nameof(IRepository<TEntity, TKey>));
+            return repository!;
         }
 
         public void RollbackTransaction()

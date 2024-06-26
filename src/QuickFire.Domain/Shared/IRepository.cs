@@ -27,8 +27,8 @@ namespace QuickFire.Domain.Shared
         Task<TEntity?> FindByIdAsync(TKey id);
         void Save();
         Task<int> SaveAsync();
-        TEntity? Update(TEntity t, object key);
-        Task<TEntity?> UpdateAsyn(TEntity t, TKey key);
+        TEntity? Update(TEntity t);
+        Task<TEntity?> UpdateAsyn(TEntity t);
     }
 
 }

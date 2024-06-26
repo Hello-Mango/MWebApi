@@ -10,6 +10,9 @@ using System.Text;
 using System.Threading.Tasks;
 using QuickFire.Extensions.EFData;
 using QuickFire.Utils;
+using System.Threading;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Linq.Expressions;
 
 
 namespace QuickFire.Infrastructure
@@ -32,7 +35,12 @@ namespace QuickFire.Infrastructure
             this.HandleAddModify(_userContext);
             return base.SaveChanges();
         }
-
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        {
+            this.HandleSoftDelete(_userContext);
+            this.HandleAddModify(_userContext);
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var tenant = _userContext.TenantId;
@@ -103,4 +111,7 @@ namespace QuickFire.Infrastructure
             }
         }
     }
+
+  
+
 }

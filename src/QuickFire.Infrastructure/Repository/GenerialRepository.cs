@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using QuickFire.Core;
 using QuickFire.Domain.Shared;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace QuickFire.Infrastructure.Repository
 {
-    public class GenerialRepository<TEntity, Tkey> : IRepository<TEntity, Tkey> where TEntity : class
+    public class GenerialRepository<TEntity, Tkey> : IRepository<TEntity, Tkey> where TEntity : BaseEntity<Tkey>
     {
         protected readonly DbContext _context;
         protected readonly DbSet<TEntity> _dbSet;
@@ -89,11 +90,11 @@ namespace QuickFire.Infrastructure.Repository
             return await _context.SaveChangesAsync();
         }
 
-        public virtual TEntity? Update(TEntity t, object key)
+        public virtual TEntity? Update(TEntity t)
         {
             if (t == null)
                 return null;
-            TEntity? exist = _dbSet.Find(key);
+            TEntity? exist = _dbSet.Find(t.Id);
             if (exist != null)
             {
                 _context.Entry(exist).CurrentValues.SetValues(t);
@@ -102,11 +103,11 @@ namespace QuickFire.Infrastructure.Repository
             return exist;
         }
 
-        public virtual async Task<TEntity?> UpdateAsyn(TEntity t, Tkey key)
+        public virtual async Task<TEntity?> UpdateAsyn(TEntity t)
         {
             if (t == null)
                 return null;
-            TEntity? exist = await _dbSet.FindAsync(key);
+            TEntity? exist = await _dbSet.FindAsync(t.Id);
             if (exist != null)
             {
                 _context.Entry(exist).CurrentValues.SetValues(t);

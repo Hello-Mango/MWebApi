@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Localization;
 using QuickFire.Core;
 
 namespace QuickFireApi.Extension
@@ -19,7 +20,12 @@ namespace QuickFireApi.Extension
                         .Select(e => e.ErrorMessage)
                         .ToList();
 
-
+                    var serviceProvider = actionContext.HttpContext.RequestServices;
+                    var translateService = serviceProvider.GetService<IStringLocalizer>();
+                    if (translateService != null)
+                    {
+                        errors = errors.Select(e => translateService.GetString(e).Value).ToList();
+                    }
                     throw new Exception422(string.Join(Environment.NewLine, errors));
                 };
             });

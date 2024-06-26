@@ -21,6 +21,7 @@ using QuickFire.Extensions.Snowflake;
 using QuickFire.Domain.Shared;
 using QuickFire.Infrastructure;
 using QuickFire.Infrastructure.Repository;
+using QuickFireApi.Extension;
 
 namespace QuickFireApi
 {
@@ -50,13 +51,13 @@ namespace QuickFireApi
                 options.AddPolicy("MyPolicy", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             });
             builder.Services.AddHealthChecks();
-            //builder.Services.AddQuickFireEventBus(configuration);
             builder.Services.AddHostedService<EventBusHostedService>();
             builder.Services.AddSingleton<IEventSourceStorer, ChannelEventSourceStorer>();
             builder.Services.AddSingleton<IEventPublisher, ChannelEventPublisher>();
             builder.Services.AddScoped(typeof(IUnitOfWork<>), typeof(EFUnitOfWork<>));
             builder.Services.AddScoped(typeof(IRepository<>), typeof(LongIdRepository<>));
             builder.Services.AddDbContext<ApplicationDbContext>();
+            builder.Services.AddModelState();
             long dataCenterId = configuration.GetValue<long>("Snowflake:DataCenterId");
             long workerId = configuration.GetValue<long>("Snowflake:WorkerId");
             builder.Services.AddSnowflake(c =>
@@ -78,7 +79,8 @@ namespace QuickFireApi
             builder.Services.AddSignalR(z =>
             {
             });
-            //builder.Services.AddQuickFireQuartz(configuration);
+
+            builder.Services.AddQuickFireQuartz(configuration);
             var app = builder.Build();
             if (configuration.GetSection("Swagger").GetValue<bool>("IsShow"))
             {
@@ -90,7 +92,7 @@ namespace QuickFireApi
                 new CultureInfo("zh-CN"),
             };
             app.UseStaticFiles();
-            //app.UseQuickFireQuartzUI();
+            app.UseQuickFireQuartzUI();
             app.UseAddonsUI();
             app.UseHealthChecks("/health");
             app.UseSerilogRequestLogging();

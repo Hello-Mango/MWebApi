@@ -9,7 +9,11 @@
   <ItemGroup>
     <Folder Include="DTOS\" />
     <Folder Include="Querys\" />
-    <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\QuickFire.Domain.Entity\QuickFire.Domain.Entity.csproj" />
+    <ProjectReference Include="..\QuickFire.Domain\QuickFire.Domain.csproj" />
   </ItemGroup>
 
 </Project>
