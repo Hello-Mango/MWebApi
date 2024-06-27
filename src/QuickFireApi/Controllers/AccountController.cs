@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using QucikFire.Extensions;
 using QuickFire.Core;
+using QuickFire.Extensions.Core;
 using QuickFireApi.Extensions.Token;
 using QuickFireApi.Models.Reponse;
 using QuickFireApi.Models.Request;
+using QuickFireApi.Response;
 
 namespace QuickFireApi.Controllers
 {
@@ -15,8 +17,8 @@ namespace QuickFireApi.Controllers
     public class AccountController : ControllerBase
     {
         private readonly MTokenHandler _mTokenHandler;
-        private readonly UserContext _userContext;
-        public AccountController(MTokenHandler mTokenHandler, UserContext userContext)
+        private readonly IUserContext _userContext;
+        public AccountController(MTokenHandler mTokenHandler, IUserContext userContext)
         {
             _userContext = userContext;
             _mTokenHandler = mTokenHandler;

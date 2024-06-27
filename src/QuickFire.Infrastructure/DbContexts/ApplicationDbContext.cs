@@ -13,7 +13,9 @@ using QuickFire.Utils;
 using System.Threading;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Linq.Expressions;
-using QuickFire.EFData;
+using QuickFire.Domain.Entity;
+using QuickFire.Extensions.Core;
+using QuickFire.Infrastructure.Extensions;
 
 
 namespace QuickFire.Infrastructure
@@ -21,9 +23,9 @@ namespace QuickFire.Infrastructure
     public class ApplicationDbContext : DbContext
     {
         private readonly DbContextOptions<ApplicationDbContext> _options;
-        private readonly UserContext _userContext;
+        private readonly IUserContext _userContext;
         private readonly IConfiguration _configuration;
-        public ApplicationDbContext(UserContext userContext, DbContextOptions<ApplicationDbContext> options, IConfiguration configuration)
+        public ApplicationDbContext(IUserContext userContext, DbContextOptions<ApplicationDbContext> options, IConfiguration configuration)
         {
             _userContext = userContext;
             _options = options;
@@ -72,7 +74,7 @@ namespace QuickFire.Infrastructure
             modelBuilder.AddSoftDeleteQueryFilter();
             modelBuilder.AddTenantQueryFilter(_userContext);
         }
-        private void HandleSoftDelete(UserContext userContext)
+        private void HandleSoftDelete(IUserContext userContext)
         {
             foreach (var entry in this.ChangeTracker.Entries<ISoftDeleted>())
             {
@@ -91,7 +93,7 @@ namespace QuickFire.Infrastructure
             }
         }
 
-        private void HandleAddModify(UserContext userContext)
+        private void HandleAddModify(IUserContext userContext)
         {
             foreach (var entry in this.ChangeTracker.Entries<BaseEntity>())
             {

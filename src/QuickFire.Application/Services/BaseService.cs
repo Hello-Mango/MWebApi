@@ -1,5 +1,6 @@
 ﻿using QuickFire.Application.Interface;
 using QuickFire.Core;
+using QuickFire.Domain.Entity;
 using QuickFire.Domain.Shared;
 using System;
 using System.Collections.Generic;

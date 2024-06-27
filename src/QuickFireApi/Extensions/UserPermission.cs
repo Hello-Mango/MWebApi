@@ -1,4 +1,5 @@
 ﻿using QuickFire.Core;
+using QuickFire.Extensions.Core;
 
 namespace QuickFireApi.Extensions
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace QuickFire.Core
+namespace QuickFire.Extensions.Core
 {
     public interface IUserPermission
     {

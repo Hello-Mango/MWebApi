@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuickFire.Core
+namespace QuickFire.Domain.Entity
 {
-    public interface IEntity<TId>
+    public interface IEntity<out TId>
     {
-        TId Id { get; set; }
+        TId Id { get; }
     }
 }

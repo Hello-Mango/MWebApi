@@ -2,6 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using QuickFire.Core;
 using System.Diagnostics.CodeAnalysis;
+using QuickFire.Extensions.Core;
+using QuickFire.Extensions.UserContext;
+using QuickFire.Utils;
 
 namespace QuickFireApi.Middlewares
 {
@@ -19,8 +22,10 @@ namespace QuickFireApi.Middlewares
             {
                 if (context.User.Identity!.IsAuthenticated)
                 {
-                    var userContext = serviceProvider.GetRequiredService<UserContext>();
-                    userContext.UserName = context.User.Identity.Name!;
+                    var userContext = serviceProvider.GetRequiredService<IUserContext>();
+                    long.TryParse(context.User.Claims.FirstOrDefault(x => x.Type == "UserId")?.Value, out long userId);
+                    long.TryParse(context.User.Claims.FirstOrDefault(x => x.Type == "TenantId")?.Value, out long tenantId);
+                    userContext.SetUserContext(userId, context.User.Identity.Name!, tenantId);
                 }
             }
 
@@ -38,7 +43,7 @@ namespace QuickFireApi.Middlewares
     {
         public static IServiceCollection AddUserContext(this IServiceCollection services)
         {
-            services.AddScoped<UserContext>();
+            services.AddScoped<IUserContext, UserContext>();
             return services;
         }
     }

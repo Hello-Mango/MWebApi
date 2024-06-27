@@ -22,6 +22,7 @@ using QuickFire.Domain.Shared;
 using QuickFire.Infrastructure;
 using QuickFire.Infrastructure.Repository;
 using QuickFireApi.Extension;
+using QuickFire.Extensions.Core;
 
 namespace QuickFireApi
 {

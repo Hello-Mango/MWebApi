@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace QuickFire.Application.Interface
 {
-    public interface IUserServiceInterface : IBaseInterface<TUser>
+    public interface IUserService : IBaseInterface<TUser>
     {
         public TUser CreateUser(TUser user);
     }
