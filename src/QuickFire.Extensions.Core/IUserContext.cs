@@ -9,7 +9,8 @@ namespace QuickFire.Extensions.Core
         public long UserId { get; }
         public string UserName { get; }
         public long TenantId { get; }
+        public List<string> Roles { get; }
 
-        public void SetUserContext(long userId, string userName, long tenantId);
+        public void SetUserContext(long userId, string userName, long tenantId,List<string> roles);
     }
 }

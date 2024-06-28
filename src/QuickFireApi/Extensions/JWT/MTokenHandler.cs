@@ -12,7 +12,7 @@ namespace QuickFireApi.Extensions.Token
         {
             _configuration = configuration;
         }
-        public string CreateAccessToken(string username, List<string> roleList)
+        public string CreateAccessToken(string userId, string username, string tenantId, List<string> roleList)
         {
             var section = _configuration.GetSection("JWTConfig");
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -25,7 +25,13 @@ namespace QuickFireApi.Extensions.Token
             var expires = section.GetValue<int>("Expires");
             var audience = section.GetValue<string>("Audience");
             var issuer = section.GetValue<string>("Issuer");
-
+            IDictionary<string, object> claims = new Dictionary<string, object>();
+            foreach (var item in roleList)
+            {
+                claims.Add(ClaimTypes.Role, item);
+            }
+            claims.Add("UserId", userId);
+            claims.Add("TenantId", tenantId);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, username) }),
@@ -33,10 +39,7 @@ namespace QuickFireApi.Extensions.Token
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
                 Audience = audience,
                 TokenType = "Bearer",
-                Claims = new Dictionary<string, object>()
-                {
-                    { ClaimTypes.Role, string.Join(',',roleList) }
-                },
+                Claims = claims,
                 Issuer = issuer,
                 IssuedAt = DateTime.UtcNow,
                 NotBefore = DateTime.UtcNow

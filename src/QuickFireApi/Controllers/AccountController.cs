@@ -4,6 +4,7 @@ using Microsoft.Extensions.Localization;
 using QucikFire.Extensions;
 using QuickFire.Core;
 using QuickFire.Extensions.Core;
+using QuickFire.Utils;
 using QuickFireApi.Extensions.Token;
 using QuickFireApi.Models.Reponse;
 using QuickFireApi.Models.Request;
@@ -34,7 +35,7 @@ namespace QuickFireApi.Controllers
         {
             if (_loginReq.username == "admin" && _loginReq.password == "111111")
             {
-                var token = _mTokenHandler.CreateAccessToken("admin", new List<string>()
+                var token = _mTokenHandler.CreateAccessToken("1", "admin", "2222", new List<string>()
                 {
                     "admin",
                     "user"
@@ -42,9 +43,9 @@ namespace QuickFireApi.Controllers
                 var refreshToken = _mTokenHandler.CreateRefreshToken("admin");
                 return new LoginReponse()
                 {
-                    AccessToken = $"bearer " + token,
+                    AccessToken = token,
                     RefreshToken = refreshToken,
-                    Timestamp = DateTime.Now.Microsecond,
+                    Timestamp = TimeUtils.GetTimeStamp(),
                     CompanyId = 1,
                     UserId = 1,
                     Username = "admin",

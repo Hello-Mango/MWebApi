@@ -38,10 +38,14 @@ namespace QuickFireApi
                 logger.ReadFrom.Configuration(builder.Configuration)
                 .Enrich.FromLogContext();
             });
-            builder.Services.AddControllers().AddJsonOptions(options =>
+            builder.Services.AddControllers(c =>
+            {
+                c.Filters.Add(new PermissionFilter());
+            }).AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.Converters.Add(new LongToStringConverter());
             });
+           
             builder.Services.AddAddons();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddJsonLocalization(z => z.ResourcesPath = "i18n");
