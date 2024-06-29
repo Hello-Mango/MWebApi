@@ -26,11 +26,12 @@ namespace QuickFireApi.Middlewares
                     var userContext = serviceProvider.GetRequiredService<IUserContext>();
                     long.TryParse(context.User.Claims.FirstOrDefault(x => x.Type == "UserId")?.Value, out long userId);
                     long.TryParse(context.User.Claims.FirstOrDefault(x => x.Type == "TenantId")?.Value, out long tenantId);
+                    string ipAddress = context.Connection.RemoteIpAddress!.ToString();
                     var roles = context.User.Claims
                                 .Where(c => c.Type == ClaimTypes.Role)
                                 .Select(c => c.Value)
                                 .ToList();
-                    userContext.SetUserContext(userId, context.User.Identity.Name!, tenantId, roles);
+                    userContext.SetUserContext(userId, context.User.Identity.Name!, tenantId, roles, ipAddress);
                 }
             }
 

@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace QuickFireApi.Extensions
+namespace QuickFire.Core.AssemblyFinder
 {
-    public class AppDomainAssemblyFinder
+    public class AppDomainAssemblyFinder : IAssemblyFinder
     {
         /// <summary>
         /// 程序集过滤模式
@@ -58,7 +58,7 @@ namespace QuickFireApi.Extensions
             try
             {
                 var assemblyName = AssemblyName.GetAssemblyName(file);
-                if (IsSkip(assemblyName.Name))
+                if (IsSkip(assemblyName.Name!))
                     return;
                 if (currentDomainAssemblies.Any(t => t.FullName == assemblyName.FullName))
                     return;
@@ -89,7 +89,7 @@ namespace QuickFireApi.Extensions
         /// </summary>
         private bool IsSkip(Assembly assembly)
         {
-            return IsSkip(assembly.FullName);
+            return IsSkip(assembly.FullName!);
         }
     }
 }

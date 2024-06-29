@@ -16,8 +16,8 @@ namespace EventBusHandlers.Test
         public void Handle(Test eventData)
         {
             var temp = serviceProvider1.GetService<ICacheService>();
-            temp.Set("test", "test");
-            string res = temp.Get("test");
+            temp!.Set("test", "test");
+            string? res = temp!.Get("test");
             Console.WriteLine(eventData.EventSource);
         }
     }

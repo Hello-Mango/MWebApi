@@ -8,9 +8,8 @@ namespace QuickFire.Extensions.AuditLog
 {
     public class EntityChangeInfo
     {
-        public string Entity { get; set; }
-        public string Action { get; set; }
-        public string Sql { get; set; }
-        public Dictionary<string, object?> Parameters { get; set; }
+
+        public string OldValue { get; set; }
+        public string NewValue { get; set; }
     }
 }

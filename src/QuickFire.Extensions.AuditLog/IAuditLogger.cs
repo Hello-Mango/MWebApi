@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace QuickFire.Extensions.AuditLog
 {
-    public interface IAuditLogService
+    public interface IAuditLogger
     {
-        Task LogAsync(AuditLog auditLog);
+        void Log(AuditLog message);
+
+        Task LogAsync(AuditLog message);
     }
 }

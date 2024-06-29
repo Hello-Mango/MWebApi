@@ -23,6 +23,7 @@ using QuickFire.Infrastructure;
 using QuickFire.Infrastructure.Repository;
 using QuickFireApi.Extension;
 using QuickFire.Extensions.Core;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace QuickFireApi
 {
@@ -45,7 +46,10 @@ namespace QuickFireApi
             {
                 options.JsonSerializerOptions.Converters.Add(new LongToStringConverter());
             });
-           
+            builder.Services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            });
             builder.Services.AddAddons();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddJsonLocalization(z => z.ResourcesPath = "i18n");
@@ -62,6 +66,7 @@ namespace QuickFireApi
             builder.Services.AddScoped(typeof(IUnitOfWork<>), typeof(EFUnitOfWork<>));
             builder.Services.AddScoped(typeof(IRepository<>), typeof(LongIdRepository<>));
             builder.Services.AddDbContext<ApplicationDbContext>();
+            ;
             builder.Services.AddModelState();
             long dataCenterId = configuration.GetValue<long>("Snowflake:DataCenterId");
             long workerId = configuration.GetValue<long>("Snowflake:WorkerId");

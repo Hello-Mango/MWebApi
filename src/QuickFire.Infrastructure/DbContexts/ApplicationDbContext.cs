@@ -16,6 +16,8 @@ using System.Linq.Expressions;
 using QuickFire.Domain.Entity;
 using QuickFire.Extensions.Core;
 using QuickFire.Infrastructure.Extensions;
+using QuickFire.Extensions.AuditLog;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 
 namespace QuickFire.Infrastructure
@@ -49,8 +51,8 @@ namespace QuickFire.Infrastructure
             var tenant = _userContext.TenantId;
             optionsBuilder.UseSnakeCaseNamingConvention();
             IConfigurationSection sec = _configuration.GetSection("DataBase");
-            string type = sec["DbType"];
-            string connectionString = sec["ConnectionString"];
+            string type = sec["DbType"]!;
+            string connectionString = sec["ConnectionString"]!;
             switch (type)
             {
                 case "sqlserver":
@@ -113,8 +115,85 @@ namespace QuickFire.Infrastructure
                 }
             }
         }
+
+        private void AddAuditLog(IUserContext userContext, IAuditLogger auditLogger)
+        {
+            if (_configuration.GetSection("AuditLog").GetValue<bool>("DbEnable") == false)
+            {
+                return;
+            }
+            List<AuditLog> auditLogs = new List<AuditLog>();
+
+            foreach (var entry in this.ChangeTracker.Entries<BaseEntity>())
+            {
+                AuditLog auditLog = new AuditLog()
+                {
+                    Action = entry.State.ToString(),
+                    Entity = entry.Entity.GetType().Name,
+                    CreatedTime = DateTime.UtcNow,
+                    UserId = userContext.UserId.ToString(),
+                    UserName = userContext.UserName
+                };
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        var propertyList = entry.CurrentValues.Properties.Where(i => entry.Property(i.Name).IsModified);
+                        PropertyEntry keyEntity = entry.Property("KeyId");
+                        foreach (var prop in propertyList)
+                        {
+                            PropertyEntry entity = entry.Property(prop.Name)!;
+                            if (entity != null)
+                            {
+                                EntityChangeInfo entityChangeInfo = new EntityChangeInfo()
+                                {
+                                    OldValue = string.Empty,
+                                    NewValue = entity.CurrentValue == null ? string.Empty : entity.CurrentValue.ToString()!,
+                                };
+                                auditLog!.EntityChanges!.Add(entityChangeInfo);
+                            }
+                        }
+                        break;
+                    case EntityState.Modified:
+                        propertyList = entry.CurrentValues.Properties.Where(i => entry.Property(i.Name).IsModified);
+                        keyEntity = entry.Property("KeyId");
+                        foreach (var prop in propertyList)
+                        {
+                            PropertyEntry entity = entry.Property(prop.Name)!;
+                            if (entity != null)
+                            {
+                                EntityChangeInfo entityChangeInfo = new EntityChangeInfo()
+                                {
+                                    OldValue = entity.OriginalValue == null ? string.Empty : entity.OriginalValue.ToString()!,
+                                    NewValue = entity.CurrentValue == null ? string.Empty : entity.CurrentValue.ToString()!,
+                                };
+                                auditLog!.EntityChanges!.Add(entityChangeInfo);
+                            }
+                        }
+
+                        break;
+                    case EntityState.Deleted:
+                        propertyList = entry.CurrentValues.Properties.Where(i => entry.Property(i.Name).IsModified);
+                        keyEntity = entry.Property("KeyId");
+                        foreach (var prop in propertyList)
+                        {
+                            PropertyEntry entity = entry.Property(prop.Name)!;
+                            if (entity != null)
+                            {
+                                EntityChangeInfo entityChangeInfo = new EntityChangeInfo()
+                                {
+                                    OldValue = entity.OriginalValue == null ? string.Empty : entity.OriginalValue.ToString()!,
+                                };
+                                auditLog!.EntityChanges!.Add(entityChangeInfo);
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
     }
 
-  
+
 
 }

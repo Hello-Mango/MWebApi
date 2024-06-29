@@ -10,11 +10,14 @@ namespace QuickFire.Extensions.UserContext
 
         public List<string> Roles => new List<string>();
 
-        public void SetUserContext(long userId, string userName, long tenantId, List<string> roles)
+        public string IpAddress { get; private set; }
+
+        public void SetUserContext(long userId, string userName, long tenantId, List<string> roles, string ipAddress)
         {
             UserId = userId;
             UserName = userName;
             TenantId = tenantId;
+            IpAddress = ipAddress;
             Roles.AddRange(roles);
         }
     }
