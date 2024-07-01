@@ -17,6 +17,6 @@
         /// <summary>
         /// 时间戳
         /// </summary>
-        public string Timestamp { get; } = DateTime.UtcNow.Ticks.ToString();
+        public string Timestamp { get; } = DateTimeOffset.UtcNow.Ticks.ToString();
     }
 }

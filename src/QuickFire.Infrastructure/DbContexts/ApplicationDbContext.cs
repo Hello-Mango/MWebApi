@@ -18,6 +18,8 @@ using QuickFire.Extensions.Core;
 using QuickFire.Infrastructure.Extensions;
 using QuickFire.Extensions.AuditLog;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System.Reflection.Emit;
 
 
 namespace QuickFire.Infrastructure
@@ -27,11 +29,17 @@ namespace QuickFire.Infrastructure
         private readonly DbContextOptions<ApplicationDbContext> _options;
         private readonly IUserContext _userContext;
         private readonly IConfiguration _configuration;
+        private readonly String _dbType;
+        private readonly String _connectionString;
         public ApplicationDbContext(IUserContext userContext, DbContextOptions<ApplicationDbContext> options, IConfiguration configuration)
         {
             _userContext = userContext;
             _options = options;
             _configuration = configuration;
+            IConfigurationSection sec = _configuration.GetSection("DataBase");
+            string _dbType = sec["DbType"]!;
+            string _connectionString = sec["ConnectionString"]!;
+
         }
 
         public override int SaveChanges()
@@ -50,19 +58,17 @@ namespace QuickFire.Infrastructure
         {
             var tenant = _userContext.TenantId;
             optionsBuilder.UseSnakeCaseNamingConvention();
-            IConfigurationSection sec = _configuration.GetSection("DataBase");
-            string type = sec["DbType"]!;
-            string connectionString = sec["ConnectionString"]!;
-            switch (type)
+
+            switch (_dbType)
             {
                 case "sqlserver":
-                    optionsBuilder.UseSqlServer(connectionString);
+                    optionsBuilder.UseSqlServer(_connectionString);
                     break;
                 case "mysql":
-                    optionsBuilder.UseMySQL(connectionString);
+                    optionsBuilder.UseMySQL(_connectionString);
                     break;
                 case "pgsql":
-                    optionsBuilder.UseNpgsql(connectionString);
+                    optionsBuilder.UseNpgsql(_connectionString);
                     break;
                 default:
                     throw new Exception("Invalid database type");
@@ -75,7 +81,15 @@ namespace QuickFire.Infrastructure
             modelBuilder.RegisterAllEntities();
             modelBuilder.AddSoftDeleteQueryFilter();
             modelBuilder.AddTenantQueryFilter(_userContext);
+            if (_dbType != "pgsql" && _dbType != "sqlserver")
+            {
+                modelBuilder.AddDateTimeOffsetConvert();
+                modelBuilder.AddDateTimeConvert();
+            }
         }
+
+
+
         private void HandleSoftDelete(IUserContext userContext)
         {
             foreach (var entry in this.ChangeTracker.Entries<ISoftDeleted>())

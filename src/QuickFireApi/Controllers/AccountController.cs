@@ -68,7 +68,7 @@ namespace QuickFireApi.Controllers
             return new TokenResponse()
             {
                 RefreshToken = _userContext.UserName,
-                Timestamp = DateTime.Now.Ticks
+                Timestamp = DateTimeOffset.UtcNow.Ticks
             };
         }
     }

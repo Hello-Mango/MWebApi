@@ -59,7 +59,7 @@ namespace QuickFire.Extensions.Quartz
             dataMap.Put(DataKeys.IntervalType, request.IntervalType);
             dataMap.Put(DataKeys.Cron, request.Cron);
             dataMap.Put(DataKeys.RequestBody, request.RequestBody);
-            dataMap.Put(DataKeys.CreateTime, DateTime.Now.ToString());
+            dataMap.Put(DataKeys.CreateTime, DateTimeOffset.Now.ToString());
             dataMap.Put(DataKeys.StartTime, request.StartTime.ToString());
             dataMap.Put(DataKeys.EndTime, request.EndTime.HasValue ? request.EndTime.Value.ToString() : string.Empty);
 
@@ -187,8 +187,8 @@ namespace QuickFire.Extensions.Quartz
                     TriggerState triggerState = await _scheduler.GetTriggerState(trigger.Key);  // trigger 状态
 
                     /****计算时间差***/
-                    DateTime? prevFire = trigger.GetPreviousFireTimeUtc()?.LocalDateTime;
-                    DateTime? nextFire = trigger.GetNextFireTimeUtc()?.LocalDateTime;
+                    DateTimeOffset? prevFire = trigger.GetPreviousFireTimeUtc();
+                    DateTimeOffset? nextFire = trigger.GetNextFireTimeUtc();
                     TimeSpan span = TimeSpan.FromSeconds(0);
                     if (prevFire.HasValue && nextFire.HasValue)
                     {

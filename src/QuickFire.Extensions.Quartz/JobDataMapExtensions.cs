@@ -24,11 +24,11 @@ namespace QuickFire.Extensions.Quartz
             => map.GetString(DataKeys.Cron) ?? string.Empty;
         public static string GetRequestBody(this JobDataMap map)
             => map.GetString(DataKeys.RequestBody) ?? string.Empty;
-        public static DateTime GetCreateTime(this JobDataMap map)
+        public static DateTimeOffset GetCreateTime(this JobDataMap map)
             => map.GetDateTime(DataKeys.CreateTime);
-        public static DateTime GetStartTime(this JobDataMap map)
+        public static DateTimeOffset GetStartTime(this JobDataMap map)
             => map.GetDateTime(DataKeys.StartTime);
-        public static DateTime? GetEndTime(this JobDataMap map)
+        public static DateTimeOffset? GetEndTime(this JobDataMap map)
             => string.IsNullOrWhiteSpace(map.GetString(DataKeys.EndTime)) ? null : map.GetDateTime(DataKeys.EndTime);
         public static string GetLastException(this JobDataMap map)
             => map.GetString(DataKeys.LastException) ?? string.Empty;

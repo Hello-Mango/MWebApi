@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuickFire.Core;
 using QuickFire.Domain.Entity;
 using QuickFire.Extensions.Core;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,7 +32,41 @@ namespace QuickFire.Infrastructure.Extensions
                 }
             }
         }
-        public static void AddTenantQueryFilter(this ModelBuilder modelBuilder,IUserContext userContext)
+        public static void AddDateTimeConvert(this ModelBuilder modelBuilder)
+        {
+            var dateTimeConverter = new ValueConverter<DateTime, DateTime>(
+           v => v, // 假设已经是 UTC，不进行转换
+           v => DateTime.SpecifyKind(v, DateTimeKind.Utc)); // 从数据库读取时，指定为 UTC
+
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                foreach (var property in entityType.GetProperties())
+                {
+                    if (property.ClrType == typeof(DateTime) || property.ClrType == typeof(DateTime?))
+                    {
+                        property.SetValueConverter(dateTimeConverter);
+                    }
+                }
+            }
+        }
+        public static void AddDateTimeOffsetConvert(this ModelBuilder modelBuilder)
+        {
+            var dateTimeConverter = new ValueConverter<DateTimeOffset, DateTimeOffset>(
+           v => v.ToUniversalTime(), // 假设已经是 UTC，不进行转换
+           v => v.ToLocalTime()); // 从数据库读取时，指定为 UTC
+
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                foreach (var property in entityType.GetProperties())
+                {
+                    if (property.ClrType == typeof(DateTimeOffset) || property.ClrType == typeof(DateTimeOffset?))
+                    {
+                        property.SetValueConverter(dateTimeConverter);
+                    }
+                }
+            }
+        }
+        public static void AddTenantQueryFilter(this ModelBuilder modelBuilder, IUserContext userContext)
         {
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {

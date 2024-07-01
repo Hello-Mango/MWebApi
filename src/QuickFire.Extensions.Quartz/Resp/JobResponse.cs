@@ -34,19 +34,19 @@ namespace QuickFire.Extensions.Quartz.Resp
         /// <summary>
         /// 任务开始时间
         /// </summary>
-        public DateTime StartTime { get; set; }
+        public DateTimeOffset StartTime { get; set; }
         /// <summary>
         /// 任务停止时间
         /// </summary>
-        public DateTime? EndTime { get; set; }
+        public DateTimeOffset? EndTime { get; set; }
         /// <summary>
         /// 前一次执行时间
         /// </summary>
-        public DateTime? PrevFireTime { get; set; }
+        public DateTimeOffset? PrevFireTime { get; set; }
         /// <summary>
         /// 下一次执行时间
         /// </summary>
-        public DateTime? NextFireTime { get; set; }
+        public DateTimeOffset? NextFireTime { get; set; }
         /// <summary>
         /// 执行计划/频率
         /// </summary>
@@ -117,7 +117,7 @@ namespace QuickFire.Extensions.Quartz.Resp
         /// <summary>
         /// 创建时间
         /// </summary>
-        public DateTime CreateTime { get; set; }
+        public DateTimeOffset CreateTime { get; set; }
         /// <summary>
         /// 最后一次异常信息
         /// </summary>
