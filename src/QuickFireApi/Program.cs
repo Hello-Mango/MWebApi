@@ -24,6 +24,10 @@ using QuickFire.Infrastructure.Repository;
 using QuickFireApi.Extension;
 using QuickFire.Extensions.Core;
 using Microsoft.AspNetCore.HttpOverrides;
+using QuickFire.Core.AssemblyFinder;
+using QuickFireApi.Extensions.ServiceRefister;
+using QuickFire.Application.Interface;
+using QuickFire.Application.Services;
 
 namespace QuickFireApi
 {
@@ -66,8 +70,11 @@ namespace QuickFireApi
             builder.Services.AddScoped(typeof(IUnitOfWork<>), typeof(EFUnitOfWork<>));
             builder.Services.AddScoped(typeof(IRepository<>), typeof(LongIdRepository<>));
             builder.Services.AddDbContext<ApplicationDbContext>();
-            ;
-            builder.Services.AddModelState();
+            builder.Services.RegisterService();
+            //builder.Services.AddScoped(typeof(IUserService), typeof(UserService));
+
+
+             builder.Services.AddModelState();
             long dataCenterId = configuration.GetValue<long>("Snowflake:DataCenterId");
             long workerId = configuration.GetValue<long>("Snowflake:WorkerId");
             builder.Services.AddSnowflake(c =>

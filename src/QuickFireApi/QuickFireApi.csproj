@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -41,6 +41,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EventBusHandlers.Test\EventBusHandlers.Test.csproj" />
+    <ProjectReference Include="..\QuickFire.Application\QuickFire.Application.csproj" />
+    <ProjectReference Include="..\QuickFire.Core\QuickFire.Core.csproj" />
+    <ProjectReference Include="..\QuickFire.Domain.Entity\QuickFire.Domain.Entity.csproj" />
     <ProjectReference Include="..\QuickFire.Domain\QuickFire.Domain.csproj" />
     <ProjectReference Include="..\QuickFire.Extensions.Core\QuickFire.Extensions.Core.csproj" />
     <ProjectReference Include="..\QuickFire.Extensions.Localization\QuickFire.Extensions.Localization.csproj" />
@@ -50,6 +53,7 @@
     <ProjectReference Include="..\QuickFire.Infrastructure\QuickFire.Infrastructure.csproj" />
     <ProjectReference Include="..\QuickFire.MemoryCache\QuickFire.Extensions.MemoryCache.csproj" />
     <ProjectReference Include="..\QuickFire.RedisCache\QuickFire.Extensions.RedisCache.csproj" />
+    <ProjectReference Include="..\QuickFire.Utils\QuickFire.Utils.csproj" />
   </ItemGroup>
 
   <ItemGroup>

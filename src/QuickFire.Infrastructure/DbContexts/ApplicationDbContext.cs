@@ -37,8 +37,8 @@ namespace QuickFire.Infrastructure
             _options = options;
             _configuration = configuration;
             IConfigurationSection sec = _configuration.GetSection("DataBase");
-            string _dbType = sec["DbType"]!;
-            string _connectionString = sec["ConnectionString"]!;
+            _dbType = sec["DbType"]!;
+            _connectionString = sec["ConnectionString"]!;
 
         }
 

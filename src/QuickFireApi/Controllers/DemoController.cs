@@ -12,6 +12,7 @@ using QuickFire.Domain.Shared;
 using QuickFire.Infrastructure;
 using QuickFire.Domain.Entity;
 using QuickFire.Infrastructure.Repository;
+using QuickFire.Application.Interface;
 
 namespace QuickFireApi.Controllers
 {
@@ -27,6 +28,7 @@ namespace QuickFireApi.Controllers
         private readonly ILogger _logger;
         private readonly IRepository<TUser> _repository;
         private readonly IUnitOfWork<ApplicationDbContext> _unitOfWork;
+        private readonly IUserService _userService;
         private readonly ApplicationDbContext _applicationDbContext;
         public DemoController(
             IStringLocalizer<AccountController> stringLocalizer,
@@ -35,7 +37,7 @@ namespace QuickFireApi.Controllers
             IEventPublisher eventBus,
             IUnitOfWork<ApplicationDbContext> unitOfWork,
             IRepository<TUser> repository,
-            ApplicationDbContext applicationDbContext,
+            ApplicationDbContext applicationDbContext, IUserService userService,
             ICacheService cacheService)
         {
             _stringLocalizer = stringLocalizer;
@@ -46,6 +48,7 @@ namespace QuickFireApi.Controllers
             _unitOfWork = unitOfWork;
             _repository = repository;
             _applicationDbContext = applicationDbContext;
+            _userService = userService;
         }
         [HttpPost]
         public string AddCache(SingleReq<long> singleReq)
@@ -53,13 +56,14 @@ namespace QuickFireApi.Controllers
             IRepository<TUser> repository1 = new LongIdRepository<TUser>(_applicationDbContext);
             var respository = _unitOfWork.GetRepository<TUser>();
             respository.Add(new TUser() { Id = idGenerateInterface1.NextId(), Name = "test" });
-            var item = respository.FindById(1);
+            var item = respository.FindBy(z => z.CreatedAt > DateTime.UtcNow);
             _cacheService.Set("test", item);
             return "Test";
         }
         [HttpGet]
         public TUser? GetCache()
         {
+            _userService.CreateUser(new TUser() { Id = idGenerateInterface1.NextId(), Name = "tes222t" });
             return _cacheService.Get<TUser>("test");
         }
         [HttpGet]

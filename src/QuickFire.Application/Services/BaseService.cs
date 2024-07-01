@@ -10,38 +10,38 @@ using System.Threading.Tasks;
 
 namespace QuickFire.Application.Services
 {
-    public class BaseService<T> : IBaseInterface<T> where T : BaseEntity
+    public abstract class BaseService<T,TEntity> : IBaseInterface<TEntity> where TEntity : BaseEntity
     {
         protected readonly IUnitOfWork<T> _unitOfWork;
         public BaseService(IUnitOfWork<T> unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
-        public T Create(T entity)
+        public TEntity Create(TEntity entity)
         {
-            _unitOfWork.GetRepository<T>().Add(entity);
+            _unitOfWork.GetRepository<TEntity>().Add(entity);
             return entity;
         }
 
-        public T Delete(T entity)
+        public TEntity Delete(TEntity entity)
         {
-            _unitOfWork.GetRepository<T>().Delete(entity);
+            _unitOfWork.GetRepository<TEntity   >().Delete(entity);
             return entity;
         }
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<TEntity> GetAll()
         {
-            return _unitOfWork.GetRepository<T>().GetAll();
+            return _unitOfWork.GetRepository<TEntity>().GetAll();
         }
 
-        public T? GetById(long id)
+        public TEntity? GetById(long id)
         {
-            return _unitOfWork.GetRepository<T>().FindById(id);
+            return _unitOfWork.GetRepository<TEntity>().FindById(id);
         }
 
-        public T Update(T entity)
+        public TEntity Update(TEntity entity)
         {
-            _unitOfWork.GetRepository<T>().Update(entity);
+            _unitOfWork.GetRepository<TEntity>().Update(entity);
             return entity;
         }
     }
