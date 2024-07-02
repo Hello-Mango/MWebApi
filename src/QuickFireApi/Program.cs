@@ -28,6 +28,8 @@ using QuickFire.Core.AssemblyFinder;
 using QuickFireApi.Extensions.ServiceRegister;
 using QuickFire.Application.Interface;
 using QuickFire.Application.Services;
+using QuickFire.Extensions.ApiFilter;
+using QuickFireApi.Filters;
 
 namespace QuickFireApi
 {
@@ -43,9 +45,15 @@ namespace QuickFireApi
                 logger.ReadFrom.Configuration(builder.Configuration)
                 .Enrich.FromLogContext();
             });
+            builder.Services.AddSingleton<IApiLogging, ApiLogging>();
+            builder.Services.AddSingleton<IApiMonitor, ApiMonitor>();
+            builder.Services.AddScoped<ApiMonitorActionFilter>();
+            builder.Services.AddScoped<ApiLoggingActionFilter>();
             builder.Services.AddControllers(c =>
             {
                 c.Filters.Add(new PermissionFilter());
+                c.Filters.Add(typeof(ApiMonitorActionFilter));
+                c.Filters.Add(typeof(ApiLoggingActionFilter));
             }).AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.Converters.Add(new LongToStringConverter());
@@ -74,7 +82,7 @@ namespace QuickFireApi
             //builder.Services.AddScoped(typeof(IUserService), typeof(UserService));
 
 
-             builder.Services.AddModelState();
+            builder.Services.AddModelState();
             long dataCenterId = configuration.GetValue<long>("Snowflake:DataCenterId");
             long workerId = configuration.GetValue<long>("Snowflake:WorkerId");
             builder.Services.AddSnowflake(c =>
@@ -88,6 +96,7 @@ namespace QuickFireApi
             builder.Services.AddUserContext();
             builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IApplicationModelProvider, ProduceResponseTypeModelProvider>());
             builder.Services.AddMemoryCache();
+
             builder.Services.AddSingleton<IAuthorizationHandler, MAuthorizationHandler>();
             builder.Services.AddCacheService<MemoryCacheService, QMemoryCacheOptions>(c =>
             {

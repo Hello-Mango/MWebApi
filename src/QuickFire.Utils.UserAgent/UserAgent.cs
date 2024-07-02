@@ -2,14 +2,19 @@
 
 namespace QuickFire.Utils.UserAgent
 {
-    public class UserAgent
+    public static class UserAgent
     {
-        public UserAgentInfo GetUserAgent(string uaString)
+        public static UserAgentInfo GetUserAgent(string uaString)
         {
             var uaParser = Parser.GetDefault();
             ClientInfo c = uaParser.Parse(uaString);
 
-            return new UserAgentInfo();
+            return new UserAgentInfo()
+            {
+                Browser= c.UA.ToString(),
+                OS = c.OS.ToString(),
+                Device = c.Device.ToString(),
+            };
         }
     }
 }
