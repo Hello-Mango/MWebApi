@@ -83,10 +83,6 @@ namespace QuickFire.Core.AssemblyFinder
         protected bool IsSkip(string assemblyName)
         {
             var applicationName = Assembly.GetEntryAssembly()?.GetName().Name;
-            if (assemblyName.StartsWith($"{applicationName}.Views"))
-                return true;
-            if (assemblyName.StartsWith($"{applicationName}.PrecompiledViews"))
-                return true;
             if (string.IsNullOrWhiteSpace(AssemblySkipPattern))
                 return false;
             return Regex.IsMatch(assemblyName, AssemblySkipPattern, RegexOptions.IgnoreCase | RegexOptions.Compiled);

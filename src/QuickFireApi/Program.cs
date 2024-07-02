@@ -25,7 +25,7 @@ using QuickFireApi.Extension;
 using QuickFire.Extensions.Core;
 using Microsoft.AspNetCore.HttpOverrides;
 using QuickFire.Core.AssemblyFinder;
-using QuickFireApi.Extensions.ServiceRefister;
+using QuickFireApi.Extensions.ServiceRegister;
 using QuickFire.Application.Interface;
 using QuickFire.Application.Services;
 

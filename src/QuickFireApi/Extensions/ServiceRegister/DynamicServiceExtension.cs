@@ -3,7 +3,7 @@ using QuickFire.Core.AssemblyFinder;
 using QuickFire.Extensions.Quartz;
 using QuickFire.Utils;
 
-namespace QuickFireApi.Extensions.ServiceRefister
+namespace QuickFireApi.Extensions.ServiceRegister
 {
     public static class DynamicServiceExtension
     {

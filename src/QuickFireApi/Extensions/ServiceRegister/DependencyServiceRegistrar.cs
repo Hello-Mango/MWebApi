@@ -5,7 +5,7 @@ using QuickFire.Utils;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-namespace QuickFireApi.Extensions.ServiceRefister
+namespace QuickFireApi.Extensions.ServiceRegister
 {
     public class DependencyServiceRegistrar : IServiceRegister
     {
