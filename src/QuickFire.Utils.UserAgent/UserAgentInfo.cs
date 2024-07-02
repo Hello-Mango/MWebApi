@@ -7,7 +7,7 @@ using UAParser;
 
 namespace QuickFire.Utils.UserAgent
 {
-    public class UserAgent
+    public class UserAgentInfo
     {
        
     }
