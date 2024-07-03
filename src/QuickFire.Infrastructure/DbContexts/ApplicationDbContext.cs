@@ -13,13 +13,13 @@ using QuickFire.Utils;
 using System.Threading;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Linq.Expressions;
-using QuickFire.Domain.Entity;
 using QuickFire.Extensions.Core;
 using QuickFire.Infrastructure.Extensions;
 using QuickFire.Extensions.AuditLog;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Reflection.Emit;
+using QuickFire.Domain.Entity.Base;
 
 
 namespace QuickFire.Infrastructure

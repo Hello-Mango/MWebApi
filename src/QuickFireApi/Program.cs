@@ -24,11 +24,7 @@ using QuickFire.Infrastructure.Repository;
 using QuickFireApi.Extension;
 using QuickFire.Extensions.Core;
 using Microsoft.AspNetCore.HttpOverrides;
-using QuickFire.Core.AssemblyFinder;
 using QuickFireApi.Extensions.ServiceRegister;
-using QuickFire.Application.Interface;
-using QuickFire.Application.Services;
-using QuickFire.Extensions.ApiFilter;
 using QuickFireApi.Filters;
 
 namespace QuickFireApi
@@ -39,7 +35,6 @@ namespace QuickFireApi
         {
             var builder = WebApplication.CreateBuilder(args);
             IConfiguration configuration = builder.Configuration;
-            builder.Services.AddSerilog();
             builder.Services.AddSerilog(logger =>
             {
                 logger.ReadFrom.Configuration(builder.Configuration)
@@ -75,11 +70,8 @@ namespace QuickFireApi
             builder.Services.AddHostedService<EventBusHostedService>();
             builder.Services.AddSingleton<IEventSourceStorer, ChannelEventSourceStorer>();
             builder.Services.AddSingleton<IEventPublisher, ChannelEventPublisher>();
-            builder.Services.AddScoped(typeof(IUnitOfWork<>), typeof(EFUnitOfWork<>));
-            builder.Services.AddScoped(typeof(IRepository<>), typeof(LongIdRepository<>));
-            builder.Services.AddDbContext<ApplicationDbContext>();
+            builder.Services.AddDataBase();
             builder.Services.RegisterService();
-            //builder.Services.AddScoped(typeof(IUserService), typeof(UserService));
 
 
             builder.Services.AddModelState();

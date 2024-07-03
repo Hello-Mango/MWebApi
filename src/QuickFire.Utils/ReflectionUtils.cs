@@ -74,7 +74,7 @@ public static class ReflectionUtils {
         if ( member == null )
             return string.Empty;
         if ( member.GetCustomAttribute<DisplayAttribute>() is { } displayAttribute )
-            return displayAttribute.Name;
+            return displayAttribute.Name!;
         if ( member.GetCustomAttribute<DisplayNameAttribute>() is { } displayNameAttribute )
             return displayNameAttribute.DisplayName;
         return string.Empty;
@@ -470,7 +470,7 @@ public static class ReflectionUtils {
     /// 获取顶级基类
     /// </summary>
     /// <typeparam name="T">类型</typeparam>
-    public static Type GetTopBaseType<T>() {
+    public static Type? GetTopBaseType<T>() {
         return GetTopBaseType( typeof( T ) );
     }
 
@@ -478,7 +478,7 @@ public static class ReflectionUtils {
     /// 获取顶级基类
     /// </summary>
     /// <param name="type">类型</param>
-    public static Type GetTopBaseType( Type type ) {
+    public static Type? GetTopBaseType( Type type ) {
         if ( type == null )
             return null;
         if ( type.IsInterface )
@@ -497,7 +497,7 @@ public static class ReflectionUtils {
     /// </summary>
     /// <param name="instance">实例</param>
     /// <param name="propertyName">属性名</param>
-    public static object GetPropertyValue( object instance, string propertyName ) {
+    public static object? GetPropertyValue( object instance, string propertyName ) {
         if ( instance == null )
             return null;
         var property = instance.GetType().GetProperty( propertyName );

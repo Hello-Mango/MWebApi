@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuickFire.Domain.Entity
+namespace QuickFire.Extensions.Core
 {
-    public interface IEntity<out TId>
+    public interface IApiLogging
     {
-        TId Id { get; }
+        public Task AddLog(ApiLoggingModel context);
     }
 }

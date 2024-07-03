@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using QuickFire.Core;
-using QuickFire.Domain.Entity;
+using QuickFire.Domain.Entity.Base;
 using QuickFire.Domain.Shared;
 using QuickFire.Infrastructure.Repository;
 using QuickFire.Utils;

@@ -1,4 +1,5 @@
-﻿using QuickFire.Extensions.ApiFilter;
+﻿
+using QuickFire.Extensions.Core;
 
 namespace QuickFireApi.Filters
 {

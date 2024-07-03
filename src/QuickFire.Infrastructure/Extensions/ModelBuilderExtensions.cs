@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuickFire.Core;
-using QuickFire.Domain.Entity;
+using QuickFire.Domain.Entity.Base;
 using QuickFire.Extensions.Core;
 using System;
 using System.Collections.Generic;

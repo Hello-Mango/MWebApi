@@ -7,15 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuickFire.Domain.Services
+namespace QuickFire.Domain.Business.UserBiz
 {
-    public class UserAggregateRoot : BaseAggregateRoot<long>
+    public class User : BaseAggregateRoot<long>
     {
         public TUser _user { get; private set; }
         private List<TRole> _roles = new List<TRole>();
         public IReadOnlyCollection<TRole> Roles => _roles.AsReadOnly();
 
-        public UserAggregateRoot(TUser user, List<TRole> roles)
+        public User(TUser user, List<TRole> roles)
         {
             Id = user.Id;
             _user = user;

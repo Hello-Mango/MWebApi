@@ -66,7 +66,9 @@ namespace QuickFire.Utils
         /// <param name="value">值</param>
         public static bool IsDefault<T>(this T value)
         {
+#pragma warning disable CS8604 // Possible null reference argument.
             return EqualityComparer<T>.Default.Equals(value, default);
+#pragma warning restore CS8604 // Possible null reference argument.
         }
     }
 }

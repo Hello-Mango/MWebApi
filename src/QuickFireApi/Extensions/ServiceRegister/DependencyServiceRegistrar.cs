@@ -18,6 +18,7 @@ namespace QuickFireApi.Extensions.ServiceRegister
         /// 注册服务
         /// </summary>
         /// <param name="serviceContext">服务上下文</param>
+        /// <param name="services">服务上下文</param>
         public Action Register(ServiceContext serviceContext, IServiceCollection services)
         {
             return () =>
@@ -88,6 +89,7 @@ namespace QuickFireApi.Extensions.ServiceRegister
         /// 注册服务,该操作在启动开始时执行,如果需要延迟执行某些操作,可在返回的Action中执行,它将在启动最后执行
         /// </summary>
         /// <param name="context">服务上下文</param>
+        /// <param name="services">服务上下文</param>
         Action Register(ServiceContext context, IServiceCollection services);
     }
     public class ServiceContext

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using QuickFire.Extensions.ApiFilter;
 using QuickFire.Extensions.Core;
 using Newtonsoft.Json;
 

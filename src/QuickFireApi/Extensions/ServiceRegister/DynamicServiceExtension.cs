@@ -18,7 +18,6 @@ namespace QuickFireApi.Extensions.ServiceRegister
             #endregion
 
             var types = _typeFinder.Find<IServiceRegister>();
-
             var instances = types.Select(type => (IServiceRegister)Activator.CreateInstance(type)).OrderBy(t => t.OrderId).ToList();
             var context = new ServiceContext(_assemblyFinder, _typeFinder);
             var _serviceActions = new List<Action>();

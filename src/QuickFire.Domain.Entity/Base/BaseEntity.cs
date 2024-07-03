@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 
-namespace QuickFire.Domain.Entity
+namespace QuickFire.Domain.Entity.Base
 {
     public abstract class BaseEntity<TId> : IEntity<TId>
     {
