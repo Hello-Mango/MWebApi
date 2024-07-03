@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace QuickFire.Domain.Business.UserBiz
 {
-    public class UserFactory : IUserFactory, IScopeDependency
+    public class UserFactory : IUserFactory
     {
         private readonly IRepository<TUser> _repositoryUser;
         public UserFactory(IRepository<TUser> repositoryUser)

@@ -38,13 +38,13 @@ namespace QuickFire.Infrastructure
 
         public IRouteTail RouteTail { get; set; }
 
-        public SysDbContext(IUserContext userContext, DbContextOptions<SysDbContext> options, IConfiguration configuration, IOptions<DataBaseConfig> databaseOption) : base(options)
+        public SysDbContext(IUserContext userContext, DbContextOptions<SysDbContext> options, IConfiguration configuration, IOptions<AppSettings> databaseOption) : base(options)
         {
             _userContext = userContext;
             _options = options;
             _configuration = configuration;
-            _dbType = databaseOption.Value.DbType;
-            _connectionString = databaseOption.Value.ConnectionString;
+            _dbType = databaseOption.Value.DataBaseConfig.DbType.ToLower();
+            _connectionString = databaseOption.Value.DataBaseConfig.ConnectionString;
 
         }
 
