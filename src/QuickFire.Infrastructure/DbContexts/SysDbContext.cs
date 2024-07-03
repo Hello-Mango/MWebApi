@@ -23,6 +23,7 @@ using QuickFire.Domain.Entity.Base;
 using ShardingCore.Sharding.Abstractions;
 using ShardingCore.Sharding;
 using ShardingCore.Core.VirtualRoutes.TableRoutes.RouteTails.Abstractions;
+using Microsoft.Extensions.Options;
 
 
 namespace QuickFire.Infrastructure
@@ -37,14 +38,13 @@ namespace QuickFire.Infrastructure
 
         public IRouteTail RouteTail { get; set; }
 
-        public SysDbContext(IUserContext userContext, DbContextOptions<SysDbContext> options, IConfiguration configuration) : base(options)
+        public SysDbContext(IUserContext userContext, DbContextOptions<SysDbContext> options, IConfiguration configuration, IOptions<DataBaseConfig> databaseOption) : base(options)
         {
             _userContext = userContext;
             _options = options;
             _configuration = configuration;
-            IConfigurationSection sec = _configuration.GetSection("DataBase");
-            _dbType = sec["DbType"]!;
-            _connectionString = sec["ConnectionString"]!;
+            _dbType = databaseOption.Value.DbType;
+            _connectionString = databaseOption.Value.ConnectionString;
 
         }
 

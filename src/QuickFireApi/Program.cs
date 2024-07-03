@@ -28,6 +28,7 @@ using QuickFireApi.Extensions.ServiceRegister;
 using QuickFireApi.Filters;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using QuickFireApi.Extensions.JWT;
 
 namespace QuickFireApi
 {
@@ -89,7 +90,7 @@ namespace QuickFireApi
                 });
             builder.Services.AddMToken(configuration);
             var section = configuration.GetSection("JWTConfig");
-            builder.Services.AddMAuth(section);
+            builder.Services.AddMAuth(appSettings.JWTConfig.SecretKey, appSettings.JWTConfig.Issuer, appSettings.JWTConfig.Audience);
             builder.Services.AddUserContext();
             builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IApplicationModelProvider, ProduceResponseTypeModelProvider>());
             builder.Services.AddMemoryCache();
@@ -105,7 +106,7 @@ namespace QuickFireApi
 
             builder.Services.AddQuickFireQuartz(configuration);
             var app = builder.Build();
-            if (configuration.GetSection("Swagger").GetValue<bool>("IsShow"))
+            if (appSettings.SwaggerConfig.IsShow)
             {
                 app.UseSwaggerExtension();
             }

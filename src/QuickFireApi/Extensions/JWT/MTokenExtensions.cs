@@ -16,14 +16,8 @@ namespace QuickFireApi.Extensions.Token
             service.AddSingleton(new MTokenHandler(configuration));
             return service;
         }
-        public static IServiceCollection AddMAuth(this IServiceCollection service, IConfigurationSection section, Func<TokenValidatedContext, Task>? func = null)
+        public static IServiceCollection AddMAuth(this IServiceCollection service, string secretKey, string issuer, string audience, Func<TokenValidatedContext, Task>? func = null)
         {
-            //AddMToken(service, section);
-            string? secretKey = section.GetValue<string?>("SecretKey");
-            if (string.IsNullOrEmpty(secretKey))
-            {
-                throw new ArgumentNullException("SecretKey is null");
-            }
             var secretByte = Encoding.UTF8.GetBytes(secretKey);
             service.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
@@ -31,9 +25,9 @@ namespace QuickFireApi.Extensions.Token
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidateIssuer = true,
-                    ValidIssuer = section.GetValue<string>("Issuer"),
+                    ValidIssuer = issuer,
                     ValidateAudience = true,
-                    ValidAudience = section.GetValue<string>("Audience"),
+                    ValidAudience = audience,
                     //验证是否过期
                     ValidateLifetime = true,
                     //验证私钥
