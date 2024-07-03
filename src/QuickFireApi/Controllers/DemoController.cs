@@ -27,17 +27,17 @@ namespace QuickFireApi.Controllers
         private readonly IEventPublisher _eventBus;
         private readonly ILogger _logger;
         private readonly IRepository<TUser> _repository;
-        private readonly IUnitOfWork<ApplicationDbContext> _unitOfWork;
+        private readonly IUnitOfWork<SysDbContext> _unitOfWork;
         private readonly IUserService _userService;
-        private readonly ApplicationDbContext _applicationDbContext;
+        private readonly SysDbContext _applicationDbContext;
         public DemoController(
             IStringLocalizer<AccountController> stringLocalizer,
             IStringLocalizer stringLocalizer2,
             IGenerateId<long> idGenerateInterface,
             IEventPublisher eventBus,
-            IUnitOfWork<ApplicationDbContext> unitOfWork,
+            IUnitOfWork<SysDbContext> unitOfWork,
             IRepository<TUser> repository,
-            ApplicationDbContext applicationDbContext, IUserService userService,
+            SysDbContext applicationDbContext, IUserService userService,
             ICacheService cacheService)
         {
             _stringLocalizer = stringLocalizer;

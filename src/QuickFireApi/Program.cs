@@ -26,6 +26,8 @@ using QuickFire.Extensions.Core;
 using Microsoft.AspNetCore.HttpOverrides;
 using QuickFireApi.Extensions.ServiceRegister;
 using QuickFireApi.Filters;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 
 namespace QuickFireApi
 {
@@ -40,6 +42,8 @@ namespace QuickFireApi
                 logger.ReadFrom.Configuration(builder.Configuration)
                 .Enrich.FromLogContext();
             });
+            builder.Services.Configure<AppSettings>(configuration);
+            AppSettings appSettings = configuration.Get<AppSettings>()!;
             builder.Services.AddSingleton<IApiLogging, ApiLogging>();
             builder.Services.AddSingleton<IApiMonitor, ApiMonitor>();
             builder.Services.AddScoped<ApiMonitorActionFilter>();
@@ -57,6 +61,7 @@ namespace QuickFireApi
             {
                 options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
             });
+
             builder.Services.AddAddons();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddJsonLocalization(z => z.ResourcesPath = "i18n");
@@ -75,8 +80,8 @@ namespace QuickFireApi
 
 
             builder.Services.AddModelState();
-            long dataCenterId = configuration.GetValue<long>("Snowflake:DataCenterId");
-            long workerId = configuration.GetValue<long>("Snowflake:WorkerId");
+            long dataCenterId = appSettings.SnowflakeConfig.DataCenterId;
+            long workerId = appSettings.SnowflakeConfig.WorkerId;
             builder.Services.AddSnowflake(c =>
                 {
                     c.DatacenterId = dataCenterId;

@@ -12,14 +12,14 @@ namespace QuickFire.Infrastructure.Repository
 {
     public class LongIdRepository<T> : GenerialRepository<T, long>, IRepository<T> where T : BaseEntity
     {
-        public LongIdRepository(ApplicationDbContext dbContext) : base(dbContext)
+        public LongIdRepository(SysDbContext dbContext) : base(dbContext)
         {
 
         }
     }
     public class LongIdReadOnlyRepository<T> : GenerialReadOnlyRepository<T, long>, IReadOnlyRepository<T> where T : BaseEntity
     {
-        public LongIdReadOnlyRepository(ApplicationDbContext dbContext) : base(dbContext)
+        public LongIdReadOnlyRepository(SysDbContext dbContext) : base(dbContext)
         {
 
         }

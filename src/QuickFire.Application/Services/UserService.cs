@@ -7,10 +7,10 @@ using QuickFire.Infrastructure;
 
 namespace QuickFire.Application.Services
 {
-    public class UserService : BaseService<ApplicationDbContext, TUser>, IUserService
+    public class UserService : BaseService<SysDbContext, TUser>, IUserService
     {
         private readonly IUserFactory _userFactory;
-        public UserService(IUnitOfWork<ApplicationDbContext> unitOfWork, IUserFactory userFactory) : base(unitOfWork)
+        public UserService(IUnitOfWork<SysDbContext> unitOfWork, IUserFactory userFactory) : base(unitOfWork)
         {
             _userFactory = userFactory;
         }

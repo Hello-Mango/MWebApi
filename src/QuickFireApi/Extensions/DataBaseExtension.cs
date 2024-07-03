@@ -11,7 +11,7 @@ namespace QuickFireApi.Extensions
             service.AddScoped(typeof(IUnitOfWork<>), typeof(EFUnitOfWork<>));
             service.AddScoped(typeof(IRepository<>), typeof(LongIdRepository<>));
             service.AddScoped(typeof(IReadOnlyRepository<>), typeof(LongIdReadOnlyRepository<>));
-            service.AddDbContext<ApplicationDbContext>();
+            service.AddDbContext<SysDbContext>();
             return service;
         }
     }

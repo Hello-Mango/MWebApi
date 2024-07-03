@@ -1,4 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using QuickFireApi.Extensions.JWT;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -12,20 +14,22 @@ namespace QuickFireApi.Extensions.Token
         {
             _configuration = configuration;
         }
-        public string CreateAccessToken(string userId, string username, string tenantId, List<string> roleList)
+        public string CreateAccessToken(string userId, string username, string tenantId, List<string> roleList, MJWTConfig mJWTConfig, IDictionary<string, object> claims = default!)
         {
-            var section = _configuration.GetSection("JWTConfig");
+            if (claims == null)
+            {
+                claims = new Dictionary<string, object>();
+            }
             var tokenHandler = new JwtSecurityTokenHandler();
-            string? secretKey = section.GetValue<string>("SecretKey");
+            string? secretKey = mJWTConfig.SecretKey;
             if (string.IsNullOrEmpty(secretKey))
             {
                 throw new ArgumentNullException("SecretKey is null");
             }
             var key = Encoding.ASCII.GetBytes(secretKey!);
-            var expires = section.GetValue<int>("Expires");
-            var audience = section.GetValue<string>("Audience");
-            var issuer = section.GetValue<string>("Issuer");
-            IDictionary<string, object> claims = new Dictionary<string, object>();
+            var expires = mJWTConfig.Expires;
+            var audience = mJWTConfig.Audience;
+            var issuer = mJWTConfig.Issuer;
             foreach (var item in roleList)
             {
                 claims.Add(ClaimTypes.Role, item);

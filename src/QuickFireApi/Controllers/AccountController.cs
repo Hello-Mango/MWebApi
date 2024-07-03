@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using QucikFire.Extensions;
 using QuickFire.Core;
 using QuickFire.Extensions.Core;
+using QuickFire.Infrastructure;
 using QuickFire.Utils;
+using QuickFireApi.Extensions.JWT;
 using QuickFireApi.Extensions.Token;
 using QuickFireApi.Models.Reponse;
 using QuickFireApi.Models.Request;
@@ -19,10 +22,12 @@ namespace QuickFireApi.Controllers
     {
         private readonly MTokenHandler _mTokenHandler;
         private readonly IUserContext _userContext;
-        public AccountController(MTokenHandler mTokenHandler, IUserContext userContext)
+        private readonly JWTConfig _jwtConfig;
+        public AccountController(MTokenHandler mTokenHandler, IUserContext userContext, IOptions<JWTConfig> jwtConfig)
         {
             _userContext = userContext;
             _mTokenHandler = mTokenHandler;
+            _jwtConfig = jwtConfig.Value;
         }
         /// <summary>
         /// 登录
@@ -35,11 +40,19 @@ namespace QuickFireApi.Controllers
         {
             if (_loginReq.username == "admin" && _loginReq.password == "111111")
             {
+                MJWTConfig mJWTConfig = new MJWTConfig()
+                {
+                    Audience = _jwtConfig.Audience,
+                    Issuer = _jwtConfig.Issuer,
+                    SecretKey = _jwtConfig.SecretKey,
+                    Expires = _jwtConfig.Expires,
+                    RefreshExpiration = _jwtConfig.RefreshExpiration
+                };
                 var token = _mTokenHandler.CreateAccessToken("1", "admin", "2222", new List<string>()
                 {
                     "admin",
                     "user"
-                });
+                }, mJWTConfig);
                 var refreshToken = _mTokenHandler.CreateRefreshToken("admin");
                 return new LoginReponse()
                 {

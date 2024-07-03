@@ -1,4 +1,5 @@
-﻿using QuickFire.Core.Dependency;
+﻿using QuickFire.Core;
+using QuickFire.Core.Dependency;
 using QuickFire.Domain.Entity;
 using QuickFire.Domain.Shared;
 using System;
@@ -20,8 +21,11 @@ namespace QuickFire.Domain.Business.UserBiz
         public User CreateUser(long userId)
         {
             var tUser = _repositoryUser.FindById(userId);
-
-            User user = new User(tUser, new List<TRole>());
+            if (tUser is not null)
+            {
+                throw new Exception422("User not found");
+            }
+            User user = new User(tUser!, new List<TRole>());
             return user;
         }
     }

@@ -20,18 +20,24 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Reflection.Emit;
 using QuickFire.Domain.Entity.Base;
+using ShardingCore.Sharding.Abstractions;
+using ShardingCore.Sharding;
+using ShardingCore.Core.VirtualRoutes.TableRoutes.RouteTails.Abstractions;
 
 
 namespace QuickFire.Infrastructure
 {
-    public class ApplicationDbContext : DbContext
+    public class SysDbContext : AbstractShardingDbContext, IShardingTableDbContext
     {
-        private readonly DbContextOptions<ApplicationDbContext> _options;
+        private readonly DbContextOptions<SysDbContext> _options;
         private readonly IUserContext _userContext;
         private readonly IConfiguration _configuration;
         private readonly String _dbType;
         private readonly String _connectionString;
-        public ApplicationDbContext(IUserContext userContext, DbContextOptions<ApplicationDbContext> options, IConfiguration configuration)
+
+        public IRouteTail RouteTail { get; set; }
+
+        public SysDbContext(IUserContext userContext, DbContextOptions<SysDbContext> options, IConfiguration configuration) : base(options)
         {
             _userContext = userContext;
             _options = options;
