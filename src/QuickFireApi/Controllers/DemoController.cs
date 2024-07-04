@@ -26,7 +26,7 @@ namespace QuickFireApi.Controllers
         private readonly ICacheService _cacheService;
         private readonly IEventPublisher _eventBus;
         private readonly ILogger _logger;
-        private readonly IRepository<TUser> _repository;
+        private readonly IRepository<SysUser> _repository;
         private readonly IUnitOfWork<SysDbContext> _unitOfWork;
         private readonly IUserService _userService;
         private readonly SysDbContext _applicationDbContext;
@@ -36,7 +36,7 @@ namespace QuickFireApi.Controllers
             IGenerateId<long> idGenerateInterface,
             IEventPublisher eventBus,
             IUnitOfWork<SysDbContext> unitOfWork,
-            IRepository<TUser> repository,
+            IRepository<SysUser> repository,
             SysDbContext applicationDbContext, IUserService userService,
             ICacheService cacheService)
         {
@@ -53,18 +53,18 @@ namespace QuickFireApi.Controllers
         [HttpPost]
         public string AddCache(SingleReq<long> singleReq)
         {
-            IRepository<TUser> repository1 = new LongIdRepository<TUser>(_applicationDbContext);
-            var respository = _unitOfWork.GetRepository<TUser>();
-            respository.Add(new TUser() { Id = idGenerateInterface1.NextId(), Name = "test" });
+            IRepository<SysUser> repository1 = new LongIdRepository<SysUser>(_applicationDbContext);
+            var respository = _unitOfWork.GetRepository<SysUser>();
+            respository.Add(new SysUser() { Id = idGenerateInterface1.NextId(), Name = "test" });
             var item = respository.FindBy(z => z.CreatedAt > DateTime.UtcNow);
             _cacheService.Set("test", item);
             return "Test";
         }
         [HttpGet]
-        public TUser? GetCache()
+        public SysUser? GetCache()
         {
-            _userService.CreateUser(new TUser() { Id = idGenerateInterface1.NextId(), Name = "tes222t" });
-            return _cacheService.Get<TUser>("test");
+            _userService.CreateUser(new SysUser() { Id = idGenerateInterface1.NextId(), Name = "tes222t" });
+            return _cacheService.Get<SysUser>("test");
         }
         [HttpGet]
         public string GetStringLocalizer()

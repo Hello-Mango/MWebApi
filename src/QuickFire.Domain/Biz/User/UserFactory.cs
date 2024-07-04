@@ -8,24 +8,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuickFire.Domain.Business.UserBiz
+namespace QuickFire.Domain.Biz.User
 {
     public class UserFactory : IUserFactory
     {
-        private readonly IRepository<TUser> _repositoryUser;
-        public UserFactory(IRepository<TUser> repositoryUser)
+        private readonly IRepository<SysUser> _repositoryUser;
+        public UserFactory(IRepository<SysUser> repositoryUser)
         {
             _repositoryUser = repositoryUser;
         }
 
         public User CreateUser(long userId)
         {
-            var tUser = _repositoryUser.FindById(userId);
-            if (tUser is not null)
+            var SysUser = _repositoryUser.FindById(userId);
+            if (SysUser is not null)
             {
                 throw new Exception422("User not found");
             }
-            User user = new User(tUser!, new List<TRole>());
+            User user = new User(SysUser!, new List<SysRole>());
             return user;
         }
     }

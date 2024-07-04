@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuickFire.Domain.Business.UserBiz
+namespace QuickFire.Domain.Biz.User
 {
     public interface IUserFactory: IScopeDependency
     {

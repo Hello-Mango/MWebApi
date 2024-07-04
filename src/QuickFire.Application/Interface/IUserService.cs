@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace QuickFire.Application.Interface
 {
-    public interface IUserService : IBaseInterface<TUser>, IScopeDependency
+    public interface IUserService : IBaseInterface<SysUser>, IScopeDependency
     {
-        public TUser CreateUser(TUser user);
+        public SysUser CreateUser(SysUser user);
     }
 }

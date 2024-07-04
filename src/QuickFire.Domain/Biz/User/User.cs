@@ -7,26 +7,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuickFire.Domain.Business.UserBiz
+namespace QuickFire.Domain.Biz.User
 {
     public class User : BaseAggregateRoot<long>
     {
-        public TUser _user { get; private set; }
-        private List<TRole> _roles = new List<TRole>();
-        public IReadOnlyCollection<TRole> Roles => _roles.AsReadOnly();
+        public SysUser _user { get; private set; }
+        private List<SysRole> _roles = new List<SysRole>();
+        public IReadOnlyCollection<SysRole> Roles => _roles.AsReadOnly();
 
-        public User(TUser user, List<TRole> roles)
+        public User(SysUser user, List<SysRole> roles)
         {
             Id = user.Id;
             _user = user;
             _roles = roles;
         }
-        public TUser CreateUser(TUser user)
+        public SysUser CreateUser(SysUser user)
         {
             return user;
         }
         // 用户相关的方法，如添加角色、移除角色等
-        public void AssignRole(TRole role)
+        public void AssignRole(SysRole role)
         {
             if (!_roles.Contains(role))
             {
@@ -34,7 +34,7 @@ namespace QuickFire.Domain.Business.UserBiz
             }
         }
 
-        public void RemoveRole(TRole role)
+        public void RemoveRole(SysRole role)
         {
             if (_roles.Contains(role))
             {

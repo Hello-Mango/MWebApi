@@ -4,7 +4,7 @@ namespace QuickFire.Utils.UserAgent
 {
     public static class UserAgent
     {
-        public static UserAgentInfo GetUserAgent(string uaString)
+        public static UserAgentInfo GeSysUserAgent(string uaString)
         {
             var uaParser = Parser.GetDefault();
             ClientInfo c = uaParser.Parse(uaString);

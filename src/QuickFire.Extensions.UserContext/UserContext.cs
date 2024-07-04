@@ -12,7 +12,7 @@ namespace QuickFire.Extensions.UserContext
 
         public string IpAddress { get; private set; }
 
-        public void SetUserContext(long userId, string userName, long tenantId, List<string> roles, string ipAddress)
+        public void SeSysUserContext(long userId, string userName, long tenantId, List<string> roles, string ipAddress)
         {
             UserId = userId;
             UserName = userName;

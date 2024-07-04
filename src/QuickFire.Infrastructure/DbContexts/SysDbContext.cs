@@ -108,7 +108,6 @@ namespace QuickFire.Infrastructure
                     {
                         auditableEntity.ModifierStaffId = userContext.UserId;
                         auditableEntity.ModifierStaffName = userContext.UserName;
-                        auditableEntity.ModificationTime = TimeUtils.GetTimeStamp();
                         auditableEntity.ModifiedAt = DateTimeOffset.UtcNow;
                     }
                 }
@@ -121,14 +120,12 @@ namespace QuickFire.Infrastructure
             {
                 if (entry.State == EntityState.Modified)
                 {
-                    entry.Entity.ModificationTime = TimeUtils.GetTimeStamp();
                     entry.Entity.ModifierStaffId = userContext.UserId;
                     entry.Entity.ModifierStaffName = userContext.UserName;
                     entry.Entity.ModifiedAt = DateTimeOffset.UtcNow;
                 }
                 else if (entry.State == EntityState.Added)
                 {
-                    entry.Entity.CreationTime = TimeUtils.GetTimeStamp();
                     entry.Entity.CreatorStaffId = userContext.UserId;
                     entry.Entity.CreatorStaffName = userContext.UserName;
                     entry.Entity.CreatedAt = DateTimeOffset.UtcNow; ;

@@ -13,14 +13,14 @@ using ShardingCore.VirtualRoutes.Months;
 
 namespace QuickFire.Infrastructure.DataSourceRoute
 {
-    public class UserDataSourceRoute : AbstractSimpleShardingMonthKeyDateTimeVirtualTableRoute<TUser>
+    public class UserDataSourceRoute : AbstractSimpleShardingMonthKeyDateTimeVirtualTableRoute<SysUser>
     {
         public override bool AutoCreateTableByTime()
         {
             return true;
         }
 
-        public override void Configure(EntityMetadataTableBuilder<TUser> builder)
+        public override void Configure(EntityMetadataTableBuilder<SysUser> builder)
         {
             builder.ShardingProperty(o => o.CreatedAt);
         }

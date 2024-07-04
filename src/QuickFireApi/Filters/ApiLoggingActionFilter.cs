@@ -33,7 +33,7 @@ public class ApiLoggingActionFilter : IAsyncActionFilter
 
         // 获取User-Agent和请求地址
         var userAgent = request.Headers["User-Agent"].ToString();
-        var client = QuickFire.Utils.UserAgent.UserAgent.GetUserAgent(userAgent);
+        var client = QuickFire.Utils.UserAgent.UserAgent.GeSysUserAgent(userAgent);
         var requestPath = request.GetDisplayUrl();
 
         // 执行Action

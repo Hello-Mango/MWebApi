@@ -31,7 +31,7 @@ namespace QuickFireApi.Middlewares
                                 .Where(c => c.Type == ClaimTypes.Role)
                                 .Select(c => c.Value)
                                 .ToList();
-                    userContext.SetUserContext(userId, context.User.Identity.Name!, tenantId, roles, ipAddress);
+                    userContext.SeSysUserContext(userId, context.User.Identity.Name!, tenantId, roles, ipAddress);
                 }
             }
 
