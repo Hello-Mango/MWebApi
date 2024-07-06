@@ -19,10 +19,10 @@ using QuickFire.Extensions.AuditLog;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Reflection.Emit;
-using QuickFire.Domain.Entity.Base;
 using ShardingCore.Sharding.Abstractions;
 using ShardingCore.Sharding;
 using ShardingCore.Core.VirtualRoutes.TableRoutes.RouteTails.Abstractions;
+using QuickFire.Domain.Shared;
 
 
 namespace QuickFire.Infrastructure

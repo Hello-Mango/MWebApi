@@ -1,5 +1,5 @@
 ﻿using QuickFire.Core.Dependency;
-using QuickFire.Domain.Entity;
+using QuickFire.Domain.Entites;
 using System;
 using System.Collections.Generic;
 using System.Linq;

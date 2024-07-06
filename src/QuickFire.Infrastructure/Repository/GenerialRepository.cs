@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
-using QuickFire.Core;
-using QuickFire.Domain.Entity.Base;
 using QuickFire.Domain.Shared;
 using System;
 using System.Collections.Generic;

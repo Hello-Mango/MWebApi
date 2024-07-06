@@ -7,9 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using QuickFire.Domain.Entity;
 using ShardingCore.Core.VirtualRoutes.TableRoutes.Abstractions;
 using ShardingCore.VirtualRoutes.Months;
+using QuickFire.Domain.Entites;
 
 namespace QuickFire.Infrastructure.DataSourceRoute
 {

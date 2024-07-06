@@ -1,6 +1,6 @@
 ﻿using QuickFire.Core;
 using QuickFire.Core.Dependency;
-using QuickFire.Domain.Entity;
+using QuickFire.Domain.Entites;
 using QuickFire.Domain.Shared;
 using System;
 using System.Collections.Generic;

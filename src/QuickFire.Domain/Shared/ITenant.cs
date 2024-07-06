@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace QuickFire.Domain.Entity.Base
+namespace QuickFire.Domain.Shared
 {
     public interface ITenant
     {

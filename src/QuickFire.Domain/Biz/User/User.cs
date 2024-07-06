@@ -1,4 +1,4 @@
-﻿using QuickFire.Domain.Entity;
+﻿using QuickFire.Domain.Entites;
 using QuickFire.Domain.Shared;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace QuickFire.Domain.Biz.User
 {
-    public class User : BaseAggregateRoot<long>
+    public class User : BaseAggregateRoot
     {
         public SysUser _user { get; private set; }
         private List<SysRole> _roles = new List<SysRole>();
@@ -17,7 +17,6 @@ namespace QuickFire.Domain.Biz.User
 
         public User(SysUser user, List<SysRole> roles)
         {
-            Id = user.Id;
             _user = user;
             _roles = roles;
         }

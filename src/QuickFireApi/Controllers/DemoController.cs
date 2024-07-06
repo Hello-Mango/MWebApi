@@ -10,9 +10,9 @@ using QuickFireApi.Models.Request;
 using QuickFire.Extensions.Core;
 using QuickFire.Domain.Shared;
 using QuickFire.Infrastructure;
-using QuickFire.Domain.Entity;
 using QuickFire.Infrastructure.Repository;
 using QuickFire.Application.Interface;
+using QuickFire.Domain.Entites;
 
 namespace QuickFireApi.Controllers
 {

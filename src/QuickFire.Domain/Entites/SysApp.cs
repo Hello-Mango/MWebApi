@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using QuickFire.Core;
+using QuickFire.Domain.Shared;
 
-namespace QQuickFire.Domain.Entity
+namespace QQuickFire.Domain.Entites
 {
     public class SysApp : BaseEntity
     {

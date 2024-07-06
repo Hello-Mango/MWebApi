@@ -1,7 +1,7 @@
 ﻿using QuickFire.Application.Interface;
 using QuickFire.Core.Dependency;
 using QuickFire.Domain.Biz.User;
-using QuickFire.Domain.Entity;
+using QuickFire.Domain.Entites;
 using QuickFire.Domain.Shared;
 using QuickFire.Infrastructure;
 
@@ -20,7 +20,7 @@ namespace QuickFire.Application.Services
             return user;
         }
 
-        public async bool CheckLoginInfo(string userName, string password)
+        public async  Task<bool> CheckLoginSync(string userName, string password)
         {
             var user = await _unitOfWork.GetRepository<SysUser>().FindAsync(x => x.Mobile == userName || x.Email == userName);
             return true;
