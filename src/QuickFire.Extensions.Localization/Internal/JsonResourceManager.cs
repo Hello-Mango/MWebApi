@@ -68,29 +68,23 @@ namespace QuickFire.Extensions.Localization.Json.Internal
         public virtual string? GetString(string name)
         {
             var culture = CultureInfo.CurrentUICulture;
-            var key = $"{ResourceName}.{culture.Name}";
-            if (_hitKeyCache.ContainsKey(key))
-            {
-                return _hitKeyCache[key];
-            }
-            if (!_resourcesCache.ContainsKey(key))
-            {
-                TryLoadResourceSet(culture);
-            }
+            GetResourceSet(culture, tryParents: true);
+
             if (_resourcesCache.IsEmpty)
             {
                 return null;
             }
             do
             {
+                var key = $"{ResourceName}.{culture.Name}";
                 if (_resourcesCache.TryGetValue(key, out var resources))
                 {
                     if (resources.TryGetValue(name, out var value))
                     {
-                        _hitKeyCache.TryAdd(key, value.ToString());
                         return value.ToString();
                     }
                 }
+
                 culture = culture.Parent;
             } while (culture != culture.Parent);
 
@@ -99,35 +93,22 @@ namespace QuickFire.Extensions.Localization.Json.Internal
 
         public virtual string? GetString(string name, CultureInfo culture)
         {
-            var key = $"{ResourceName}.{culture.Name}";
-            if (_hitKeyCache.ContainsKey(key))
-            {
-                return _hitKeyCache[key];
-            }
-            if (!_resourcesCache.ContainsKey(key))
-            {
-                TryLoadResourceSet(culture);
-            }
+            GetResourceSet(culture, tryParents: true);
 
             if (_resourcesCache.IsEmpty)
             {
                 return null;
             }
 
+            var key = $"{ResourceName}.{culture.Name}";
             if (!_resourcesCache.TryGetValue(key, out var resources))
             {
                 return null;
             }
-            bool flag = resources.TryGetValue(name, out string? value);
-            if (flag)
-            {
-                _hitKeyCache.TryAdd(key, value!.ToString());
-                return value.ToString();
-            }
-            else
-            {
-                return null;
-            }
+
+            return resources.TryGetValue(name, out var value)
+                ? value.ToString()
+                : null;
         }
 
         private void TryLoadResourceSet(CultureInfo culture)

@@ -6,6 +6,6 @@ namespace QuickFire.Domain.Shared
 {
     public interface ITenant
     {
-        string TenantId { get; }
+        long TenantId { get; }
     }
 }

@@ -3,15 +3,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using QucikFire.Extensions;
+using QuickFire.Application.Base;
+using QuickFire.Application.DTOS.Reponse;
+using QuickFire.Application.DTOS.Request;
 using QuickFire.Core;
 using QuickFire.Extensions.Core;
 using QuickFire.Infrastructure;
 using QuickFire.Utils;
 using QuickFireApi.Extensions.JWT;
 using QuickFireApi.Extensions.Token;
-using QuickFireApi.Models.Reponse;
-using QuickFireApi.Models.Request;
-using QuickFireApi.Response;
 
 namespace QuickFireApi.Controllers
 {
@@ -21,13 +21,15 @@ namespace QuickFireApi.Controllers
     public class AccountController : ControllerBase
     {
         private readonly MTokenHandler _mTokenHandler;
-        private readonly IUserContext _userContext;
+        private readonly ISessionContext _sessionContext;
         private readonly JWTConfig _jwtConfig;
-        public AccountController(MTokenHandler mTokenHandler, IUserContext userContext, IOptions<JWTConfig> jwtConfig)
+        private readonly IUserService _userService;
+        public AccountController(MTokenHandler mTokenHandler, ISessionContext sessionContext, IOptions<JWTConfig> jwtConfig, IUserService userService)
         {
-            _userContext = userContext;
+            _sessionContext = sessionContext;
             _mTokenHandler = mTokenHandler;
             _jwtConfig = jwtConfig.Value;
+            _userService = userService;
         }
         /// <summary>
         /// 登录
@@ -36,38 +38,31 @@ namespace QuickFireApi.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
-        public LoginReponse Login([FromBody] LoginReq _loginReq)
+        public async Task<LoginReponse> Login([FromBody] LoginReq _loginReq)
         {
-            if (_loginReq.username == "admin" && _loginReq.password == "111111")
+            var user = await _userService.CheckLoginSync(_loginReq);
+            MJWTConfig mJWTConfig = new MJWTConfig()
             {
-                MJWTConfig mJWTConfig = new MJWTConfig()
-                {
-                    Audience = _jwtConfig.Audience,
-                    Issuer = _jwtConfig.Issuer,
-                    SecretKey = _jwtConfig.SecretKey,
-                    Expires = _jwtConfig.Expires,
-                    RefreshExpiration = _jwtConfig.RefreshExpiration
-                };
-                var token = _mTokenHandler.CreateAccessToken("1", "admin", "2222", new List<string>()
+                Audience = _jwtConfig.Audience,
+                Issuer = _jwtConfig.Issuer,
+                SecretKey = _jwtConfig.SecretKey,
+                Expires = _jwtConfig.Expires,
+                RefreshExpiration = _jwtConfig.RefreshExpiration
+            };
+            var token = _mTokenHandler.CreateAccessToken(user.Id.ToString(), user.Name, new List<string>()
                 {
                     "admin",
                     "user"
                 }, mJWTConfig);
-                var refreshToken = _mTokenHandler.CreateRefreshToken("admin");
-                return new LoginReponse()
-                {
-                    AccessToken = token,
-                    RefreshToken = refreshToken,
-                    Timestamp = TimeUtils.GetTimeStamp(),
-                    CompanyId = 1,
-                    UserId = 1,
-                    Username = "admin",
-                };
-            }
-            else
+            var refreshToken = _mTokenHandler.CreateRefreshToken(user.Name);
+            return new LoginReponse()
             {
-                return new LoginReponse();
-            }
+                AccessToken = token,
+                RefreshToken = refreshToken,
+                Timestamp = TimeUtils.GetTimeStamp(),
+                UserId = user.Id,
+                Username = user.Name,
+            };
         }
         /// <summary>
         /// 根据refreshtoken刷新token
@@ -80,7 +75,7 @@ namespace QuickFireApi.Controllers
         {
             return new TokenResponse()
             {
-                RefreshToken = _userContext.UserName,
+                RefreshToken = _sessionContext.UserName,
                 Timestamp = DateTimeOffset.UtcNow.Ticks
             };
         }

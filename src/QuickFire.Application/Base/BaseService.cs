@@ -1,4 +1,4 @@
-﻿using QuickFire.Application.Interface;
+﻿using QuickFire.Application.Base;
 using QuickFire.Core;
 using QuickFire.Domain.Shared;
 using System;
@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuickFire.Application.Services
+namespace QuickFire.Application.Base
 {
-    public abstract class BaseService<T,TEntity> : IBaseInterface<TEntity> where TEntity : BaseEntity
+    public abstract class BaseService<T, TEntity> : IBaseInterface<TEntity> where TEntity : BaseEntity
     {
         protected readonly IUnitOfWork<T> _unitOfWork;
         public BaseService(IUnitOfWork<T> unitOfWork)
@@ -24,7 +24,7 @@ namespace QuickFire.Application.Services
 
         public TEntity Delete(TEntity entity)
         {
-            _unitOfWork.GetRepository<TEntity   >().Delete(entity);
+            _unitOfWork.GetRepository<TEntity>().Delete(entity);
             return entity;
         }
 

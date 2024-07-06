@@ -27,15 +27,19 @@
     <PackageReference Include="CronExpressionDescriptor" Version="2.33.0" />
     <PackageReference Include="JWT" Version="10.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="8.0.6" />
     <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="8.0.6" />
-    <PackageReference Include="MySql.Data" Version="8.4.0" />
+    <PackageReference Include="MySql.Data" Version="9.0.0" />
     <PackageReference Include="Serilog" Version="4.0.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.1" />
     <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
-    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
     <PackageReference Include="ShardingCore" Version="7.8.1.21" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
@@ -48,8 +52,8 @@
     <ProjectReference Include="..\QuickFire.Extensions.Core\QuickFire.Extensions.Core.csproj" />
     <ProjectReference Include="..\QuickFire.Extensions.Localization\QuickFire.Extensions.Localization.csproj" />
     <ProjectReference Include="..\QuickFire.Extensions.Quartz\QuickFire.Extensions.Quartz.csproj" />
+    <ProjectReference Include="..\QuickFire.Extensions.SessionContext\QuickFire.Extensions.SessionContext.csproj" />
     <ProjectReference Include="..\QuickFire.Extensions.SnowFlake\QuickFire.Extensions.SnowFlake.csproj" />
-    <ProjectReference Include="..\QuickFire.Extensions.UserContext\QuickFire.Extensions.UserContext.csproj" />
     <ProjectReference Include="..\QuickFire.Infrastructure\QuickFire.Infrastructure.csproj" />
     <ProjectReference Include="..\QuickFire.MemoryCache\QuickFire.Extensions.MemoryCache.csproj" />
     <ProjectReference Include="..\QuickFire.RedisCache\QuickFire.Extensions.RedisCache.csproj" />

@@ -1,4 +1,4 @@
-﻿namespace QuickFireApi.Models.Request
+﻿namespace QuickFire.Application.DTOS.Request
 {
     public class SingleReq<T>
     {

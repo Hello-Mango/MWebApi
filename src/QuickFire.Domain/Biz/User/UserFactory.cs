@@ -1,4 +1,5 @@
-﻿using QuickFire.Core;
+﻿using QuickFire.BizException;
+using QuickFire.Core;
 using QuickFire.Core.Dependency;
 using QuickFire.Domain.Entites;
 using QuickFire.Domain.Shared;
@@ -18,15 +19,14 @@ namespace QuickFire.Domain.Biz.User
             _repositoryUser = repositoryUser;
         }
 
-        public User CreateUser(long userId)
+        public SysUser CreateUser(long userId)
         {
-            var SysUser = _repositoryUser.FindById(userId);
-            if (SysUser is not null)
+            var sysUser = _repositoryUser.FindById(userId);
+            if (sysUser is not null)
             {
-                throw new Exception422("User not found");
+                throw new EnumException(ExceptionEnum.USER_NOT_FOUND);
             }
-            User user = new User(SysUser!, new List<SysRole>());
-            return user;
+            return sysUser!;
         }
     }
 }

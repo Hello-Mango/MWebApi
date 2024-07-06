@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Localization;
+using QuickFire.BizException;
 using QuickFire.Core;
 
 namespace QuickFireApi.Extension

@@ -10,6 +10,6 @@ namespace QuickFire.Domain.Biz.User
 {
     public interface IUserFactory: IScopeDependency
     {
-        public User CreateUser(long userId);
+        public SysUser CreateUser(long userId);
     }
 }

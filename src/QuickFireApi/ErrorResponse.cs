@@ -14,6 +14,7 @@
         /// 调试错误信息
         /// </summary>
         public string DebugMessage { get; set; }
+        public string Code { get; set; }
         /// <summary>
         /// 时间戳
         /// </summary>

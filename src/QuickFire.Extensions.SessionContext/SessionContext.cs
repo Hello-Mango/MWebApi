@@ -1,23 +1,29 @@
 ﻿using QuickFire.Extensions.Core;
 
-namespace QuickFire.Extensions.UserContext
+namespace QuickFire.Extensions.sessionContext
 {
-    public class UserContext : IUserContext
+    public class SessionContext : ISessionContext
     {
         public long UserId { get; private set; }
         public string UserName { get; private set; }
         public long TenantId { get; private set; }
-
         public List<string> Roles => new List<string>();
-
         public string IpAddress { get; private set; }
 
-        public void SeSysUserContext(long userId, string userName, long tenantId, List<string> roles, string ipAddress)
+        public void SetIp(string ipAddress)
+        {
+            IpAddress = ipAddress;
+        }
+
+        public void SetTenant(long tenantId)
+        {
+            TenantId = tenantId;
+        }
+
+        public void SetsessionContext(long userId, string userName, List<string> roles)
         {
             UserId = userId;
             UserName = userName;
-            TenantId = tenantId;
-            IpAddress = ipAddress;
             Roles.AddRange(roles);
         }
     }

@@ -14,7 +14,7 @@ namespace QuickFireApi.Extensions.Token
         {
             _configuration = configuration;
         }
-        public string CreateAccessToken(string userId, string username, string tenantId, List<string> roleList, MJWTConfig mJWTConfig, IDictionary<string, object> claims = default!)
+        public string CreateAccessToken(string userId, string username, List<string> roleList, MJWTConfig mJWTConfig, IDictionary<string, object> claims = default!)
         {
             if (claims == null)
             {
@@ -35,7 +35,6 @@ namespace QuickFireApi.Extensions.Token
                 claims.Add(ClaimTypes.Role, item);
             }
             claims.Add("UserId", userId);
-            claims.Add("TenantId", tenantId);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, username) }),

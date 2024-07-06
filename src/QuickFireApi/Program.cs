@@ -91,7 +91,7 @@ namespace QuickFireApi
             builder.Services.AddMToken(configuration);
             var section = configuration.GetSection("JWTConfig");
             builder.Services.AddMAuth(appSettings.JWTConfig.SecretKey, appSettings.JWTConfig.Issuer, appSettings.JWTConfig.Audience);
-            builder.Services.AddUserContext();
+            builder.Services.AddsessionContext();
             builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IApplicationModelProvider, ProduceResponseTypeModelProvider>());
             builder.Services.AddMemoryCache();
 
@@ -121,7 +121,7 @@ namespace QuickFireApi
             app.UseHealthChecks("/health");
             app.UseSerilogRequestLogging();
             app.UseExceptionMiddleware();
-            app.UseUserContextMiddleware();
+            app.UsesessionContextMiddleware();
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
                 DefaultRequestCulture = new RequestCulture("en-US"),

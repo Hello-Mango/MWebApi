@@ -31,16 +31,16 @@ namespace QuickFire.Infrastructure
     public class SysDbContext : AbstractShardingDbContext, IShardingTableDbContext
     {
         private readonly DbContextOptions<SysDbContext> _options;
-        private readonly IUserContext _userContext;
+        private readonly ISessionContext _sessionContext;
         private readonly IConfiguration _configuration;
         private readonly String _dbType;
         private readonly String _connectionString;
 
         public IRouteTail RouteTail { get; set; }
 
-        public SysDbContext(IUserContext userContext, DbContextOptions<SysDbContext> options, IConfiguration configuration, IOptions<AppSettings> databaseOption) : base(options)
+        public SysDbContext(ISessionContext sessionContext, DbContextOptions<SysDbContext> options, IConfiguration configuration, IOptions<AppSettings> databaseOption) : base(options)
         {
-            _userContext = userContext;
+            _sessionContext = sessionContext;
             _options = options;
             _configuration = configuration;
             _dbType = databaseOption.Value.DataBaseConfig.DbType.ToLower();
@@ -50,31 +50,30 @@ namespace QuickFire.Infrastructure
 
         public override int SaveChanges()
         {
-            this.HandleSoftDelete(_userContext);
-            this.HandleAddModify(_userContext);
+            this.HandleSoftDelete(_sessionContext);
+            this.HandleAddModify(_sessionContext);
             return base.SaveChanges();
         }
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
-            this.HandleSoftDelete(_userContext);
-            this.HandleAddModify(_userContext);
+            this.HandleSoftDelete(_sessionContext);
+            this.HandleAddModify(_sessionContext);
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var tenant = _userContext.TenantId;
             optionsBuilder.UseSnakeCaseNamingConvention();
 
             switch (_dbType)
             {
                 case "sqlserver":
-                    optionsBuilder.UseSqlServer(_connectionString);
+                    optionsBuilder.UseSqlServer(_connectionString, b => b.MigrationsAssembly("QuickFireApi"));
                     break;
                 case "mysql":
-                    optionsBuilder.UseMySQL(_connectionString);
+                    optionsBuilder.UseMySQL(_connectionString, b => b.MigrationsAssembly("QuickFireApi"));
                     break;
                 case "pgsql":
-                    optionsBuilder.UseNpgsql(_connectionString);
+                    optionsBuilder.UseNpgsql(_connectionString, b => b.MigrationsAssembly("QuickFireApi"));
                     break;
                 default:
                     throw new Exception("Invalid database type");
@@ -86,7 +85,7 @@ namespace QuickFire.Infrastructure
         {
             modelBuilder.RegisterAllEntities();
             modelBuilder.AddSoftDeleteQueryFilter();
-            modelBuilder.AddTenantQueryFilter(_userContext);
+            modelBuilder.AddTenantQueryFilter(_sessionContext);
             if (_dbType != "pgsql" && _dbType != "sqlserver")
             {
                 modelBuilder.AddDateTimeOffsetConvert();
@@ -96,7 +95,7 @@ namespace QuickFire.Infrastructure
 
 
 
-        private void HandleSoftDelete(IUserContext userContext)
+        private void HandleSoftDelete(ISessionContext sessionContext)
         {
             foreach (var entry in this.ChangeTracker.Entries<ISoftDeleted>())
             {
@@ -106,34 +105,34 @@ namespace QuickFire.Infrastructure
                     entry.Entity.Deleted = true;
                     if (entry.Entity is BaseEntity auditableEntity)
                     {
-                        auditableEntity.ModifierStaffId = userContext.UserId;
-                        auditableEntity.ModifierStaffName = userContext.UserName;
+                        auditableEntity.ModifierStaffId = sessionContext.UserId;
+                        auditableEntity.ModifierStaffNo = sessionContext.UserName;
                         auditableEntity.ModifiedAt = DateTimeOffset.UtcNow;
                     }
                 }
             }
         }
 
-        private void HandleAddModify(IUserContext userContext)
+        private void HandleAddModify(ISessionContext sessionContext)
         {
             foreach (var entry in this.ChangeTracker.Entries<BaseEntity>())
             {
                 if (entry.State == EntityState.Modified)
                 {
-                    entry.Entity.ModifierStaffId = userContext.UserId;
-                    entry.Entity.ModifierStaffName = userContext.UserName;
+                    entry.Entity.ModifierStaffId = sessionContext.UserId;
+                    entry.Entity.ModifierStaffNo = sessionContext.UserName;
                     entry.Entity.ModifiedAt = DateTimeOffset.UtcNow;
                 }
                 else if (entry.State == EntityState.Added)
                 {
-                    entry.Entity.CreatorStaffId = userContext.UserId;
-                    entry.Entity.CreatorStaffName = userContext.UserName;
+                    entry.Entity.CreatorStaffId = sessionContext.UserId;
+                    entry.Entity.CreatorStaffNo = sessionContext.UserName;
                     entry.Entity.CreatedAt = DateTimeOffset.UtcNow; ;
                 }
             }
         }
 
-        private void AddAuditLog(IUserContext userContext, IAuditLogger auditLogger)
+        private void AddAuditLog(ISessionContext sessionContext, IAuditLogger auditLogger)
         {
             if (_configuration.GetSection("AuditLog").GetValue<bool>("DbEnable") == false)
             {
@@ -148,8 +147,8 @@ namespace QuickFire.Infrastructure
                     Action = entry.State.ToString(),
                     Entity = entry.Entity.GetType().Name,
                     CreatedTime = DateTime.UtcNow,
-                    UserId = userContext.UserId.ToString(),
-                    UserName = userContext.UserName
+                    UserId = sessionContext.UserId.ToString(),
+                    UserName = sessionContext.UserName
                 };
                 switch (entry.State)
                 {

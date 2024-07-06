@@ -1,9 +1,13 @@
-﻿using QuickFire.Application.Interface;
+﻿using QuickFire.Application.Base;
+using QuickFire.Application.DTOS.Request;
+using QuickFire.BizException;
+using QuickFire.Core;
 using QuickFire.Core.Dependency;
 using QuickFire.Domain.Biz.User;
 using QuickFire.Domain.Entites;
 using QuickFire.Domain.Shared;
 using QuickFire.Infrastructure;
+using QuickFire.Utils;
 
 namespace QuickFire.Application.Services
 {
@@ -20,10 +24,16 @@ namespace QuickFire.Application.Services
             return user;
         }
 
-        public async  Task<bool> CheckLoginSync(string userName, string password)
+        public async Task<SysUser> CheckLoginSync(LoginReq loginReq)
         {
-            var user = await _unitOfWork.GetRepository<SysUser>().FindAsync(x => x.Mobile == userName || x.Email == userName);
-            return true;
+            var user = await _unitOfWork.GetRepository<SysUser>().FindAsync(x => x.Mobile == loginReq.userAccount || x.Email == loginReq.userAccount);
+            if (user == null)
+            {
+                throw new BizException.EnumException(ExceptionEnum.USER_NOT_FOUND, loginReq.userAccount);
+            }
+            string password = EncryptUtils.EncryptStringToMd5(loginReq.password);
+            bool flag = user.CheckPassword(password);
+            return user;
         }
     }
 }

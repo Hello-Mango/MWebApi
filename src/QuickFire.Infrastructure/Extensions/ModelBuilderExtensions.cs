@@ -66,7 +66,7 @@ namespace QuickFire.Infrastructure.Extensions
                 }
             }
         }
-        public static void AddTenantQueryFilter(this ModelBuilder modelBuilder, IUserContext userContext)
+        public static void AddTenantQueryFilter(this ModelBuilder modelBuilder, ISessionContext sessionContext)
         {
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
@@ -75,7 +75,7 @@ namespace QuickFire.Infrastructure.Extensions
                     var parameter = Expression.Parameter(entityType.ClrType, "e");
                     var filter = Expression.Lambda(Expression.Equal(
                         Expression.Property(parameter, nameof(ITenant.TenantId)),
-                        Expression.Constant(userContext.TenantId)
+                        Expression.Constant(sessionContext.TenantId)
                     ), parameter);
 
                     modelBuilder.Entity(entityType.ClrType).HasQueryFilter(filter);
@@ -84,14 +84,38 @@ namespace QuickFire.Infrastructure.Extensions
         }
         public static void RegisterAllEntities(this ModelBuilder modelBuilder)
         {
-            var entityTypes = Assembly.Load("QuickFire.Domain.Entity").GetTypes()
-                .Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(BaseEntity)))
-                .ToList();
-
+            var entityTypes = Assembly.Load("QuickFire.Domain").GetTypes()
+                .Where(t => !t.IsAbstract);
+            var tt = typeof(IEntity<>);
             foreach (var entityType in entityTypes)
             {
-                modelBuilder.Entity(entityType);
+                var types = FindRootInterfaces(entityType);
+                if (types.Exists(z => z.Name == tt.Name))
+                {
+                    modelBuilder.Entity(entityType);
+                }
             }
+            //foreach (var entityType in entityTypes)
+            //{
+            //    modelBuilder.Entity(entityType);
+            //}
+        }
+        public static List<Type> FindRootInterfaces(Type type)
+        {
+            List<Type> rootInterfaces = new List<Type>();
+            foreach (Type interfaceType in type.GetInterfaces())
+            {
+                if (interfaceType.IsInterface && interfaceType.GetInterfaces().Length == 0)
+                {
+                    rootInterfaces.Add(interfaceType);
+                }
+                else
+                {
+                    // 如果接口还继承了其他接口，递归查找
+                    rootInterfaces.AddRange(FindRootInterfaces(interfaceType));
+                }
+            }
+            return rootInterfaces.Distinct().ToList(); // 去重，确保每个基础接口只出现一次
         }
     }
 }

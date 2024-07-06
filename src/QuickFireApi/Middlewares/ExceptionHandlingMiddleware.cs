@@ -1,6 +1,8 @@
 ﻿using QuickFire.Core;
 using Newtonsoft.Json;
 using System.Net;
+using QuickFire.BizException;
+using Microsoft.Extensions.Localization;
 
 namespace QuickFireApi.Middlewares
 {
@@ -11,11 +13,13 @@ namespace QuickFireApi.Middlewares
     {
         private readonly RequestDelegate _next;  // 用来处理上下文请求
         private readonly ILogger<ExceptionHandlingMiddleware> _logger;
+        private readonly IStringLocalizer _stringLocalizer;
 
-        public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
+        public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger, IStringLocalizer stringLocalizer)
         {
             _next = next;
             _logger = logger;
+            _stringLocalizer = stringLocalizer;
         }
 
         /// <summary>
@@ -46,18 +50,52 @@ namespace QuickFireApi.Middlewares
             var response = context.Response;
             var errorResponse = new ErrorResponse  // 自定义的异常错误信息类型
             {
-                Message = ex.Message,
-                DebugMessage = ex.StackTrace ?? ex.Message,
                 Successed = false
             };
             switch (ex)
             {
                 case Exception422 ex422:
+                    if (ex422.Params != null)
+                    {
+                        try
+                        {
+                            errorResponse.Message = string.Format(ex422.Message, ex422.Params);
+                        }
+                        catch (Exception ex2)
+                        {
+                            errorResponse.Message = $"Exception result formatting error {ex422.Message}";
+                            errorResponse.DebugMessage = ex2.Message + ex2.StackTrace;
+                        }
+                    }
+                    else
+                    {
+                        errorResponse.Message = ex422.Message;
+                    }
+                    response.StatusCode = (int)HttpStatusCode.UnprocessableContent;
+                    break;
+                case EnumException bizEx:
+                    if (bizEx.Params != null)
+                    {
+                        try
+                        {
+                            errorResponse.Message = string.Format(_stringLocalizer[bizEx.Code.ToString()], bizEx.Params);
+                        }
+                        catch (Exception ex2)
+                        {
+                            errorResponse.Message = $"Exception result formatting error {bizEx.Message}";
+                            errorResponse.DebugMessage = ex2.Message + ex2.StackTrace;
+                        }
+                    }
+                    else
+                    {
+                        errorResponse.Message = _stringLocalizer[bizEx.Code.ToString()];
+                    }
                     response.StatusCode = (int)HttpStatusCode.UnprocessableContent;
                     break;
                 default:
                     response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     _logger.LogError(ex.Message + ex.StackTrace);
+                    errorResponse.DebugMessage = ex.StackTrace ?? ex.Message;
                     break;
             }
             await context.Response.WriteAsJsonAsync(errorResponse);

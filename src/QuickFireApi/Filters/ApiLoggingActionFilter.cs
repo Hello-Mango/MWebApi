@@ -14,12 +14,12 @@ public class ApiLoggingActionFilter : IAsyncActionFilter
     private readonly ILogger<ApiLoggingActionFilter> _logger;
 
     private readonly IApiLogging _apiLogging;
-    private readonly IUserContext _userContext;
-    public ApiLoggingActionFilter(ILogger<ApiLoggingActionFilter> logger, IApiLogging apiLogging, IUserContext userContext)
+    private readonly ISessionContext _sessionContext;
+    public ApiLoggingActionFilter(ILogger<ApiLoggingActionFilter> logger, IApiLogging apiLogging, ISessionContext sessionContext)
     {
         _logger = logger;
         _apiLogging = apiLogging;
-        _userContext = userContext;
+        _sessionContext = sessionContext;
     }
 
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
@@ -51,10 +51,10 @@ public class ApiLoggingActionFilter : IAsyncActionFilter
             Url = requestPath,
             TimeTick = stopwatch.ElapsedMilliseconds,
             BrowserName = client.Browser,
-            IpAddress = _userContext.IpAddress,
+            IpAddress = _sessionContext.IpAddress,
             OSName = client.OS,
-            UserName = _userContext.UserName,
-            TenantName = _userContext.TenantId.ToString(),
+            UserName = _sessionContext.UserName,
+            TenantName = _sessionContext.TenantId.ToString(),
             ReturnValue = JsonConvert.SerializeObject(responseBody),
             Param = requestBody
         });

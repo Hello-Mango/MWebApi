@@ -6,13 +6,13 @@ using QucikFire.Extensions;
 using QuickFire.Extensions.EventBus;
 using QuickFire.Core;
 using QuickFireApi.Extensions.Token;
-using QuickFireApi.Models.Request;
 using QuickFire.Extensions.Core;
 using QuickFire.Domain.Shared;
 using QuickFire.Infrastructure;
 using QuickFire.Infrastructure.Repository;
-using QuickFire.Application.Interface;
+using QuickFire.Application.Base;
 using QuickFire.Domain.Entites;
+using QuickFire.Application.DTOS.Request;
 
 namespace QuickFireApi.Controllers
 {

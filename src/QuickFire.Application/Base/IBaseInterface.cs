@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuickFire.Application.Interface
+namespace QuickFire.Application.Base
 {
     public interface IBaseInterface<T> where T : BaseEntity
     {

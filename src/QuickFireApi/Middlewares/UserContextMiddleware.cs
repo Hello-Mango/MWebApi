@@ -3,16 +3,16 @@ using Microsoft.Extensions.DependencyInjection;
 using QuickFire.Core;
 using System.Diagnostics.CodeAnalysis;
 using QuickFire.Extensions.Core;
-using QuickFire.Extensions.UserContext;
 using QuickFire.Utils;
 using System.Security.Claims;
+using QuickFire.Extensions.sessionContext;
 
 namespace QuickFireApi.Middlewares
 {
-    public class UserContextMiddleware
+    public class SessionContextMiddleware
     {
         private readonly RequestDelegate _next;
-        public UserContextMiddleware(RequestDelegate next)
+        public SessionContextMiddleware(RequestDelegate next)
         {
             _next = next;
         }
@@ -23,7 +23,7 @@ namespace QuickFireApi.Middlewares
             {
                 if (context.User.Identity!.IsAuthenticated)
                 {
-                    var userContext = serviceProvider.GetRequiredService<IUserContext>();
+                    var sessionContext = serviceProvider.GetRequiredService<ISessionContext>();
                     long.TryParse(context.User.Claims.FirstOrDefault(x => x.Type == "UserId")?.Value, out long userId);
                     long.TryParse(context.User.Claims.FirstOrDefault(x => x.Type == "TenantId")?.Value, out long tenantId);
                     string ipAddress = context.Connection.RemoteIpAddress!.ToString();
@@ -31,25 +31,25 @@ namespace QuickFireApi.Middlewares
                                 .Where(c => c.Type == ClaimTypes.Role)
                                 .Select(c => c.Value)
                                 .ToList();
-                    userContext.SeSysUserContext(userId, context.User.Identity.Name!, tenantId, roles, ipAddress);
+                    sessionContext.SetsessionContext(userId, context.User.Identity.Name!, roles);
                 }
             }
 
             await _next(context!);
         }
     }
-    public static class UserContextBuilderExtensions
+    public static class SessionContextBuilderExtensions
     {
-        public static IApplicationBuilder UseUserContextMiddleware(this IApplicationBuilder app)
+        public static IApplicationBuilder UsesessionContextMiddleware(this IApplicationBuilder app)
         {
-            return app.UseMiddleware<UserContextMiddleware>();
+            return app.UseMiddleware<SessionContextMiddleware>();
         }
     }
-    public static class UserContextExtension
+    public static class SessionContextExtension
     {
-        public static IServiceCollection AddUserContext(this IServiceCollection services)
+        public static IServiceCollection AddsessionContext(this IServiceCollection services)
         {
-            services.AddScoped<IUserContext, UserContext>();
+            services.AddScoped<ISessionContext, SessionContext>();
             return services;
         }
     }

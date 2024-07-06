@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace QuickFireApi.Response
+namespace QuickFire.Application.DTOS.Reponse
 {
     public class TokenResponse
     {

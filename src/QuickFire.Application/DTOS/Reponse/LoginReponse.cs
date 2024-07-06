@@ -1,4 +1,4 @@
-﻿namespace QuickFireApi.Models.Reponse
+﻿namespace QuickFire.Application.DTOS.Reponse
 {
     public class LoginReponse
     {
@@ -7,6 +7,5 @@
         public long Timestamp { get; set; }
         public long UserId { get; set; }
         public string Username { get; set; }
-        public long CompanyId { get; set; }
     }
 }
