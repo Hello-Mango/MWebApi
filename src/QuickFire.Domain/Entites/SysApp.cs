@@ -25,7 +25,7 @@ namespace QQuickFire.Domain.Entites
         [Comment("访问地址")]
         [StringLength(200)]
         public string VisitUrl { get; set; }
-        [Comment("是否运行")]
+        [Comment("是否运营系统")]
         public bool IsOperation { get; set; }
 
     }

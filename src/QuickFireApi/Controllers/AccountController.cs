@@ -24,11 +24,11 @@ namespace QuickFireApi.Controllers
         private readonly ISessionContext _sessionContext;
         private readonly JWTConfig _jwtConfig;
         private readonly IUserService _userService;
-        public AccountController(MTokenHandler mTokenHandler, ISessionContext sessionContext, IOptions<JWTConfig> jwtConfig, IUserService userService)
+        public AccountController(MTokenHandler mTokenHandler, ISessionContext sessionContext, IOptions<AppSettings> appsettings, IUserService userService)
         {
             _sessionContext = sessionContext;
             _mTokenHandler = mTokenHandler;
-            _jwtConfig = jwtConfig.Value;
+            _jwtConfig = appsettings.Value.JWTConfig;
             _userService = userService;
         }
         /// <summary>

@@ -26,22 +26,29 @@ namespace QuickFire.Infrastructure
 
         public void BeginTransaction()
         {
-            _dbContext.Database.BeginTransaction();
+            if (IsTransactionActive) return;
+
             IsTransactionActive = true;
+            _dbContext.Database.BeginTransaction();
         }
 
         public Task BeginTransactionAsync()
         {
+            if (IsTransactionActive) return Task.CompletedTask;
+
+            IsTransactionActive = true;
             return _dbContext.Database.BeginTransactionAsync();
         }
 
         public void CommitTransaction()
         {
+            IsTransactionActive=false;
             _dbContext.Database.CommitTransaction();
         }
 
         public Task CommitTransactionAsync()
         {
+            IsTransactionActive = false;
             return _dbContext.Database.CommitTransactionAsync();
         }
 
@@ -50,14 +57,21 @@ namespace QuickFire.Infrastructure
             _dbContext.Dispose();
         }
 
-        public IRepository<TEntity> GetRepository<TEntity>() where TEntity : BaseEntity
-        {
-            var repository = _serviceProvider.GetService<IRepository<TEntity>>();
-            repository!.CheckNull(nameof(IRepository<TEntity>));
-            return repository!;
-        }
+        //public IRepository<TEntity> GetBaseRepository<TEntity>() where TEntity : BaseEntityLId
+        //{
+        //    var repository = _serviceProvider.GetService<IRepository<TEntity>>();
+        //    repository!.CheckNull(nameof(IRepository<TEntity>));
+        //    return repository!;
+        //}
 
-        public IRepository<TEntity, TKey> GetRepository<TEntity, TKey>() where TEntity : BaseEntity<TKey>
+        //public IRepository<TEntity> GetRepository<TEntity>() where TEntity : class, IEntity<long>
+        //{
+        //    var repository = _serviceProvider.GetService<IRepository<TEntity>>();
+        //    repository!.CheckNull(nameof(IRepository<TEntity>));
+        //    return repository!;
+        //}
+
+        public IRepository<TEntity, TKey> GetRepository<TEntity, TKey>() where TEntity : class, IEntity<TKey>
         {
             var repository = _serviceProvider.GetService<IRepository<TEntity, TKey>>();
             repository!.CheckNull(nameof(IRepository<TEntity, TKey>));
@@ -66,17 +80,33 @@ namespace QuickFire.Infrastructure
 
         public void RollbackTransaction()
         {
+            IsTransactionActive = false;
             _dbContext.Database.RollbackTransaction();
         }
 
         public Task RollbackTransactionAsync()
         {
+            IsTransactionActive = false;
             return _dbContext.Database.RollbackTransactionAsync();
         }
 
         public Task<int> SaveChangesAsync()
         {
             return _dbContext.SaveChangesAsync();
+        }
+
+        public IRepository<TEntity> GetLongRepository<TEntity>() where TEntity : class, IEntity<long>
+        {
+            var repository = _serviceProvider.GetService<IRepository<TEntity>>();
+            repository!.CheckNull(nameof(IRepository<TEntity>));
+            return repository!;
+        }
+
+        public IRepository<TEntity, string> GetStringRepository<TEntity>() where TEntity : class, IEntity<string>
+        {
+            var repository = _serviceProvider.GetService<IRepository<TEntity, string>>();
+            repository!.CheckNull(nameof(IRepository<TEntity, string>));
+            return repository!;
         }
     }
 }

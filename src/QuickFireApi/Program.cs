@@ -11,8 +11,6 @@ using QuickFireApi.Extensions.Cache;
 using QuickFireApi.Extensions.JsonExtensions;
 using QuickFireApi.Extensions.SwaggerExtensions;
 using QuickFireApi.Extensions.Token;
-using QuickFireApi.Middlewares;
-using QuickFireApi.SignalR;
 using Serilog;
 using System.Globalization;
 using QuickFire.Extensions.Quartz;
@@ -25,10 +23,9 @@ using QuickFireApi.Extension;
 using QuickFire.Extensions.Core;
 using Microsoft.AspNetCore.HttpOverrides;
 using QuickFireApi.Extensions.ServiceRegister;
-using QuickFireApi.Filters;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
-using QuickFireApi.Extensions.JWT;
+using QuickFire.Infrastructure.Filters;
+using QuickFire.Infrastructure.SignalR;
+using QuickFire.Infrastructure.Middlewares;
 
 namespace QuickFireApi
 {
@@ -78,7 +75,8 @@ namespace QuickFireApi
             builder.Services.AddSingleton<IEventPublisher, ChannelEventPublisher>();
             builder.Services.AddDataBase();
             builder.Services.RegisterService();
-
+            builder.Services.AddSingleton<ITenantConfigManager, TenantConfigManager>();
+            builder.Services.AddSingleton<IConfigManager, ConfigManager>();
 
             builder.Services.AddModelState();
             long dataCenterId = appSettings.SnowflakeConfig.DataCenterId;
@@ -91,7 +89,7 @@ namespace QuickFireApi
             builder.Services.AddMToken(configuration);
             var section = configuration.GetSection("JWTConfig");
             builder.Services.AddMAuth(appSettings.JWTConfig.SecretKey, appSettings.JWTConfig.Issuer, appSettings.JWTConfig.Audience);
-            builder.Services.AddsessionContext();
+            builder.Services.AddSessionContext();
             builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IApplicationModelProvider, ProduceResponseTypeModelProvider>());
             builder.Services.AddMemoryCache();
 

@@ -8,7 +8,7 @@ using System.Text;
 
 namespace QuickFire.Domain.Entites
 {
-    public class SysRole : BaseEntity, ITenant, IEntityLong
+    public class TSysRole : BaseEntity, ITenant<long>, IEntityLong
     {
         [Comment("角色编号")]
         [StringLength(32)]

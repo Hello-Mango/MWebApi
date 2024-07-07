@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using System.Diagnostics;
-using System.IO;
+using System;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using QuickFire.Extensions.Core;
-using Newtonsoft.Json;
+using System.Text.Json;
+using QuickFire.Utils.UserAgent;
 
 public class ApiLoggingActionFilter : IAsyncActionFilter
 {
@@ -28,12 +29,12 @@ public class ApiLoggingActionFilter : IAsyncActionFilter
         var stopwatch = Stopwatch.StartNew();
         // 获取请求内容
         var request = context.HttpContext.Request;
-        var requestBody = JsonConvert.SerializeObject(context.ActionArguments);
+        var requestBody = JsonSerializer.Serialize(context.ActionArguments);
         //request.Body.Position = 0; // 重置流的位置
 
         // 获取User-Agent和请求地址
         var userAgent = request.Headers["User-Agent"].ToString();
-        var client = QuickFire.Utils.UserAgent.UserAgent.GeSysUserAgent(userAgent);
+        var client = UserAgent.GeSysUserAgent(userAgent);
         var requestPath = request.GetDisplayUrl();
 
         // 执行Action
@@ -55,7 +56,7 @@ public class ApiLoggingActionFilter : IAsyncActionFilter
             OSName = client.OS,
             UserName = _sessionContext.UserName,
             TenantName = _sessionContext.TenantId.ToString(),
-            ReturnValue = JsonConvert.SerializeObject(responseBody),
+            ReturnValue = JsonSerializer.Serialize(responseBody),
             Param = requestBody
         });
     }

@@ -30,14 +30,16 @@ namespace QuickFireApi.Extensions.Token
             var expires = mJWTConfig.Expires;
             var audience = mJWTConfig.Audience;
             var issuer = mJWTConfig.Issuer;
-            foreach (var item in roleList)
+            List<Claim> claimsList = new List<Claim>();
+            foreach (var role in roleList)
             {
-                claims.Add(ClaimTypes.Role, item);
+                claimsList.Add(new Claim(ClaimTypes.Role, role));
             }
+            claimsList.Add(new Claim(ClaimTypes.Name,username));
             claims.Add("UserId", userId);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, username) }),
+                Subject = new ClaimsIdentity(claimsList),
                 Expires = DateTime.UtcNow.AddMinutes(expires),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
                 Audience = audience,

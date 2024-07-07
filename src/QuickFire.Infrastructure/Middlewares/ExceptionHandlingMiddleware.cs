@@ -1,10 +1,15 @@
 ﻿using QuickFire.Core;
-using Newtonsoft.Json;
-using System.Net;
 using QuickFire.BizException;
 using Microsoft.Extensions.Localization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
+using System;
+using Microsoft.AspNetCore.Builder;
+using QuickFire.Infrastructure;
+using System.Net;
 
-namespace QuickFireApi.Middlewares
+namespace QuickFire.Infrastructure.Middlewares
 {
     /// <summary>
     /// 全局异常捕获中间件

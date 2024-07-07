@@ -4,8 +4,8 @@ using System.Text;
 
 namespace QuickFire.Domain.Shared
 {
-    public interface ITenant
+    public interface ITenant<out TKey>
     {
-        long TenantId { get; }
+        TKey TenantId { get; }
     }
 }

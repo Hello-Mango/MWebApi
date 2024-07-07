@@ -10,47 +10,33 @@ using System.Threading.Tasks;
 
 namespace QuickFire.Infrastructure.Repository
 {
-    public class GenerialRepository<TEntity, TKey> : GenerialReadOnlyRepository<TEntity, TKey>, IRepository<TEntity, TKey> where TEntity : BaseEntity<TKey>
+    public class GenerialRepository<TEntity, TKey> : GenerialReadOnlyRepository<TEntity, TKey>, IRepository<TEntity, TKey> where TEntity : class, IEntity<TKey>
     {
         public GenerialRepository(DbContext dbContext) : base(dbContext)
         {
         }
-
-        //protected readonly DbContext _context;
-        //protected readonly DbSet<TEntity> _dbSet;
-
-        //public GenerialRepository(DbContext dbContext)
-        //{
-        //    _context = dbContext;
-        //    _dbSet = _context.Set<TEntity>();
-        //}
-
         public virtual TEntity Add(TEntity t)
         {
 
             _dbSet.Add(t);
-            _context.SaveChanges();
+            Save();
             return t;
         }
 
-        public virtual async Task<TEntity> AddAsyn(TEntity t)
+        public virtual async Task<TEntity> AddAsync(TEntity t)
         {
             _dbSet.Add(t);
-            await _context.SaveChangesAsync();
+            await SaveAsync();
             return t;
-
         }
 
-
-
-        public virtual void Delete(TEntity entity)
+        public virtual int Delete(TEntity entity)
         {
             _dbSet.Remove(entity);
-            _context.SaveChanges();
-
+            return _context.SaveChanges();
         }
 
-        public virtual async Task<int> DeleteAsyn(TEntity entity)
+        public virtual async Task<int> DeleteAsync(TEntity entity)
         {
             _dbSet.Remove(entity);
             return await _context.SaveChangesAsync();
@@ -64,12 +50,11 @@ namespace QuickFire.Infrastructure.Repository
             if (exist != null)
             {
                 _context.Entry(exist).CurrentValues.SetValues(t);
-                _context.SaveChanges();
             }
             return exist;
         }
 
-        public virtual async Task<TEntity?> UpdateAsyn(TEntity t)
+        public virtual async Task<TEntity?> UpdateAsync(TEntity t)
         {
             if (t == null)
                 return null;
@@ -77,15 +62,15 @@ namespace QuickFire.Infrastructure.Repository
             if (exist != null)
             {
                 _context.Entry(exist).CurrentValues.SetValues(t);
-                await _context.SaveChangesAsync();
+                await SaveAsync();
             }
             return exist;
         }
 
 
-        public virtual void Save()
+        public virtual int Save()
         {
-            _context.SaveChanges();
+            return _context.SaveChanges();
         }
 
         public async virtual Task<int> SaveAsync()
@@ -116,9 +101,30 @@ namespace QuickFire.Infrastructure.Repository
             return _dbSet.Where(predicate).ExecuteDelete();
         }
 
+        public int Delete(TKey id)
+        {
+            var t = FindById(id);
+            if (t != null)
+            {
+                _dbSet.Remove(t);
+                return Save();
+            }
+            return 0;
+        }
+
+        public async Task<int> DeleteAsyn(TKey id)
+        {
+            var t = await FindByIdAsync(id);
+            if (t != null)
+            {
+                _dbSet.Remove(t);
+                return await SaveAsync();
+            }
+            return 0;
+        }
     }
 
-    public class GenerialReadOnlyRepository<TEntity, TKey> : IReadOnlyRepository<TEntity, TKey> where TEntity : BaseEntity<TKey>
+    public class GenerialReadOnlyRepository<TEntity, TKey> : IReadOnlyRepository<TEntity, TKey> where TEntity : class, IEntity<TKey>
     {
         protected readonly DbContext _context;
         protected readonly DbSet<TEntity> _dbSet;
@@ -138,7 +144,7 @@ namespace QuickFire.Infrastructure.Repository
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        public virtual async Task<IEnumerable<TEntity>> FindByAsyn(Expression<Func<TEntity, bool>> predicate)
+        public virtual async Task<IEnumerable<TEntity>> FindByAsync(Expression<Func<TEntity, bool>> predicate)
         {
             return await _dbSet.Where(predicate).ToListAsync();
         }
@@ -157,7 +163,7 @@ namespace QuickFire.Infrastructure.Repository
             return _dbSet;
         }
 
-        public virtual async Task<IEnumerable<TEntity>> GetAllAsyn()
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
         {
             return await _dbSet.ToListAsync();
         }

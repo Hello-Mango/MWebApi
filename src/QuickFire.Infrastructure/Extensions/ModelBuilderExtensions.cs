@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Numerics;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
@@ -70,11 +71,12 @@ namespace QuickFire.Infrastructure.Extensions
         {
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
-                if (typeof(ITenant).IsAssignableFrom(entityType.ClrType))
+                if (typeof(ITenant<>).IsAssignableFrom(entityType.ClrType))
                 {
                     var parameter = Expression.Parameter(entityType.ClrType, "e");
                     var filter = Expression.Lambda(Expression.Equal(
-                        Expression.Property(parameter, nameof(ITenant.TenantId)),
+                        //这边只是为了获取属性名，所以可以直接定义一个
+                        Expression.Property(parameter, nameof(ITenant<long>.TenantId)),
                         Expression.Constant(sessionContext.TenantId)
                     ), parameter);
 
@@ -93,6 +95,10 @@ namespace QuickFire.Infrastructure.Extensions
                 if (types.Exists(z => z.Name == tt.Name))
                 {
                     modelBuilder.Entity(entityType);
+    //                 .Property<long?>(nameof(BaseEntity.ModifierStaffId))
+    //.HasColumnType("bigint") // 确保数据库类型正确
+    //.HasConversion(v => (long?)v, v => v ?? default(long?)) // 允许值为 null
+    //.IsRequired(false);
                 }
             }
             //foreach (var entityType in entityTypes)

@@ -1,7 +1,9 @@
 ﻿
+using Microsoft.Extensions.Logging;
 using QuickFire.Extensions.Core;
+using System.Threading.Tasks;
 
-namespace QuickFireApi.Filters
+namespace QuickFire.Infrastructure.Filters
 {
     public class ApiLogging : IApiLogging
     {

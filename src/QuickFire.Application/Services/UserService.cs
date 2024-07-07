@@ -20,20 +20,29 @@ namespace QuickFire.Application.Services
         }
         public SysUser CreateUser(SysUser user)
         {
-            _unitOfWork.GetRepository<SysUser>().Add(user);
+            _unitOfWork.GetLongRepository<SysUser>().Add(user);
             return user;
         }
 
         public async Task<SysUser> CheckLoginSync(LoginReq loginReq)
         {
-            var user = await _unitOfWork.GetRepository<SysUser>().FindAsync(x => x.Mobile == loginReq.userAccount || x.Email == loginReq.userAccount);
+            var user = await _unitOfWork.GetLongRepository<SysUser>().FindAsync(x => x.Mobile == loginReq.userAccount || x.Email == loginReq.userAccount);
             if (user == null)
             {
                 throw new BizException.EnumException(ExceptionEnum.USER_NOT_FOUND, loginReq.userAccount);
             }
             string password = EncryptUtils.EncryptStringToMd5(loginReq.password);
             bool flag = user.CheckPassword(password);
-            return user;
+            if (flag)
+            {
+                var roles = await _unitOfWork.GetLongRepository<TSysUserRole>().FindByAsync(Z => Z.UserId == user.Id);
+                user.SetRoles(roles.Select(x => x.RoleId).ToList());
+                return user;
+            }
+            else
+            {
+                throw new BizException.EnumException(ExceptionEnum.USER_PASSWORD_ERROR, loginReq.userAccount);
+            }
         }
     }
 }

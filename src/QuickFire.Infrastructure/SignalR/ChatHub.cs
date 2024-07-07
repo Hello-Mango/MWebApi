@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using System.Threading.Tasks;
 
-namespace QuickFireApi.SignalR
+namespace QuickFire.Infrastructure.SignalR
 {
     public class ChatHub : Hub<IChatClient>
     {

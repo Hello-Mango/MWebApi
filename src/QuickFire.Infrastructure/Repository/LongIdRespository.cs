@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuickFire.Core;
+using QuickFire.Domain.Entites;
 using QuickFire.Domain.Shared;
 using System;
 using System.Collections.Generic;
@@ -9,18 +10,17 @@ using System.Threading.Tasks;
 
 namespace QuickFire.Infrastructure.Repository
 {
-    public class LongIdRepository<T> : GenerialRepository<T, long>, IRepository<T> where T : Domain.Shared.BaseEntity
+    public class LongIdRepository<T> : GenerialRepository<T, long>, IRepository<T> where T :class, IEntity<long>
     {
         public LongIdRepository(SysDbContext dbContext) : base(dbContext)
         {
 
         }
     }
-    public class LongIdReadOnlyRepository<T> : GenerialReadOnlyRepository<T, long>, IReadOnlyRepository<T> where T : BaseEntity
+    public class LongIdReadOnlyRepository<T> : GenerialReadOnlyRepository<T, long>, IReadOnlyRepository<T> where T :class, IEntity<long>
     {
         public LongIdReadOnlyRepository(SysDbContext dbContext) : base(dbContext)
         {
-
         }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using QuickFire.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using QuickFire.Infrastructure;
 
 namespace QuickFireApi.Extensions
 {

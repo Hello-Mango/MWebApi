@@ -32,6 +32,8 @@ namespace QuickFire.Domain.Entites
         [Comment("用户是否锁定标记 0：正常 1：锁定")]
         public bool IsLock { get; set; }
 
+        private List<long> RoleIds = new List<long>();
+
         public bool CheckPassword(string password)
         {
             if (password == Password)
@@ -42,6 +44,16 @@ namespace QuickFire.Domain.Entites
             {
                 return false;
             }
+        }
+
+        public void SetRoles(List<long> roleIds)
+        {
+            RoleIds.Clear();
+            RoleIds.AddRange(roleIds);
+        }
+        public List<long> GetRoles()
+        {
+            return RoleIds;
         }
         public override string ToString()
         {

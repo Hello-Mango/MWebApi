@@ -1,4 +1,7 @@
-﻿namespace QuickFireApi
+﻿
+using System;
+
+namespace QuickFire.Infrastructure
 {
     public class ErrorResponse
     {

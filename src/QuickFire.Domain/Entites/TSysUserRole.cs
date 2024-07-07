@@ -8,13 +8,12 @@ using QuickFire.Domain.Shared;
 
 namespace QuickFire.Domain.Entites
 {
-    public class SysUserRole : BaseEntityLId, ITenant
+    public class TSysUserRole : BaseEntityLId, ITenant<long>
     {
         [Comment("用户Id")]
         public long UserId { get; set; }
         [Comment("角色Id")]
         public long RoleId { get; set; }
-
         [Comment("租户Id")]
         public long TenantId { get; set; }
     }

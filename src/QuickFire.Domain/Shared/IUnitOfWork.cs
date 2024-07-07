@@ -10,8 +10,9 @@ namespace QuickFire.Domain.Shared
 {
     public interface IUnitOfWork<T>
     {
-        public IRepository<TEntity> GetRepository<TEntity>() where TEntity : BaseEntity;
-        public IRepository<TEntity, TKey> GetRepository<TEntity, TKey>() where TEntity : BaseEntity<TKey>;
+        public IRepository<TEntity> GetLongRepository<TEntity>() where TEntity : class, IEntity<long>;
+        public IRepository<TEntity, string> GetStringRepository<TEntity>() where TEntity : class, IEntity<string>;
+        public IRepository<TEntity, TKey> GetRepository<TEntity, TKey>() where TEntity : class, IEntity<TKey>;
 
         public Task<int> SaveChangesAsync();
 

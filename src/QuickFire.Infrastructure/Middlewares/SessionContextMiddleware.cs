@@ -1,13 +1,17 @@
-﻿using QuickFireApi.Middlewares;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using QuickFire.Core;
 using System.Diagnostics.CodeAnalysis;
 using QuickFire.Extensions.Core;
 using QuickFire.Utils;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
+using System;
+using System.Linq;
+using Microsoft.AspNetCore.Builder;
 using QuickFire.Extensions.sessionContext;
+using System.Threading.Tasks;
 
-namespace QuickFireApi.Middlewares
+namespace QuickFire.Infrastructure.Middlewares
 {
     public class SessionContextMiddleware
     {
@@ -25,16 +29,20 @@ namespace QuickFireApi.Middlewares
                 {
                     var sessionContext = serviceProvider.GetRequiredService<ISessionContext>();
                     long.TryParse(context.User.Claims.FirstOrDefault(x => x.Type == "UserId")?.Value, out long userId);
-                    long.TryParse(context.User.Claims.FirstOrDefault(x => x.Type == "TenantId")?.Value, out long tenantId);
+                    bool isHasTenant = context.Request.Headers.TryGetValue("X-Tenant-ID", out var tenantId);
+
                     string ipAddress = context.Connection.RemoteIpAddress!.ToString();
                     var roles = context.User.Claims
                                 .Where(c => c.Type == ClaimTypes.Role)
                                 .Select(c => c.Value)
                                 .ToList();
                     sessionContext.SetsessionContext(userId, context.User.Identity.Name!, roles);
+                    if (isHasTenant)
+                    {
+                        sessionContext.SetTenant(long.Parse(tenantId!));
+                    }
                 }
             }
-
             await _next(context!);
         }
     }
@@ -47,7 +55,7 @@ namespace QuickFireApi.Middlewares
     }
     public static class SessionContextExtension
     {
-        public static IServiceCollection AddsessionContext(this IServiceCollection services)
+        public static IServiceCollection AddSessionContext(this IServiceCollection services)
         {
             services.AddScoped<ISessionContext, SessionContext>();
             return services;
