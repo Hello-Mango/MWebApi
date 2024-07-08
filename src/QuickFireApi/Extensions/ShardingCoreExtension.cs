@@ -12,7 +12,7 @@ namespace QuickFireApi.Extensions
         public static IServiceCollection AddShardingCore(this IServiceCollection service, string connectionString, string dbType)
         {
             //额外添加分片配置
-            service.AddShardingDbContext<SysDbContext>()
+            service.AddShardingDbContext<ApplicationDbContext>()
                 .UseRouteConfig(op =>
                 {
                     op.AddShardingTableRoute<UserDataSourceRoute>();

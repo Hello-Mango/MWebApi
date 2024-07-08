@@ -1,6 +1,7 @@
 ﻿using QuickFire.Application.Base;
 using QuickFire.Core;
 using QuickFire.Domain.Shared;
+using QuickFire.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +13,8 @@ namespace QuickFire.Application.Base
 {
     public abstract class BaseService<TEntity> : IBaseInterface<TEntity> where TEntity : class, IEntity<long>
     {
-        protected readonly IUnitOfWork _unitOfWork;
-        public BaseService(IUnitOfWork unitOfWork)
+        protected readonly IUnitOfWork<ApplicationDbContext> _unitOfWork;
+        public BaseService(IUnitOfWork<ApplicationDbContext> unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

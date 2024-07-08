@@ -10,7 +10,7 @@ using QuickFire.Infrastructure;
 
 namespace QuickFireApi.Migrations
 {
-    [DbContext(typeof(SysDbContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20240707143021_Initial")]
     partial class Initial
     {

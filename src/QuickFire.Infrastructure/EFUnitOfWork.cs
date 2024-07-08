@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using QuickFire.Core;
 using QuickFire.Domain.Shared;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace QuickFire.Infrastructure
 {
-    public class EFUnitOfWork<T> : IUnitOfWork where T : DbContext
+    public class EFUnitOfWork<T> : IUnitOfWork<T> where T : DbContext
     {
         private readonly T _dbContext;
         private readonly IServiceProvider _serviceProvider;
@@ -21,55 +22,47 @@ namespace QuickFire.Infrastructure
             _dbContext = dbContext;
             _serviceProvider = serviceProvider;
         }
-
+        private IDbContextTransaction dbContextTransaction;
         public bool IsTransactionActive { get; private set; }
 
-        public void BeginTransaction()
+        public IDbContextTransaction BeginTransaction()
         {
-            if (IsTransactionActive) return;
+            if (IsTransactionActive) return dbContextTransaction;
 
             IsTransactionActive = true;
-            _dbContext.Database.BeginTransaction();
+            dbContextTransaction = _dbContext.Database.BeginTransaction();
+            return dbContextTransaction;
         }
 
-        public Task BeginTransactionAsync()
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
         {
-            if (IsTransactionActive) return Task.CompletedTask;
+            if (IsTransactionActive)
+            {
+                return dbContextTransaction;
+            }
 
             IsTransactionActive = true;
-            return _dbContext.Database.BeginTransactionAsync();
+            dbContextTransaction = await _dbContext.Database.BeginTransactionAsync();
+            return dbContextTransaction;
         }
 
         public void CommitTransaction()
         {
-            IsTransactionActive=false;
-            _dbContext.Database.CommitTransaction();
+            IsTransactionActive = false;
+            dbContextTransaction.Commit();
         }
 
-        public Task CommitTransactionAsync()
+        public async Task CommitTransactionAsync()
         {
             IsTransactionActive = false;
-            return _dbContext.Database.CommitTransactionAsync();
+            await dbContextTransaction.CommitAsync();
+            return;
         }
 
         public void Dispose()
         {
             _dbContext.Dispose();
         }
-
-        //public IRepository<TEntity> GetBaseRepository<TEntity>() where TEntity : BaseEntityLId
-        //{
-        //    var repository = _serviceProvider.GetService<IRepository<TEntity>>();
-        //    repository!.CheckNull(nameof(IRepository<TEntity>));
-        //    return repository!;
-        //}
-
-        //public IRepository<TEntity> GetRepository<TEntity>() where TEntity : class, IEntity<long>
-        //{
-        //    var repository = _serviceProvider.GetService<IRepository<TEntity>>();
-        //    repository!.CheckNull(nameof(IRepository<TEntity>));
-        //    return repository!;
-        //}
 
         public IRepository<TEntity, TKey> GetRepository<TEntity, TKey>() where TEntity : class, IEntity<TKey>
         {
@@ -81,13 +74,14 @@ namespace QuickFire.Infrastructure
         public void RollbackTransaction()
         {
             IsTransactionActive = false;
-            _dbContext.Database.RollbackTransaction();
+            dbContextTransaction.Rollback();
         }
 
-        public Task RollbackTransactionAsync()
+        public async Task RollbackTransactionAsync()
         {
             IsTransactionActive = false;
-            return _dbContext.Database.RollbackTransactionAsync();
+            await dbContextTransaction.RollbackAsync();
+            return;
         }
 
         public Task<int> SaveChangesAsync()

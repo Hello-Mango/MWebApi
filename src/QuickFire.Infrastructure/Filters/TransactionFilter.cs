@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using QuickFire.Domain.Shared;
 using System;
 using System.Collections.Generic;
@@ -8,36 +11,44 @@ using System.Threading.Tasks;
 
 namespace QuickFire.Infrastructure.Filters
 {
-    public class TransactionFilter : IAsyncActionFilter
+    public class TransactionFilter<T> : Attribute, IAsyncActionFilter where T : DbContext
     {
-        private readonly IUnitOfWork _unitOfWork;
-        public TransactionFilter(IUnitOfWork unitOfWork)
+        private readonly IServiceProvider _serviceProvider;
+        public TransactionFilter(IServiceProvider serviceProvider)
         {
-            _unitOfWork = unitOfWork;
+            _serviceProvider = serviceProvider;
         }
 
-        public Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-
-            var actionAttributes = context.ActionDescriptor.EndpointMetadata.OfType<ApiLoggingActionFilter>();
+            // 检查请求方法是否为 GET，如果是，则直接执行下一个中间件
+            if (context.HttpContext.Request.Method == HttpMethods.Get)
+            {
+                var result = await next();
+                return;
+            }
+            var actionAttributes = context.ActionDescriptor.EndpointMetadata.OfType<TransactionDisabled>();
             if (actionAttributes.Count() > 0)
             {
-                var result = next();
-                return result;
+                var result =await next();
+                return;
             }
             else
             {
-                _unitOfWork.BeginTransaction();
-                var result = next();
-                if (result.Exception == null)
+                var _unitOfWork = _serviceProvider.GetRequiredService<IUnitOfWork<T>>();
+                using (var transaction = await _unitOfWork.BeginTransactionAsync())
                 {
-                    _unitOfWork.CommitTransaction();
+                    var result =await next();
+                    if (result.Exception == null)
+                    {
+                        await _unitOfWork.CommitTransactionAsync();
+                    }
+                    else
+                    {
+                        await _unitOfWork.RollbackTransactionAsync();
+                    }
+                    return;
                 }
-                else
-                {
-                    _unitOfWork.RollbackTransaction();
-                }
-                return result;
             }
         }
     }

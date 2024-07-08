@@ -19,20 +19,20 @@ namespace QuickFire.Domain.Entites
         public string ConfigValue { get; set; }
         [Comment("备注")]
         [MaxLength(300)]
-        public string Remark { get; set; }
+        public string? Remark { get; set; }
         [Comment("租户ID")]
         public long TenantId { get; set;}
 
         [Comment("备用字段1")]
         [MaxLength(50)]
-        public string Field1 { get; set; }
+        public string? Field1 { get; set; }
 
         [Comment("备用字段2")]
         [MaxLength(50)]
-        public string Field2 { get; set; }
+        public string? Field2 { get; set; }
 
         [Comment("备用字段3")]
         [MaxLength(50)]
-        public string Field3 { get; set; }
+        public string? Field3 { get; set; }
     }
 }

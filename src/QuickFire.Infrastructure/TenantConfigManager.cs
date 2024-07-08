@@ -13,11 +13,13 @@ namespace QuickFire.Infrastructure
 {
     public class TenantConfigManager : ITenantConfigManager
     {
-        public IDictionary<long, TenantConfigDictionary> _tenantDics = new ConcurrentDictionary<long, TenantConfigDictionary>();
+        public static IDictionary<long, TenantConfigDictionary> _tenantDics = new ConcurrentDictionary<long, TenantConfigDictionary>();
         private readonly IServiceProvider _serviceProvider;
-        public TenantConfigManager(IServiceProvider serviceProvider)
+        private readonly IGenerateId<long> _generateId;
+        public TenantConfigManager(IServiceProvider serviceProvider, IGenerateId<long> generateId)
         {
             _serviceProvider = serviceProvider;
+            _generateId = generateId;
         }
         public string? GetTenantConfig(string key)
         {
@@ -52,12 +54,46 @@ namespace QuickFire.Infrastructure
             }
             if (tenantConfig.ContainsKey(key))
             {
+                var db = _serviceProvider.GetRequiredService<ApplicationDbContext>();
+                var item = db.Set<TSysConfig>().FirstOrDefault(x => x.ConfigKey == key && x.TenantId == sessionContext.TenantId);
+                if (item != null)
+                {
+                    item.ConfigValue = value;
+                    db.Update(item);
+                    db.SaveChanges();
+                }
                 tenantConfig[key] = value;
             }
             else
             {
+                var db = _serviceProvider.GetRequiredService<ApplicationDbContext>();
+                db.Add(new TSysConfig() { Id = _generateId.NextId(), ConfigKey = key, ConfigValue = value, TenantId = sessionContext.TenantId });
+                db.SaveChanges();
                 tenantConfig.TryAdd(key, value);
             }
+
+
+            /*
+              if (_config.ContainsKey(key))
+            {
+                var db = _serviceProvider.GetRequiredService<ApplicationDbContext>();
+                var item = db.Set<SysConfig>().FirstOrDefault(x => x.ConfigKey == key);
+                if (item != null)
+                {
+                    item.ConfigValue = value;
+                    db.Update(item);
+                    db.SaveChanges();
+                }
+                _config[key] = value;
+            }
+            else
+            {
+                var db = _serviceProvider.GetRequiredService<ApplicationDbContext>();
+                db.Add(new SysConfig() { Id = _generateId.NextId(), ConfigKey = key, ConfigValue = value });
+                db.SaveChanges();
+                _config.TryAdd(key, value);
+            }
+             */
         }
 
         private void LoadByTenant(long tenantId)
@@ -66,7 +102,7 @@ namespace QuickFire.Infrastructure
             {
                 TenantId = tenantId
             };
-            var db = _serviceProvider.GetRequiredService<SysDbContext>();
+            var db = _serviceProvider.GetRequiredService<ApplicationDbContext>();
             var items = db.Set<TSysConfig>().Where(z => z.TenantId == tenantId);
             foreach (var item in items)
             {

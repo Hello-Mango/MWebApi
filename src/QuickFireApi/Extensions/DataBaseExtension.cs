@@ -8,10 +8,12 @@ namespace QuickFireApi.Extensions
     {
         public static IServiceCollection AddDataBase(this IServiceCollection service)
         {
-            service.AddScoped(typeof(IUnitOfWork), typeof(EFUnitOfWork<>));
+            service.AddScoped(typeof(IUnitOfWork<>), typeof(EFUnitOfWork<>));
             service.AddScoped(typeof(IRepository<>), typeof(LongIdRepository<>));
             service.AddScoped(typeof(IReadOnlyRepository<>), typeof(LongIdReadOnlyRepository<>));
-            service.AddDbContext<SysDbContext>();
+            service.AddScoped(typeof(IReadOnlyRepository<,>), typeof(GenerialReadOnlyRepository<,>));
+            service.AddScoped(typeof(IRepository<,>), typeof(GenerialRepository<,>));
+            service.AddDbContext<ApplicationDbContext>();
             return service;
         }
     }

@@ -14,7 +14,7 @@ namespace QuickFire.Application.Services
     public class UserService : BaseService< SysUser>, IUserService
     {
         private readonly IUserFactory _userFactory;
-        public UserService(IUnitOfWork unitOfWork, IUserFactory userFactory) : base(unitOfWork)
+        public UserService(IUnitOfWork<ApplicationDbContext> unitOfWork, IUserFactory userFactory) : base(unitOfWork)
         {
             _userFactory = userFactory;
         }

@@ -30,17 +30,20 @@ namespace QuickFireApi.Controllers
         private readonly IEventPublisher _eventBus;
         private readonly ILogger _logger;
         private readonly IRepository<SysUser> _repository;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork<ApplicationDbContext> _unitOfWork;
         private readonly IUserService _userService;
-        private readonly SysDbContext _applicationDbContext;
+        private readonly ApplicationDbContext _applicationDbContext;
+        private readonly IConfigManager _configManager;
         public DemoController(
             IStringLocalizer<AccountController> stringLocalizer,
             IStringLocalizer stringLocalizer2,
             IGenerateId<long> idGenerateInterface,
             IEventPublisher eventBus,
-            IUnitOfWork unitOfWork,
+            IUnitOfWork<ApplicationDbContext> unitOfWork,
             IRepository<SysUser> repository,
-            SysDbContext applicationDbContext, IUserService userService,
+            ApplicationDbContext applicationDbContext,
+            IUserService userService,
+            IConfigManager configManager,
             ICacheService cacheService)
         {
             _stringLocalizer = stringLocalizer;
@@ -52,6 +55,7 @@ namespace QuickFireApi.Controllers
             _repository = repository;
             _applicationDbContext = applicationDbContext;
             _userService = userService;
+            _configManager = configManager;
         }
         [HttpPost]
         public string AddCache(SingleReq<long> singleReq)
@@ -66,12 +70,16 @@ namespace QuickFireApi.Controllers
         [HttpGet]
         public SysUser? GetCache()
         {
+            var res = _configManager.GetConfig("1");
             _userService.CreateUser(new SysUser() { Id = idGenerateInterface1.NextId(), Name = "tes222t" });
             return _cacheService.Get<SysUser>("test");
         }
         [HttpGet]
         public string GetStringLocalizer()
         {
+            _configManager.SetConfig("1", "2222");
+            _configManager.SetConfig("333", "666");
+
             return _stringLocalizer["Account"];
         }
         [HttpGet]
@@ -89,7 +97,6 @@ namespace QuickFireApi.Controllers
         {
             await _eventBus.PublishAsync(new Test());
         }
-
         [HttpDelete]
         public async Task Delete(SingleReq<long> singleReq)
         {
@@ -118,7 +125,8 @@ namespace QuickFireApi.Controllers
                 IsLock = user.IsLock
             };
         }
-
+        [TransactionDisabled]
+        [CusTransactionFilter<ApplicationDbContext>]
         [HttpGet]
         public async Task<List<UserResp>> Get()
         {
@@ -133,7 +141,13 @@ namespace QuickFireApi.Controllers
                 IsLock = z.IsLock
             }).ToList();
         }
-
+        [TransactionDisabled]
+        [CusTransactionFilter<ApplicationDbContext>]
+        [HttpGet]
+        public async Task<List<UserResp>> Get1()
+        {
+            return new List<UserResp>();
+        }
         [HttpPost]
         public async Task<UserResp> Add(UserReq userReq)
         {

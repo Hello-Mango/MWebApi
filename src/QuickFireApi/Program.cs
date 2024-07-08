@@ -49,9 +49,9 @@ namespace QuickFireApi
             builder.Services.AddControllers(c =>
             {
                 c.Filters.Add(new PermissionFilter());
-                c.Filters.Add(typeof(ApiMonitorActionFilter));
-                c.Filters.Add(typeof(ApiLoggingActionFilter));
-                c.Filters.Add(typeof(TransactionFilter));
+                //c.Filters.Add(typeof(ApiMonitorActionFilter));
+                //c.Filters.Add(typeof(ApiLoggingActionFilter));
+                c.Filters.Add(typeof(TransactionFilter<ApplicationDbContext>));
             }).AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.Converters.Add(new LongToStringConverter());
@@ -76,8 +76,8 @@ namespace QuickFireApi
             builder.Services.AddSingleton<IEventPublisher, ChannelEventPublisher>();
             builder.Services.AddDataBase();
             builder.Services.RegisterService();
-            builder.Services.AddSingleton<ITenantConfigManager, TenantConfigManager>();
-            builder.Services.AddSingleton<IConfigManager, ConfigManager>();
+            builder.Services.AddScoped<ITenantConfigManager, TenantConfigManager>();
+            builder.Services.AddScoped<IConfigManager, ConfigManager>();
 
             builder.Services.AddModelState();
             long dataCenterId = appSettings.SnowflakeConfig.DataCenterId;

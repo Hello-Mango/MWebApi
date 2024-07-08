@@ -11,8 +11,8 @@ using QuickFire.Infrastructure;
 namespace QuickFireApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240707143425_init2")]
-    partial class init2
+    [Migration("20240708132911_init3")]
+    partial class init3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -169,21 +169,18 @@ namespace QuickFireApi.Migrations
                         .HasComment("删除员工编号");
 
                     b.Property<string>("Field1")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
                         .HasColumnName("field1")
                         .HasComment("备用字段1");
 
                     b.Property<string>("Field2")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
                         .HasColumnName("field2")
                         .HasComment("备用字段2");
 
                     b.Property<string>("Field3")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
                         .HasColumnName("field3")
@@ -206,7 +203,6 @@ namespace QuickFireApi.Migrations
                         .HasComment("修改员工编号");
 
                     b.Property<string>("Remark")
-                        .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("varchar(300)")
                         .HasColumnName("remark")
@@ -490,21 +486,18 @@ namespace QuickFireApi.Migrations
                         .HasComment("删除员工编号");
 
                     b.Property<string>("Field1")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
                         .HasColumnName("field1")
                         .HasComment("备用字段1");
 
                     b.Property<string>("Field2")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
                         .HasColumnName("field2")
                         .HasComment("备用字段2");
 
                     b.Property<string>("Field3")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
                         .HasColumnName("field3")
@@ -527,7 +520,6 @@ namespace QuickFireApi.Migrations
                         .HasComment("修改员工编号");
 
                     b.Property<string>("Remark")
-                        .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("varchar(300)")
                         .HasColumnName("remark")
