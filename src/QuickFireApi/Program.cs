@@ -51,6 +51,7 @@ namespace QuickFireApi
                 c.Filters.Add(new PermissionFilter());
                 c.Filters.Add(typeof(ApiMonitorActionFilter));
                 c.Filters.Add(typeof(ApiLoggingActionFilter));
+                c.Filters.Add(typeof(TransactionFilter));
             }).AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.Converters.Add(new LongToStringConverter());

@@ -11,10 +11,10 @@ using QuickFire.Utils;
 
 namespace QuickFire.Application.Services
 {
-    public class UserService : BaseService<SysDbContext, SysUser>, IUserService
+    public class UserService : BaseService< SysUser>, IUserService
     {
         private readonly IUserFactory _userFactory;
-        public UserService(IUnitOfWork<SysDbContext> unitOfWork, IUserFactory userFactory) : base(unitOfWork)
+        public UserService(IUnitOfWork unitOfWork, IUserFactory userFactory) : base(unitOfWork)
         {
             _userFactory = userFactory;
         }

@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace QuickFire.Application.Base
 {
-    public abstract class BaseService<T, TEntity> : IBaseInterface<TEntity> where TEntity : class, IEntity<long>
+    public abstract class BaseService<TEntity> : IBaseInterface<TEntity> where TEntity : class, IEntity<long>
     {
-        protected readonly IUnitOfWork<T> _unitOfWork;
-        public BaseService(IUnitOfWork<T> unitOfWork)
+        protected readonly IUnitOfWork _unitOfWork;
+        public BaseService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

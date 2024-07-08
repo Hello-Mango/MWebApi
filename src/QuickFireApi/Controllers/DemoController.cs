@@ -15,6 +15,7 @@ using QuickFire.Domain.Entites;
 using QuickFire.Application.DTOS.Request;
 using QuickFire.Application.DTOS.Reponse;
 using QuickFire.BizException;
+using QuickFire.Infrastructure.Filters;
 
 namespace QuickFireApi.Controllers
 {
@@ -29,7 +30,7 @@ namespace QuickFireApi.Controllers
         private readonly IEventPublisher _eventBus;
         private readonly ILogger _logger;
         private readonly IRepository<SysUser> _repository;
-        private readonly IUnitOfWork<SysDbContext> _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IUserService _userService;
         private readonly SysDbContext _applicationDbContext;
         public DemoController(
@@ -37,7 +38,7 @@ namespace QuickFireApi.Controllers
             IStringLocalizer stringLocalizer2,
             IGenerateId<long> idGenerateInterface,
             IEventPublisher eventBus,
-            IUnitOfWork<SysDbContext> unitOfWork,
+            IUnitOfWork unitOfWork,
             IRepository<SysUser> repository,
             SysDbContext applicationDbContext, IUserService userService,
             ICacheService cacheService)
@@ -94,7 +95,7 @@ namespace QuickFireApi.Controllers
         {
             await _userService.DeleteAsync(singleReq._);
         }
-
+        [TransactionDisabled]
         [HttpPut("{id}")]
         public async Task<UserResp> Modify([FromRoute] long id, UserReq userReq)
         {
